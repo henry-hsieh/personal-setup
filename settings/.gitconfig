@@ -1,0 +1,37 @@
+# This is Git's per-user configuration file.
+[user]
+    name = Henry Hsieh
+    email = r901042004@yahoo.com.tw
+[core]
+    editor = nvim
+[diff]
+    tool = nvimdiff
+[difftool]
+    prompt = false
+    trustExitCode = true
+[difftool "nvimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE
+[alias]
+    vd = difftool
+    vm = mergetool
+    co = checkout
+    ci = commit
+    st = status
+    br = branch
+    su = submodule update --init --recursive
+    ps = pull --recurse-submodules
+    fs = fetch --recurse-submodules
+[merge]
+    tool = nvimdiff
+[mergetool]
+    prompt = false
+    trustExitCode = true
+    keepBackup = false
+[mergetool "nvimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[tig]
+    show-changes = true
+[tig "color"]
+    cursor = red black bold
+[tig "bind"]
+    generic = P parent
