@@ -82,7 +82,7 @@ require("lazy").setup({
 
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'make',
+    build = 'make CC=' .. vim.env.CC,
   },
 
   {
@@ -131,6 +131,7 @@ require("lazy").setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
+      require'nvim-treesitter.install'.command_extra_args = {["musl-gcc"] = {"-static"}}
       require'nvim-treesitter.configs'.setup {
         ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query", "bash", "python", "javascript" },
         -- Install parsers synchronously (only applied to `ensure_installed`)

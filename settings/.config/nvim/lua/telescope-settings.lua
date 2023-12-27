@@ -50,5 +50,7 @@ vim.api.nvim_set_keymap('n', ',g', '<cmd>Telescope live_grep<CR>', { noremap = t
 vim.api.nvim_set_keymap('n', ',G', '<cmd>lua require("telescope-settings").project_grep()<CR>', { noremap = true, silent = true })
 -- Telescope buffers
 vim.api.nvim_set_keymap('n', ',b', '<cmd>Telescope buffers<CR>', { noremap = true, silent = true })
+-- Telescope spell_suggest
+vim.api.nvim_set_keymap('n', ',S', '<cmd>Telescope spell_suggest<CR>', { noremap = true, silent = true })
 
 return M

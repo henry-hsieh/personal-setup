@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export PATH=$PATH:/root
-
 # Download and update tmux plugins using tpm
 chmod +x $HOME/.tmux/plugins/tpm/bin/*_plugins
 $HOME/.tmux/plugins/tpm/bin/install_plugins
