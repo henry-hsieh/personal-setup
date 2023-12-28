@@ -82,7 +82,7 @@ require("lazy").setup({
 
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'make CC=' .. vim.env.CC,
+    build = 'make CC=gcc',
   },
 
   {
@@ -269,8 +269,14 @@ require("lazy").setup({
 
   {
     'williamboman/mason.nvim',
+    branch = 'v2.x',
     config = function()
-      require'mason'.setup{}
+      require'mason'.setup{
+        -- log_level = vim.log.levels.DEBUG,
+        registries = {
+            "github:henry-hsieh/mason-registry",
+        },
+      }
     end
   },
 
@@ -1089,7 +1095,6 @@ require("lazy").setup({
 
   {
     "henry-hsieh/riscv-asm-vim",
-    ft = { "riscv_asm" },
     config = function()
       vim.g.riscv_asm_isa = 'RV64GCV_Ss_Sm'
       vim.g.riscv_asm_debug = true
