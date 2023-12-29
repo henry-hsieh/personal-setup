@@ -15,19 +15,23 @@ end
 -- Clipboard
 vim.o.clipboard = "unnamed,unnamedplus"
 
+-- Tabstop
+vim.bo.tabstop = 2
+vim.bo.softtabstop = 2
+vim.bo.shiftwidth = 2
+vim.bo.expandtab = true
+
 -- Toggle between tab stops of 2 and 4
 function toggle_tabstop()
   if vim.bo.tabstop == 2 then
     vim.bo.tabstop = 4
     vim.bo.softtabstop = 4
     vim.bo.shiftwidth = 4
-    vim.bo.expandtab = true
     print("Tabstop set to 4 spaces")
   else
     vim.bo.tabstop = 2
     vim.bo.softtabstop = 2
     vim.bo.shiftwidth = 2
-    vim.bo.expandtab = true
     print("Tabstop set to 2 spaces")
   end
 end

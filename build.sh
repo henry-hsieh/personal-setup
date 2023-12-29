@@ -6,7 +6,7 @@ BAT_VERSION=v0.24.0
 FD_VERSION=v9.0.0
 FZF_VERSION=0.44.1
 VERIBLE_VERSION=v0.0-3471-g9cb45092
-NODE_VERSION=v20.10.0
+NODE_VERSION=v20.9.0
 RG_VERSION=14.0.3
 TMUX_VERSION=3.3a
 
@@ -104,10 +104,10 @@ pushd $TEMP_DIR/verible-${VERIBLE_VERSION}
 rsync -av bin $BUILD_DIR/.local/
 popd
 
-# node
-curl -L https://nodejs.org/dist/$NODE_VERSION/node-${NODE_VERSION}-linux-x64.tar.xz > $TEMP_DIR/node-${NODE_VERSION}-linux-x64.tar.xz
-tar -Jxvf $TEMP_DIR/node-${NODE_VERSION}-linux-x64.tar.xz -C $TEMP_DIR
-pushd $TEMP_DIR/node-${NODE_VERSION}-linux-x64
+# node (use unofficial builds)
+curl -L https://unofficial-builds.nodejs.org/download/release/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz > $TEMP_DIR/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz
+tar -Jxvf $TEMP_DIR/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz -C $TEMP_DIR
+pushd $TEMP_DIR/node-${NODE_VERSION}-linux-x64-glibc-217
 rsync -av bin $BUILD_DIR/.local/
 rsync -av include $BUILD_DIR/.local/
 rsync -av lib $BUILD_DIR/.local/

@@ -17,7 +17,6 @@ fi
 
 # Copy directories
 rsync -av $SCRIPT_DIR/.config $1
-rsync -av $SCRIPT_DIR/.fonts $1
 rsync -av $SCRIPT_DIR/.local $1
 rsync -av $SCRIPT_DIR/.tmux $1
 
@@ -53,22 +52,15 @@ echo "====================================================="
 echo "Installation completed"
 echo "Reopen terminal and change shell color if you needed (base16_<Tab>)"
 printf "
-For WSL user, you should do following steps in first installation:
-  1. Open Windows Terminal Settings
+For WSL/SSH user, you should do following steps in first installation:
+  1. Open WindowsTerminal Settings
   2. Click your distro profile (Ex: Ubuntu-20.04)
   3. Change Starting directory to: \\\\\\\\wsl$\\{distro_name}\\home\\{user_name}
      Ex: \\\\\\\\wsl\$\\\\Ubuntu-20.04\\home\\henry
      You can check the distro name by going to \\\\\\\\wsl\$ in Windows Explorer
-  4. Install fonts in \\\\\\\\wsl\$\\{distro_name}\\home\\{user_name}\\.fonts
-     You may not directly install them in the folder. Simply copy them to other folder in Windows System.
-     Or you can install one of patched fonts in https://github.com/ryanoasis/nerd-fonts
-     There are different versions of one font style. Choose the one w/ Windows Compatible and w/o Mono.
-     For following example, choose c version.
-     a. Hack Regular Nerd Font Complete Mono Windows Compatible
-     b. Hack Regular Nerd Font Complete Mono
-     c. Hack Regular Nerd Font Complete Windows Compatible
-     d. Hack Regular Nerd Font Complete
-  5. In Apperance tab, change Font to \"Hack NF\"
+  4. Download and install one nerd fonts: https://github.com/ryanoasis/nerd-fonts
+     For example, if you choose Hack Nerd Font, please install 4 types of HackNerdFont-*.ttf
+  5. In Apperance tab, change Font to \"Hack Nerd Font\"
      If you install other fonts, open Fonts in Windows 10 Settings.
      Search the font and find the font family's name (text colored as blue)
      Change other apperance settings if you want
@@ -84,7 +76,7 @@ For WSL user, you should do following steps in first installation:
      This will help you to sync system clipboard with WSL and provides X windows ability
 "
 printf "
-For VM/SSH user, you should do following steps in first installation:
+For VM user, you should do following steps in first installation:
   1. Use gnome-terminal or other VTE terminal as primary terminal
-  2. Open gnome-terminal, change fonts to \"Hack NF\" or other fonts from Nerd Font
+  2. Open gnome-terminal, change fonts to \"Hack Nerd Font\" or other fonts from Nerd Font
 "

@@ -346,10 +346,10 @@ require("lazy").setup({
           { text = icon, texthl = 'Diagnostic' .. name }
         )
       end
-      lspSymbol('Error', '')
-      lspSymbol('Hint', '')
-      lspSymbol('Info', '')
-      lspSymbol('Warn', '𥉉')
+      lspSymbol('Error', '')
+      lspSymbol('Hint', '')
+      lspSymbol('Info', '')
+      lspSymbol('Warn', '')
       -- LSP log level
       --vim.lsp.set_log_level("info")
 
@@ -490,30 +490,30 @@ require("lazy").setup({
 
       local kind_icons = {
         Text = "",
-        Method = "",
-        Function = "",
+        Method = "󰆧",
+        Function = "󰊕",
         Constructor = "",
-        Field = "",
-        Variable = "",
-        Class = "ﴯ",
+        Field = "󰇽",
+        Variable = "󰂡",
+        Class = "󰠱",
         Interface = "",
         Module = "",
-        Property = "ﰠ",
+        Property = "󰜢",
         Unit = "",
-        Value = "",
+        Value = "󰎠",
         Enum = "",
-        Keyword = "",
+        Keyword = "󰌋",
         Snippet = "",
-        Color = "",
-        File = "",
+        Color = "󰏘",
+        File = "󰈙",
         Reference = "",
-        Folder = "",
+        Folder = "󰉋",
         EnumMember = "",
-        Constant = "",
+        Constant = "󰏿",
         Struct = "",
         Event = "",
-        Operator = "",
-        TypeParameter = ""
+        Operator = "󰆕",
+        TypeParameter = "󰅲",
       }
 
       local cmp = require "cmp"
@@ -727,7 +727,7 @@ require("lazy").setup({
         },
         git_diff_added = {
           provider = "git_diff_added",
-          icon = " ",
+          icon = " ",
           hl = base16_hl(11, 1,'None'),
           right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
           enabled = function()
@@ -736,7 +736,7 @@ require("lazy").setup({
         },
         git_diff_changed = {
           provider = "git_diff_changed",
-          icon = " ",
+          icon = " ",
           hl = base16_hl(9, 1,'None'),
           right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
           enabled = function()
@@ -745,7 +745,7 @@ require("lazy").setup({
         },
         git_diff_removed = {
           provider = "git_diff_removed",
-          icon = " ",
+          icon = " ",
           hl = base16_hl(8, 1,'None'),
           right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
           enabled = function()
@@ -757,16 +757,16 @@ require("lazy").setup({
             name = "file_info",
             opts = {
               type = "relative",
-              file_modified_icon = " ",
-              file_readonly_icon = " ",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
             }
           },
           short_provider = {
             name = "file_info",
             opts = {
               type = "relative-short",
-              file_modified_icon = " ",
-              file_readonly_icon = " ",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
             }
           },
           hl = base16_hl(6, 2,'None'),
@@ -829,7 +829,7 @@ require("lazy").setup({
               -- Trailing spaces or tabs
               trailing = vim.fn.search('\\s$', 'nw', 0 ,150)
               if trailing > 0 then
-                str = "  " .. fmt("%d", trailing) .. str
+                str = " 󱁐 " .. fmt("%d", trailing) .. str
               end
 
               -- Git conflicts
@@ -843,7 +843,7 @@ require("lazy").setup({
                 end
                 conflicts = vim.fn.search(pattern, "nw", 0, 200)
                 if conflicts > 0 then
-                  str = "  " .. fmt("%d", conflicts) .. str
+                  str = "  " .. fmt("%d", conflicts) .. str
                 end
               end
             end
@@ -938,16 +938,16 @@ require("lazy").setup({
             name = "file_info",
             opts = {
               type = "relative",
-              file_modified_icon = " ",
-              file_readonly_icon = " ",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
             }
           },
           short_provider = {
             name = "file_info",
             opts = {
               type = "relative-short",
-              file_modified_icon = " ",
-              file_readonly_icon = " ",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
             }
           },
           hl = base16_hl(4, 2,'None'),
