@@ -40,6 +40,9 @@ cp -f          $SCRIPT_DIR/.rg-completion.bash $1
 cp -f          $SCRIPT_DIR/.set_base16.sh $1
 cp -f --backup $SCRIPT_DIR/.tmux.conf $1
 cp -f          $SCRIPT_DIR/.update_display.sh $1
+if [[ ! -f $1/.vimrc_background ]]; then
+  cp -f          $SCRIPT_DIR/.vimrc_background $1
+fi
 
 # Restore origin git name and email
 git config --global user.name  "$GIT_NAME"

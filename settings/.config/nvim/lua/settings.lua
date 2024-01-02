@@ -19,7 +19,7 @@ vim.o.clipboard = "unnamed,unnamedplus"
 vim.bo.tabstop = 2
 vim.bo.softtabstop = 2
 vim.bo.shiftwidth = 2
-vim.bo.expandtab = true
+vim.o.expandtab = true
 
 -- Toggle between tab stops of 2 and 4
 function toggle_tabstop()

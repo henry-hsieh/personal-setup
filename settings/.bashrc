@@ -94,7 +94,9 @@ _fzf_comprun() {
 }
 
 # Put bash completion at first
-source ~/.local/share/bash-completion/bash_completion
+if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+  source /usr/share/bash-completion/bash_completion
+fi
 source ~/.git-prompt.sh
 source ~/.git-completion.bash
 source ~/.bat-completion.bash

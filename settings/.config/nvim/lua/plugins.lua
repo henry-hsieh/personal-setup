@@ -23,7 +23,27 @@ local ensure_lsp = {
   "pyright",
   "ltex",
   "bashls",
-  "tsserver"
+  "tsserver",
+}
+
+-- Tree-Sitter list
+local ensure_ts = {
+  "c",
+  "cpp",
+  "lua",
+  "vim",
+  "vimdoc",
+  "query",
+  "bash",
+  "python",
+  "javascript",
+  "verilog",
+  "gitcommit",
+  "git_rebase",
+  "make",
+  "markdown",
+  "latex",
+  "rust",
 }
 
 require("lazy").setup({
@@ -133,11 +153,11 @@ require("lazy").setup({
     config = function()
       require'nvim-treesitter.install'.command_extra_args = {["musl-gcc"] = {"-static"}}
       require'nvim-treesitter.configs'.setup {
-        ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query", "bash", "python", "javascript" },
+        ensure_installed = ensure_ts,
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = true,
         -- Automatically install missing parsers when entering buffer
-        auto_install = true,
+        auto_install = false,
 
         highlight = {
           enable = true,
