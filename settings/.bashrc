@@ -57,6 +57,9 @@ case "$(uname -a)" in
 esac
 
 . $HOME/.set_base16.sh
+if [ ! -L $HOME/.base16_theme ]; then # If base16-shell is not called
+    base16_default-dark
+fi
 
 # Use ~~ as the trigger sequence instead of the default **
 #export FZF_COMPLETION_TRIGGER='~~'

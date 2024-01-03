@@ -620,21 +620,20 @@ require("lazy").setup({
   },
 
   {
-    'base16-project/base16-vim',
+    'RRethy/nvim-base16',
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      vim.cmd([[let base16colorspace=256]])
-      vim.cmd([[source ~/.vimrc_background]])
-      vim.cmd([[hi link TSKeywordOperator Keyword]])
+      if os.getenv("BASE16_THEME") then
+        vim.cmd('colorscheme base16-' .. os.getenv("BASE16_THEME"))
+      else
+        vim.cmd('colorscheme base16-default-dark')
+      end
     end,
   },
 
   {
     'feline-nvim/feline.nvim',
-    dependencies = {
-      'base16-project/base16-vim',
-    },
     config = function()
       -- Feline statusline definition.
       --
@@ -664,10 +663,10 @@ require("lazy").setup({
       local function base16_hl(fg, bg, style)
         local hl = {}
         if fg then
-          hl.fg = vim.g['base16_gui' .. fmt("%02X", fg)] and "#" .. vim.g['base16_gui' .. fmt("%02X", fg)] or vim.g.terminal_color_foreground
+          hl.fg = vim.g['base16_gui' .. fmt("%02X", fg)] and vim.g['base16_gui' .. fmt("%02X", fg)] or vim.g.terminal_color_foreground
         end
         if bg then
-          hl.bg = vim.g['base16_gui' .. fmt("%02X", bg)] and "#" .. vim.g['base16_gui' .. fmt("%02X", bg)] or vim.g.terminal_color_background
+          hl.bg = vim.g['base16_gui' .. fmt("%02X", bg)] and vim.g['base16_gui' .. fmt("%02X", bg)] or vim.g.terminal_color_background
         end
         if style then
           hl.style = style

@@ -14,7 +14,10 @@ if ( -f ~/.cshrc.pre ) then
     source ~/.cshrc.pre
 endif
 
-bash --init-file ~/.set_base16.sh -i -c base16_tomorrow-night
+if ( ! -e $HOME/.base16_theme ) then
+    bash --init-file ~/.set_base16.sh -i -c 'base16_default-dark'
+    setenv BASE16_THEME "default-dark"
+endif
 set autolist=ambiguous
 source ~/.git-completion.tcsh
 set padhour
