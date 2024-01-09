@@ -329,6 +329,15 @@ require("lazy").setup({
             }
           }
         end,
+        ["svlangserver"] = function ()
+          local on_attach = function(client, bufnr)
+            require('nlspsettings').update_settings(client.name)
+          end
+          local lspconfig = require("lspconfig")
+          lspconfig.svlangserver.setup {
+            on_attach = on_attach,
+          }
+        end,
       }
       require'mason-lspconfig'.setup{
         ensure_installed = ensure_lsp,
@@ -756,7 +765,7 @@ require("lazy").setup({
         git_diff_changed = {
           provider = "git_diff_changed",
           icon = " ",
-          hl = base16_hl(9, 1,'None'),
+          hl = base16_hl(13, 1,'None'),
           right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
           enabled = function()
             return vim.b.gitsigns_status_dict ~= nil
@@ -917,7 +926,7 @@ require("lazy").setup({
             return get_diag("WARN")
           end,
           hl = base16_hl(1, 9, 'None'),
-          left_sep = { str = "", hl = base16_hl(9, 8, 'None'), always_visible = true },
+          left_sep = { str = "", hl = base16_hl(14, 8, 'None'), always_visible = true },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
           end,
@@ -927,7 +936,7 @@ require("lazy").setup({
             return get_diag("INFO")
           end,
           hl = base16_hl(1, 13, 'None'),
-          left_sep = { str = "", hl = base16_hl(13, 9, 'None'), always_visible = true },
+          left_sep = { str = "", hl = base16_hl(13, 14, 'None'), always_visible = true },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
           end,
