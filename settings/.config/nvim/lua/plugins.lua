@@ -291,12 +291,12 @@ require("lazy").setup({
     'williamboman/mason.nvim',
     branch = 'v2.x',
     config = function()
-      require'mason'.setup{
-        -- log_level = vim.log.levels.DEBUG,
-        registries = {
-            "github:henry-hsieh/mason-registry",
-        },
-      }
+      --require'mason'.setup{
+      --  -- log_level = vim.log.levels.DEBUG,
+      --  registries = {
+      --      "github:henry-hsieh/mason-registry",
+      --  },
+      --}
     end
   },
 
@@ -347,8 +347,7 @@ require("lazy").setup({
   },
 
   {
-    'henry-hsieh/mason-tool-installer.nvim',
-    branch = 'add-sync',
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
     dependencies = {
       'williamboman/mason-lspconfig.nvim',
     },
@@ -1131,4 +1130,11 @@ require("lazy").setup({
   },
 
   {"tpope/vim-fugitive"},
+
+  {
+    "vhda/verilog_systemverilog.vim",
+    config = function()
+      vim.g.verilog_disable_indent_lst = 'preproc,eos,standalone'
+    end,
+  },
 })
