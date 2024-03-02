@@ -288,14 +288,11 @@ require("lazy").setup({
   },
 
   {
-    'williamboman/mason.nvim',
+    'henry-hsieh/mason.nvim',
     branch = 'v2.x',
     config = function()
       require'mason'.setup{
         -- log_level = vim.log.levels.DEBUG,
-        registries = {
-            "github:henry-hsieh/mason-registry",
-        },
       }
     end
   },
