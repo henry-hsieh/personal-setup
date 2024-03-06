@@ -300,7 +300,7 @@ require("lazy").setup({
   {
     'williamboman/mason-lspconfig.nvim',
     dependencies = {
-      'williamboman/mason.nvim',
+      'henry-hsieh/mason.nvim',
     },
     config = function()
       local handlers = {
@@ -333,6 +333,7 @@ require("lazy").setup({
           local lspconfig = require("lspconfig")
           lspconfig.svlangserver.setup {
             on_attach = on_attach,
+            filetypes = {'verilog', 'systemverilog', 'verilog_systemverilog'},
           }
         end,
       }
@@ -595,8 +596,17 @@ require("lazy").setup({
           { name = 'luasnip' }, -- For luasnip users.
           -- { name = 'ultisnips' }, -- For ultisnips users.
           -- { name = 'snippy' }, -- For snippy users.
-        }, {
-            { name = 'buffer' },
+          }, {
+            name = 'buffer',
+            option = {
+              get_bufnrs = function()
+                local bufs = {}
+                for _, win in ipairs(vim.api.nvim_list_wins()) do
+                  bufs[vim.api.nvim_win_get_buf(win)] = true
+                end
+                return vim.tbl_keys(bufs)
+              end
+            }
           }),
         view = {
           entries = {
@@ -921,7 +931,7 @@ require("lazy").setup({
           provider = function()
             return get_diag("WARN")
           end,
-          hl = base16_hl(1, 9, 'None'),
+          hl = base16_hl(1, 14, 'None'),
           left_sep = { str = "", hl = base16_hl(14, 8, 'None'), always_visible = true },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
@@ -1130,6 +1140,7 @@ require("lazy").setup({
 
   {
     "vhda/verilog_systemverilog.vim",
+    ft = "verilog_systemverilog",
     config = function()
       vim.g.verilog_disable_indent_lst = 'preproc,eos,standalone'
     end,
