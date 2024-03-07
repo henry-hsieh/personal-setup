@@ -301,14 +301,18 @@ require("lazy").setup({
     'williamboman/mason-lspconfig.nvim',
     dependencies = {
       'henry-hsieh/mason.nvim',
+      'hrsh7th/cmp-nvim-lsp',
     },
     config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
       local handlers = {
         -- The first entry (without a key) will be the default handler
         -- and will be called for each installed server that doesn't have
         -- a dedicated handler.
         function (server_name) -- default handler (optional)
-          require("lspconfig")[server_name].setup {}
+          require("lspconfig")[server_name].setup {
+            capabilities = capabilities,
+          }
         end,
         -- Next, you can provide targeted overrides for specific servers.
         ["rust_analyzer"] = function ()
@@ -323,7 +327,8 @@ require("lazy").setup({
                   globals = { "vim" }
                 }
               }
-            }
+            },
+            capabilities = capabilities,
           }
         end,
         ["svlangserver"] = function ()
@@ -334,6 +339,7 @@ require("lazy").setup({
           lspconfig.svlangserver.setup {
             on_attach = on_attach,
             filetypes = {'verilog', 'systemverilog', 'verilog_systemverilog'},
+            capabilities = capabilities,
           }
         end,
       }
@@ -483,27 +489,29 @@ require("lazy").setup({
     end,
   },
 
-  -- Completion and snippets
-  {'hrsh7th/cmp-nvim-lsp'},
-  {'hrsh7th/cmp-buffer'},
-  {'hrsh7th/cmp-path'},
-  {'hrsh7th/cmp-cmdline'},
-  -- For vsnip users.
-  -- {'hrsh7th/cmp-vsnip'},
-  -- {'hrsh7th/vim-vsnip'},
-  -- For luasnip users.
-  {'L3MON4D3/LuaSnip'},
-  {'saadparwaiz1/cmp_luasnip'},
-  --
-  -- For ultisnips users.
-  -- {'SirVer/ultisnips'},
-  -- {'quangnguyen30192/cmp-nvim-ultisnips'},
-  --
-  -- For snippy users.
-  -- {'dcampos/nvim-snippy'},
-  -- {'dcampos/cmp-snippy'},
   {
     'hrsh7th/nvim-cmp',
+    dependencies = {
+      -- Completion and snippets
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      -- For vsnip users.
+      -- 'hrsh7th/cmp-vsnip',
+      -- 'hrsh7th/vim-vsnip',
+      -- For luasnip users.
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+      --
+      -- For ultisnips users.
+      -- 'SirVer/ultisnips',
+      -- 'quangnguyen30192/cmp-nvim-ultisnips',
+      --
+      -- For snippy users.
+      -- 'dcampos/nvim-snippy',
+      -- 'dcampos/cmp-snippy',
+    },
     config = function()
       local has_words_before = function()
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -596,7 +604,8 @@ require("lazy").setup({
           { name = 'luasnip' }, -- For luasnip users.
           -- { name = 'ultisnips' }, -- For ultisnips users.
           -- { name = 'snippy' }, -- For snippy users.
-          }, {
+        }, {
+          {
             name = 'buffer',
             option = {
               get_bufnrs = function()
@@ -607,7 +616,8 @@ require("lazy").setup({
                 return vim.tbl_keys(bufs)
               end
             }
-          }),
+          }
+        }),
         view = {
           entries = {
             name = "custom",
@@ -630,6 +640,24 @@ require("lazy").setup({
           end
         },
       }
+      -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline({ '/', '?' }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = 'buffer' }
+        }
+      })
+
+      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = 'path' }
+        }, {
+          { name = 'cmdline' }
+        })
+      })
+
       require("luasnip").config.setup({store_selection_keys="s"})
     end
   },

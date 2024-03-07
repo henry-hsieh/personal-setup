@@ -15,8 +15,10 @@ if ( -f ~/.cshrc.pre ) then
 endif
 
 if ( ! -e $HOME/.base16_theme ) then
-    bash --init-file ~/.set_base16.sh -i -c 'base16_default-dark'
+    bash --init-file $HOME/.set_base16.sh -i -c 'base16_default-dark'
     setenv BASE16_THEME "default-dark"
+else
+    setenv BASE16_THEME `bash -c 'source $HOME/.base16_theme 2>&1 > /dev/null; echo $BASE16_THEME'`
 endif
 set autolist=ambiguous
 source ~/.git-completion.tcsh
