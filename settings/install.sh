@@ -46,8 +46,9 @@ git config --global user.name  "$GIT_NAME"
 git config --global user.email "$GIT_EMAIL"
 
 # Generate tmux-256color
-/usr/bin/tic -xe tmux-256color $SCRIPT_DIR/terminfo.src
-
+mkdir -p $1/.terminfo
+/usr/bin/tic -xe tmux-256color $SCRIPT_DIR/terminfo.src -o 
+$1/.terminfo
 echo "====================================================="
 echo "Installation completed"
 echo "Reopen terminal and change shell color if you needed (base16_<Tab>)"
