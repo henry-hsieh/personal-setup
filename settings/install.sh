@@ -42,8 +42,8 @@ cp -f --backup $SCRIPT_DIR/.tmux.conf $1
 cp -f          $SCRIPT_DIR/.update_display.sh $1
 
 # Restore origin git name and email
-git config --global user.name  "$GIT_NAME"
-git config --global user.email "$GIT_EMAIL"
+git config --file $1/.gitconfig user.name  "$GIT_NAME"
+git config --file $1/.gitconfig user.email "$GIT_EMAIL"
 
 # Generate tmux-256color
 mkdir -p $1/.terminfo
