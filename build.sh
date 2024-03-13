@@ -97,13 +97,6 @@ curl -L https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.b
 curl -L https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.bash > $BUILD_DIR/.fzf-key-bindings.bash
 curl -L https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux > $BUILD_DIR/.local/bin/
 
-# verible
-curl -L https://github.com/chipsalliance/verible/releases/download/$VERIBLE_VERSION/verible-${VERIBLE_VERSION}-linux-static-x86_64.tar.gz > $TEMP_DIR/verible-${VERIBLE_VERSION}-linux-static-x86_64.tar.gz
-tar -zxvf $TEMP_DIR/verible-${VERIBLE_VERSION}-linux-static-x86_64.tar.gz -C $TEMP_DIR
-pushd $TEMP_DIR/verible-${VERIBLE_VERSION}
-rsync -av bin $BUILD_DIR/.local/
-popd
-
 # node (use unofficial builds)
 curl -L https://unofficial-builds.nodejs.org/download/release/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz > $TEMP_DIR/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz
 tar -Jxvf $TEMP_DIR/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz -C $TEMP_DIR
