@@ -51,3 +51,5 @@
     cursor = red black bold
 [tig "bind"]
     generic = P parent
+[git-p4]
+  skipSubmitEdit = true

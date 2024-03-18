@@ -4,10 +4,7 @@ if [[ $# != 1 ]]; then
     echo "Usage: $0 /path/to/install"
     exit
 fi
-if ! [[ -d $1 ]]; then
-    echo "Path $1 not found"
-    exit
-fi
+mkdir -p $1
 
 SCRIPT_DIR=$(dirname $(realpath $0))
 if [[ $($SCRIPT_DIR/.local/bin/tmux list-session) != "" ]]; then

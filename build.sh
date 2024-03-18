@@ -9,6 +9,7 @@ VERIBLE_VERSION=v0.0-3471-g9cb45092
 NODE_VERSION=v20.9.0
 RG_VERSION=14.0.3
 TMUX_VERSION=3.3a
+NCURSES_VERSION=6.4
 
 # Directory path
 BUILD_DIR=$(dirname $(realpath $0))/build/
@@ -124,9 +125,10 @@ chmod +x ./build-tmux.sh
 if [[ -e prebuilt ]]; then
   rm -rf prebuilt; 
 fi
-TMUX_VERSION=$TMUX_VERSION NCURSES_VERSION=6.4 CC=musl-gcc ./build-tmux.sh
+TMUX_VERSION=$TMUX_VERSION NCURSES_VERSION=$NCURSES_VERSION CC=musl-gcc ./build-tmux.sh
 rsync -av prebuilt/tmux/bin $BUILD_DIR/.local/
 rsync -av prebuilt/tmux/share $BUILD_DIR/.local/
+rsync -av ncurses-$NCURSES_VERSION/misc/terminfo.src $BUILD_DIR/
 popd
 
 # tmux-plugins
