@@ -1,0 +1,98 @@
+- name: test bat exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "bat --version"'
+  stdout:
+    contains:
+      - "bat"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test bd exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "\bd -?"'
+  stdout:
+    contains:
+      - "Usage: bd"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test fd exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "fd --version"'
+  stdout:
+    contains:
+      - "fd"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test fzf exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "fzf --help"'
+  stdout:
+    contains:
+      - "usage: fzf"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test fzf-tmux exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "which fzf-tmux"'
+  stdout:
+    contains:
+      - "fzf-tmux"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test node exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "node --help"'
+  stdout:
+    contains:
+      - "Usage: node"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test nvim exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "nvim --version"'
+  stdout:
+    contains:
+      - "NVIM"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test rg exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "rg --version"'
+  stdout:
+    contains:
+      - "ripgrep"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test tmux exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "tmux -V"'
+  stdout:
+    contains:
+      - "tmux"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test tree-sitter exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "tree-sitter --version"'
+  stdout:
+    contains:
+      - "tree-sitter"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
+- name: test java exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "java --version"'
+  stdout:
+    contains:
+      - "openjdk"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"

@@ -1,0 +1,154 @@
+- name: test lazy.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh lazy
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test telescope.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh telescope
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test telescope-fzf-native.nvim exists
+  command: bash ./tests/nvim/test-fzf-native-build-success.sh
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test nvim-tree exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh nvim-tree
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test hop.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh hop
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test nvim-treesitter exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh nvim-treesitter
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test mason.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh mason
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test nlsp-settings.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh nlspsettings
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test gitsigns.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh gitsigns
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test nvim-cmp exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh cmp
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test nvim-base16 exists
+  command: bash ./tests/nvim/test-base16-colorscheme.sh
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    contains:
+      - "base16-default-dark"
+    must_not_contain:
+      - "Error detected"
+
+- name: test feline.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh feline
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test TrueZen.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh true-zen
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test riscv-asm-vim exists
+  command: bash ./tests/nvim/test-vim-package-exist.sh g:riscv_asm_isa
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test vim-fugitive exists
+  command: bash ./tests/nvim/test-vim-package-exist.sh :Git
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test verilog_systemverilog exists
+  command: bash ./tests/nvim/test-vim-package-exist.sh :VerilogDisableIndentAdd test.v
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test Comment.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh Comment
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"

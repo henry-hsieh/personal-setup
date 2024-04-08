@@ -1,0 +1,8 @@
+- name: test .bashrc syntax error
+  command: bash -c 'HOME=$(pwd) bash -i -c "echo Test pass"'
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "syntax error"
