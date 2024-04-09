@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Version control
-NVIM_VERSION=v0.9.4
+NVIM_VERSION=v0.9.5
 BAT_VERSION=v0.24.0
 FD_VERSION=v9.0.0
 FZF_VERSION=0.44.1
