@@ -59,8 +59,9 @@ If you want to build from source or to contribute, following is the guide to do 
 
 ### Build Step
 
-1. Execute the `./setup.sh` script to configure your environment.
-2. The environment will be archived into `personal-setup.tar.gz`.
+1. Execute `make build` to build the environment in `build/personal-setup/build_home/`.
+2. Execute `make release` to archive the environment into `build/personal-setup.tar.gz`.
+3. **(Optional)** Execute `make test` to test the correctness of the environment.
 
 ### Organization
 
@@ -75,6 +76,10 @@ If you want to build from source or to contribute, following is the guide to do 
 - `build/`: The directory contains the downloaded files and output of the scripts.
   - `personal-setup/`: The directory contains the installation script and the payloads, which will be archived and uploaded to GitHub Release.
     - `build_home/`: The directory contains the final Linux environment, which will be archived and becomes the payload of installation.
+  - `test/`: The directory contains the decompressed files of the `personal-setup.tar.gz` for testing.
+    - `home/`: The directory is used for running test patterns.
+- `tests/`: The directory contains test environment settings and test patterns managed by [pytest-workflow](https://github.com/LUMC/pytest-workflow).
+  - `Dockerfile`: The Docker settings for testing. The packages required by testing should be specified in the file.
 - `Makefile`: Used to manage build system.
 
 ## License
