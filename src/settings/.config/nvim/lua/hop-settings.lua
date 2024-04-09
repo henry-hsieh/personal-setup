@@ -1,56 +1,47 @@
 -- hop-settings.lua
 local M = {}
-local opts = {}
 
 -- remap f, F, t, T behavior to Hop
 vim.api.nvim_set_keymap('', 'f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", {})
 vim.api.nvim_set_keymap('', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", {})
-vim.api.nvim_set_keymap('', 't', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>", {})
-vim.api.nvim_set_keymap('', 'T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>", {})
+vim.api.nvim_set_keymap('', 't', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", {})
+vim.api.nvim_set_keymap('', 'T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", {})
 -- map HopWord
-vim.api.nvim_set_keymap('', ',w', "<cmd>HopWord<cr>", {})
+vim.api.nvim_set_keymap('', '<leader>w', "<cmd>HopWord<cr>", {})
+-- map HopWORD
+vim.api.nvim_set_keymap('', '<leader>W', "<cmd>HopWORD<cr>", {})
+-- map HopWordEnd
+vim.api.nvim_set_keymap('', '<leader>e', "<cmd>HopWordEnd<cr>", {})
+-- map HopWORDEnd
+vim.api.nvim_set_keymap('', '<leader>E', "<cmd>HopWORDEnd<cr>", {})
 -- map HopLineStart
-vim.api.nvim_set_keymap('', ',l', "<cmd>HopLineStart<cr>", {})
+vim.api.nvim_set_keymap('', '<leader>l', "<cmd>HopLineStart<cr>", {})
 -- map HopLine
-vim.api.nvim_set_keymap('', ',L', "<cmd>HopLine<cr>", {})
+vim.api.nvim_set_keymap('', '<leader>L', "<cmd>HopLine<cr>", {})
 -- map HopChar1
-vim.api.nvim_set_keymap('', ',c', "<cmd>HopChar1<cr>", {})
+vim.api.nvim_set_keymap('', '<leader>c', "<cmd>HopChar1<cr>", {})
 -- map HopChar2
-vim.api.nvim_set_keymap('', ',C', "<cmd>HopChar2<cr>", {})
+vim.api.nvim_set_keymap('', '<leader>C', "<cmd>HopChar2<cr>", {})
 -- map HopPattern
-vim.api.nvim_set_keymap('', ',/', "<cmd>HopPattern<cr>", {})
--- map custom non-space word start jump
-function M.regex_by_non_space_word_start()
-    local pat = vim.regex([[\(^\|\s\+\)\zs\S\+\ze]])
-    return {
-        oneshot = false,
-        match = function(s)
-            return pat:match_str(s)
-        end
-    }
+vim.api.nvim_set_keymap('', '<leader>/', "<cmd>HopPattern<cr>", {})
+
+-- HopWORD: the sequence of non-blank characters start
+function M.hint_WORD()
+  local pat = [[\(^\|\s\+\)\zs\S\+\ze]]
+  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, require('hop').opts), require('hop').opts)
 end
-vim.api.nvim_set_keymap('', ',W', "<cmd>lua require'hop'.hint_with(require'hop.jump_target'.jump_targets_by_scanning_lines(require'hop-settings'.regex_by_non_space_word_start()))<cr>", {})
--- map custom word end jump
-function M.regex_by_word_end()
-    local pat = vim.regex([[\zs\w\ze\>]])
-    return {
-        oneshot = false,
-        match = function(s)
-            return pat:match_str(s)
-        end
-    }
+vim.api.nvim_create_user_command('HopWORD', "lua require('hop-settings').hint_WORD()", {})
+-- HopWordEnd: the word end
+function M.hint_word_end()
+  local pat = [[\zs\w\ze\>]]
+  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, require('hop').opts), require('hop').opts)
 end
-vim.api.nvim_set_keymap('', ',e', "<cmd>lua require'hop'.hint_with(require'hop.jump_target'.jump_targets_by_scanning_lines(require'hop-settings'.regex_by_word_end()))<cr>", {})
--- map custom non-space word end jump
-function M.regex_by_non_space_word_end()
-    local pat = vim.regex([[\zs\S\ze\($\|\s\+\)]])
-    return {
-        oneshot = false,
-        match = function(s)
-            return pat:match_str(s)
-        end
-    }
+vim.api.nvim_create_user_command('HopWordEnd', "lua require('hop-settings').hint_word_end()", {})
+-- HopWORDEnd: the sequence of non-blank characters end
+function M.hint_WORD_end()
+  local pat = [[\zs\S\ze\($\|\s\+\)]]
+  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, require('hop').opts), require('hop').opts)
 end
-vim.api.nvim_set_keymap('', ',E', "<cmd>lua require'hop'.hint_with(require'hop.jump_target'.jump_targets_by_scanning_lines(require'hop-settings'.regex_by_non_space_word_end()))<cr>", {})
+vim.api.nvim_create_user_command('HopWORDEnd', "lua require('hop-settings').hint_WORD_end()", {})
 
 return M
