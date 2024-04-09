@@ -373,6 +373,17 @@ require("lazy").setup({
             capabilities = capabilities,
           }
         end,
+        ["bashls"] = function ()
+          local lspconfig = require("lspconfig")
+          lspconfig.bashls.setup {
+            settings = {
+              bashIde = {
+                globPattern = "" -- Add for avoiding freeze
+              }
+            },
+            capabilities = capabilities,
+          }
+        end,
       }
       require'mason-lspconfig'.setup{
         ensure_installed = ensure_lsp,
