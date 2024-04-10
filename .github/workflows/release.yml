@@ -18,7 +18,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Commit lint
+        uses: wagoid/commitlint-github-action@v6
 
       - name: Run tests
         id: run_test
