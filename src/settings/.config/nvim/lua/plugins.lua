@@ -1204,6 +1204,8 @@ require("lazy").setup({
 
   {
     "henry-hsieh/riscv-asm-vim",
+    ft = "riscv_asm",
+    event = {"BufNewFile", "BufReadPost"},
     config = function()
       local s = plugin_settings.riscv_asm_vim.settings
       vim.g.riscv_asm_isa = s.isa
