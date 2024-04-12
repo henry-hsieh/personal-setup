@@ -35,7 +35,7 @@ test: $(OUT) _build_test_docker
 	@echo "Installing environment..."
 	$(TEST_DIR)/personal-setup/install.sh $(TEST_HOME) > $(LOG_DIR)/install.log
 	/usr/bin/cp -r $(TEST_SRC_DIR) $(TEST_HOME)
-	docker run --user $(shell id -u):$(shell id -g) -e HOME=/home -v $(TEST_HOME):/home -w /home pytest-workflow bash -i -c "pytest --symlink"
+	docker run --user $(shell id -u):$(shell id -g) -e HOME=/home -v $(TEST_HOME):/home -v $(LOG_DIR):/log -w /home pytest-workflow bash -i -c "pytest --symlink --kwdof --wt 16 --basetemp '/log/'"
 
 _build_test_docker:
 	docker build -t pytest-workflow $(TEST_SRC_DIR)
