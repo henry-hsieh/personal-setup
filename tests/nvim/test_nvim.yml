@@ -118,7 +118,7 @@
       - "Error detected"
 
 - name: test riscv-asm-vim exists
-  command: bash ./tests/nvim/test-vim-package-exist.sh g:riscv_asm_isa
+  command: bash ./tests/nvim/test-vim-package-exist.sh '*GetRiscvIndent' test.S
   stdout:
     contains:
       - "Test pass"
