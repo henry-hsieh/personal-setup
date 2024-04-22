@@ -28,19 +28,21 @@ vim.api.nvim_set_keymap('', '<leader>/', "<cmd>HopPattern<cr>", {})
 -- HopWORD: the sequence of non-blank characters start
 function M.hint_WORD()
   local pat = [[\(^\|\s\+\)\zs\S\+\ze]]
-  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, require('hop').opts), require('hop').opts)
+  local opts = require('hop').opts
+  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, opts), opts)
 end
 vim.api.nvim_create_user_command('HopWORD', "lua require('hop-settings').hint_WORD()", {})
 -- HopWordEnd: the word end
 function M.hint_word_end()
-  local pat = [[\zs\w\ze\>]]
-  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, require('hop').opts), require('hop').opts)
+  require('hop').hint_words({ hint_position = require'hop.hint'.HintPosition.END })
 end
 vim.api.nvim_create_user_command('HopWordEnd', "lua require('hop-settings').hint_word_end()", {})
 -- HopWORDEnd: the sequence of non-blank characters end
 function M.hint_WORD_end()
-  local pat = [[\zs\S\ze\($\|\s\+\)]]
-  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, require('hop').opts), require('hop').opts)
+  local pat = [[\(^\|\s\+\)\zs\S\+\ze]]
+  local opts = require('hop').opts
+  opts.hint_position = require'hop.hint'.HintPosition.END
+  require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, opts), opts)
 end
 vim.api.nvim_create_user_command('HopWORDEnd', "lua require('hop-settings').hint_WORD_end()", {})
 
