@@ -10,10 +10,11 @@ NODE_VERSION=v20.9.0
 JDK_VERSION=22
 RG_VERSION=14.0.3
 TREE_SITTER_VERSION=v0.22.2
-TMUX_VERSION=3.3a
+TMUX_VERSION=3.4
 NCURSES_VERSION=6.4
 LIBEVENT_VERSION=2.1.12-stable
 UTF8PROC_VERSION=2.6.1
+UTEMPTER_VERSION=1.2.1-alt1
 
 # Directory path
 ROOT_DIR=$(dirname $(dirname $(realpath $0)))
@@ -168,6 +169,8 @@ download_file https://invisible-mirror.net/archives/ncurses/ncurses-$NCURSES_VER
 tar -axvf $BUILD_DIR/tmux/ncurses-$NCURSES_VERSION.tar.gz -C $BUILD_DIR/tmux
 download_file https://github.com/JuliaLang/utf8proc/archive/v$UTF8PROC_VERSION.tar.gz $BUILD_DIR/tmux/utf8proc-$UTF8PROC_VERSION.tar.gz
 tar -axvf $BUILD_DIR/tmux/utf8proc-$UTF8PROC_VERSION.tar.gz -C $BUILD_DIR/tmux
+download_file https://github.com/altlinux/libutempter/archive/refs/tags/$UTEMPTER_VERSION.tar.gz $BUILD_DIR/tmux/libutempter-$UTEMPTER_VERSION.tar.gz
+tar -axvf $BUILD_DIR/tmux/libutempter-$UTEMPTER_VERSION.tar.gz -C $BUILD_DIR/tmux
 download_file https://github.com/tmux/tmux/releases/download/$TMUX_VERSION/tmux-$TMUX_VERSION.tar.gz $BUILD_DIR/tmux/tmux-$TMUX_VERSION.tar.gz
 tar -axvf $BUILD_DIR/tmux/tmux-$TMUX_VERSION.tar.gz -C $BUILD_DIR/tmux
 pushd $BUILD_DIR/tmux
@@ -217,6 +220,17 @@ if [[ 0 -ne $? ]]; then
   exit 1
 fi
 popd
+## build utempter ##
+print_process_item "Build libutempter" 1
+pushd libutempter-$UTEMPTER_VERSION/libutempter
+make -j
+if [[ 0 -ne $? ]]; then
+  echo "Build libutempter failed"
+  exit 1
+fi
+# rm -rf $TMUX_BUILD_DEPENDENCIES/share/man/man3/utempter* # Add for rebuild error
+make install DESTDIR="$TMUX_BUILD_DEPENDENCIES" libdir="/lib" libexecdir="/lib" includedir="/include" mandir="/share/man"
+popd
 ## build tmux ##
 print_process_item "Build tmux" 1
 pushd tmux-$TMUX_VERSION
@@ -231,12 +245,14 @@ else
   TMUX_NCURSES_LIBS=""
 fi
 ./configure --prefix="$OUT_DIR/.local/" \
---enable-static --enable-utf8proc \
+--enable-static --enable-utf8proc --enable-utempter \
 PKG_CONFIG_PATH="$TMUX_PKG_CONFIG_PATH" \
 LIBNCURSES_CFLAGS="$TMUX_NCURSES_CFLAGS" \
 LIBNCURSES_LIBS="$TMUX_NCURSES_LIBS" \
 LIBEVENT_CFLAGS="$(pkg-config --cflags $TMUX_BUILD_DEPENDENCIES/lib/pkgconfig/libevent.pc)" \
-LIBEVENT_LIBS="$(pkg-config --libs $TMUX_BUILD_DEPENDENCIES/lib/pkgconfig/libevent.pc)"
+LIBEVENT_LIBS="$(pkg-config --libs $TMUX_BUILD_DEPENDENCIES/lib/pkgconfig/libevent.pc)" \
+LIBUTF8PROC_CFLAGS="-I$TMUX_BUILD_DEPENDENCIES/include" \
+LIBUTF8PROC_LIBS="-L$TMUX_BUILD_DEPENDENCIES/lib -lutempter"
 make -j install
 if [[ 0 -ne $? ]]; then
   echo "Build tmux failed"
