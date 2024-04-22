@@ -104,7 +104,7 @@ get_openjdk_download_url() {
   done
 
   # Extract the download URL for the specified version and architecture
-  local download_url=$(echo "$download_url_list" | grep "$version" | grep "$arch" | head -n 1)
+  local download_url=$(echo "$download_url_list" | grep "openjdk-${version}_${arch}" | head -n 1)
 
   # Print the download URL
   echo "$download_url"
