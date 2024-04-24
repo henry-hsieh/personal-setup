@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Version control
+GIT_EXTRAS_VERSION=7.2.0
 NVIM_VERSION=v0.9.5
 BAT_VERSION=v0.24.0
 FD_VERSION=v9.0.0
@@ -60,10 +61,17 @@ rsync -av ${ROOT_DIR}/src/install.sh $TAR_DIR
 print_process_item "Clone base16-shell" 1
 download_git_repo https://github.com/chriskempson/base16-shell.git $OUT_DIR/.config/base16-shell
 
-# git
+# git-completion
 print_process_item "Download git-completion" 1
 download_exe https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash $OUT_DIR/.local/share/bash-completion/completions/git
 download_exe https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh $OUT_DIR/.local/share/scripts/git-prompt.sh
+
+# git-extras
+print_process_item "Download git-extras" 1
+download_git_repo https://github.com/tj/git-extras.git $BUILD_DIR/git-extras $GIT_EXTRAS_VERSION
+pushd $BUILD_DIR/git-extras
+make install DESTDIR=$OUT_DIR/ PREFIX=.local/ SYSCONFDIR=.local/share/
+popd
 
 # nvim
 print_process_item "Download nvim" 1
