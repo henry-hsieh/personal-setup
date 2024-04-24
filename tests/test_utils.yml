@@ -43,6 +43,15 @@
     must_not_contain:
       - "No such file or directory"
 
+- name: test git-extras exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "which git-extras"'
+  stdout:
+    contains:
+      - "git-extras"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
 - name: test node exists
   command: bash -c 'HOME=$(pwd) bash -i -c "node --help"'
   stdout:
