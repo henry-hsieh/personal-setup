@@ -11,6 +11,7 @@ NODE_VERSION=v20.9.0
 JDK_VERSION=22
 RG_VERSION=14.0.3
 TREE_SITTER_VERSION=v0.22.2
+TINTY_VERSION=v0.11.0
 TMUX_VERSION=3.4
 NCURSES_VERSION=6.4
 LIBEVENT_VERSION=2.1.12-stable
@@ -56,10 +57,6 @@ source ${ROOT_DIR}/src/utils.sh
 mkdir -p $OUT_DIR
 rsync -av $SETTINGS_DIR $OUT_DIR
 rsync -av ${ROOT_DIR}/src/install.sh $TAR_DIR
-
-# base16-shell
-print_process_item "Clone base16-shell" 1
-download_git_repo https://github.com/chriskempson/base16-shell.git $OUT_DIR/.config/base16-shell
 
 # git-completion
 print_process_item "Download git-completion" 1
@@ -159,6 +156,15 @@ popd
 download_file https://github.com/tree-sitter/tree-sitter/releases/download/${TREE_SITTER_VERSION}/tree-sitter-linux-x64.gz $BUILD_DIR/tree-sitter-${TREE_SITTER_VERSION}-linux-x64.gz
 gzip -dc < $BUILD_DIR/tree-sitter-${TREE_SITTER_VERSION}-linux-x64.gz > $OUT_DIR/.local/bin/tree-sitter
 chmod 755 $OUT_DIR/.local/bin/tree-sitter
+
+# tinty
+print_process_item "Download tinty" 1
+download_file https://github.com/tinted-theming/tinty/releases/download/${TINTY_VERSION}/tinty--x86_64-unknown-linux-gnu.tar.gz $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-gnu.tar.gz
+mkdir -p $BUILD_DIR/tinty
+tar -axvf $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-gnu.tar.gz -C $BUILD_DIR/tinty
+pushd $BUILD_DIR/tinty
+rsync -av tinty $OUT_DIR/.local/bin/
+popd
 
 # bd
 print_process_item "Download bd" 1

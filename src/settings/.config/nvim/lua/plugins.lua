@@ -713,17 +713,44 @@ require("lazy").setup({
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
+      local default_theme = "base16-default-dark"
+
+      local function get_tinty_theme()
+        local theme_name = vim.fn.system("tinty current &> /dev/null && tinty current")
+
+        if vim.v.shell_error ~= 0 then
+          return default_theme
+        else
+          return theme_name
+        end
+      end
+
+
+      local function handle_focus_gained()
+        local new_theme_name = get_tinty_theme()
+        local current_theme_name = vim.g.colors_name
+
+        if current_theme_name ~= new_theme_name then
+          vim.cmd("colorscheme " .. new_theme_name)
+        end
+      end
+
+      vim.o.termguicolors = true
+      vim.g.tinted_colorspace = 256
+      local current_theme_name = get_tinty_theme()
+
+      vim.cmd("colorscheme " .. current_theme_name)
+
+      vim.api.nvim_create_autocmd("FocusGained", {
+        callback = handle_focus_gained,
+      })
+
       vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
         callback = function ()
           local base16 = require('base16-colorscheme')
           base16.highlight.DiagnosticWarn = { guifg = base16.colors.base09, guibg = nil, gui = 'none', guisp = nil, ctermfg = base16.colors.cterm0E, ctermbg = nil }
         end
       })
-      if os.getenv("BASE16_THEME") then
-        vim.cmd('colorscheme base16-' .. os.getenv("BASE16_THEME"))
-      else
-        vim.cmd('colorscheme base16-default-dark')
-      end
     end,
   },
 
