@@ -66,7 +66,7 @@ tinty_source_shell_theme() {
   subcommand="$1"
 
   if [ "$subcommand" = "apply" ] || [ "$subcommand" = "init" ]; then
-    tinty_data_dir="$HOME/.local/tinted-theming/tinty"
+    tinty_data_dir="$HOME/.local/share/tinted-theming/tinty"
 
     for tinty_script_file in $(find "$tinty_data_dir" -maxdepth 1 -type f -name "*.sh"); do
       . $tinty_script_file
