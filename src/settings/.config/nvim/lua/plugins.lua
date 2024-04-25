@@ -70,10 +70,10 @@ require("lazy").setup({
               [m.scroll_up       ] = require('telescope.actions').results_scrolling_up,
               [m.scroll_down     ] = require('telescope.actions').results_scrolling_down,
 
-              [m.move_up         ] = require('telescope.actions').move_selection_next,
-              [m.move_down       ] = require('telescope.actions').move_selection_previous,
+              [m.move_up         ] = require('telescope.actions').move_selection_previous,
+              [m.move_down       ] = require('telescope.actions').move_selection_next,
 
-              [m.preview_up      ]   = require('telescope.actions').preview_scrolling_up,
+              [m.preview_up      ] = require('telescope.actions').preview_scrolling_up,
               [m.preview_down    ] = require('telescope.actions').preview_scrolling_down,
             },
 
@@ -85,10 +85,10 @@ require("lazy").setup({
               [m.scroll_up       ] = require('telescope.actions').results_scrolling_up,
               [m.scroll_down     ] = require('telescope.actions').results_scrolling_down,
 
-              [m.move_up         ] = require('telescope.actions').move_selection_next,
-              [m.move_down       ] = require('telescope.actions').move_selection_previous,
+              [m.move_up         ] = require('telescope.actions').move_selection_previous,
+              [m.move_down       ] = require('telescope.actions').move_selection_next,
 
-              [m.preview_up      ]   = require('telescope.actions').preview_scrolling_up,
+              [m.preview_up      ] = require('telescope.actions').preview_scrolling_up,
               [m.preview_down    ] = require('telescope.actions').preview_scrolling_down,
             },
           },
