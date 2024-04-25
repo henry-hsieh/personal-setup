@@ -52,7 +52,7 @@ local plugin_settings = require("plugin-settings")
 require("lazy").setup({
   {
     'nvim-telescope/telescope.nvim',
-    tag = '*',
+    version = '*',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-fzf-native.nvim',
@@ -713,6 +713,12 @@ require("lazy").setup({
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
+      vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+        callback = function ()
+          local base16 = require('base16-colorscheme')
+          base16.highlight.DiagnosticWarn = { guifg = base16.colors.base09, guibg = nil, gui = 'none', guisp = nil, ctermfg = base16.colors.cterm0E, ctermbg = nil }
+        end
+      })
       if os.getenv("BASE16_THEME") then
         vim.cmd('colorscheme base16-' .. os.getenv("BASE16_THEME"))
       else
@@ -722,7 +728,8 @@ require("lazy").setup({
   },
 
   {
-    'feline-nvim/feline.nvim',
+    'freddiehaddad/feline.nvim',
+    version = '*',
     config = function()
       -- Feline statusline definition.
       --
@@ -737,7 +744,7 @@ require("lazy").setup({
       -- "┃", "█", "", "", "", "", "", "", "●"
 
       local function tbl_size(tbl)
-        size = 0
+        local size = 0
         for _ in pairs(tbl) do
           size = size + 1
         end
@@ -764,47 +771,47 @@ require("lazy").setup({
       end
 
       local vi_mode_colors = {
-        ['NORMAL']    = base16_hl(0,11,'bold'),
-        ['OP']        = base16_hl(0,11,'bold'),
-        ['INSERT']    = base16_hl(1,13,'bold'),
-        ['VISUAL']    = base16_hl(1,14,'bold'),
-        ['LINES']     = base16_hl(1,14,'bold'),
-        ['BLOCK']     = base16_hl(1,14,'bold'),
-        ['REPLACE']   = base16_hl(1, 8,'bold'),
-        ['V-REPLACE'] = base16_hl(1, 8,'bold'),
-        ['ENTER']     = base16_hl(1,12,'bold'),
-        ['MORE']      = base16_hl(1,12,'bold'),
-        ['SELECT']    = base16_hl(1, 9,'bold'),
-        ['COMMAND']   = base16_hl(0,11,'bold'),
-        ['SHELL']     = base16_hl(0,11,'bold'),
-        ['TERM']      = base16_hl(0,11,'bold'),
-        ['NONE']      = base16_hl(1,10,'bold'),
+        ['NORMAL']    = function() return base16_hl(0,11,'bold') end,
+        ['OP']        = function() return base16_hl(0,11,'bold') end,
+        ['INSERT']    = function() return base16_hl(1,13,'bold') end,
+        ['VISUAL']    = function() return base16_hl(1,14,'bold') end,
+        ['LINES']     = function() return base16_hl(1,14,'bold') end,
+        ['BLOCK']     = function() return base16_hl(1,14,'bold') end,
+        ['REPLACE']   = function() return base16_hl(1, 8,'bold') end,
+        ['V-REPLACE'] = function() return base16_hl(1, 8,'bold') end,
+        ['ENTER']     = function() return base16_hl(1,12,'bold') end,
+        ['MORE']      = function() return base16_hl(1,12,'bold') end,
+        ['SELECT']    = function() return base16_hl(1, 9,'bold') end,
+        ['COMMAND']   = function() return base16_hl(0,11,'bold') end,
+        ['SHELL']     = function() return base16_hl(0,11,'bold') end,
+        ['TERM']      = function() return base16_hl(0,11,'bold') end,
+        ['NONE']      = function() return base16_hl(1,10,'bold') end,
       }
 
       local vi_sep_colors = {
-        ['NORMAL']    = base16_hl(11,1,'bold'),
-        ['OP']        = base16_hl(11,1,'bold'),
-        ['INSERT']    = base16_hl(13,1,'bold'),
-        ['VISUAL']    = base16_hl(14,1,'bold'),
-        ['LINES']     = base16_hl(14,1,'bold'),
-        ['BLOCK']     = base16_hl(14,1,'bold'),
-        ['REPLACE']   = base16_hl( 8,1,'bold'),
-        ['V-REPLACE'] = base16_hl( 8,1,'bold'),
-        ['ENTER']     = base16_hl(12,1,'bold'),
-        ['MORE']      = base16_hl(12,1,'bold'),
-        ['SELECT']    = base16_hl( 9,1,'bold'),
-        ['COMMAND']   = base16_hl(11,1,'bold'),
-        ['SHELL']     = base16_hl(11,1,'bold'),
-        ['TERM']      = base16_hl(11,1,'bold'),
-        ['NONE']      = base16_hl(10,1,'bold'),
+        ['NORMAL']    = function() return base16_hl(11,1,'bold') end,
+        ['OP']        = function() return base16_hl(11,1,'bold') end,
+        ['INSERT']    = function() return base16_hl(13,1,'bold') end,
+        ['VISUAL']    = function() return base16_hl(14,1,'bold') end,
+        ['LINES']     = function() return base16_hl(14,1,'bold') end,
+        ['BLOCK']     = function() return base16_hl(14,1,'bold') end,
+        ['REPLACE']   = function() return base16_hl( 8,1,'bold') end,
+        ['V-REPLACE'] = function() return base16_hl( 8,1,'bold') end,
+        ['ENTER']     = function() return base16_hl(12,1,'bold') end,
+        ['MORE']      = function() return base16_hl(12,1,'bold') end,
+        ['SELECT']    = function() return base16_hl( 9,1,'bold') end,
+        ['COMMAND']   = function() return base16_hl(11,1,'bold') end,
+        ['SHELL']     = function() return base16_hl(11,1,'bold') end,
+        ['TERM']      = function() return base16_hl(11,1,'bold') end,
+        ['NONE']      = function() return base16_hl(10,1,'bold') end,
       }
 
       local function vi_mode_hl()
-        return vi_mode_colors[require("feline.providers.vi_mode").get_vim_mode()] or vi_mode_colors['NONE']
+        return vi_mode_colors[require("feline.providers.vi_mode").get_vim_mode()]() or vi_mode_colors['NONE']()
       end
 
       local function vi_sep_hl()
-        return vi_sep_colors[require("feline.providers.vi_mode").get_vim_mode()] or vi_sep_colors['NONE']
+        return vi_sep_colors[require("feline.providers.vi_mode").get_vim_mode()]() or vi_sep_colors['NONE']()
       end
 
       local function index(tab, val)
@@ -821,14 +828,28 @@ require("lazy").setup({
           provider = function()
             return fmt(" %s ", require("feline.providers.vi_mode").get_vim_mode())
           end,
-          hl = vi_mode_hl,
-          right_sep = { str = "", hl = vi_sep_hl},
+          hl = function()
+            return vi_mode_hl()
+          end,
+          right_sep = {
+            str = "",
+            hl = function()
+              return vi_sep_hl()
+            end,
+          },
         },
         git_branch = {
           provider = "git_branch",
           icon = "  ",
-          hl = base16_hl(4, 1,'None'),
-          right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
+          hl = function()
+            return base16_hl(4, 1,'None')
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(4, 1,'None')
+            end,
+          },
           enabled = function()
             return vim.b.gitsigns_status_dict ~= nil
           end,
@@ -836,8 +857,17 @@ require("lazy").setup({
         git_diff_added = {
           provider = "git_diff_added",
           icon = " ",
-          hl = base16_hl(11, 1,'None'),
-          right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'GitSignsAdd', link = false}).fg)
+            return hl
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(4, 1,'None')
+            end,
+          },
           enabled = function()
             return vim.b.gitsigns_status_dict ~= nil
           end,
@@ -845,8 +875,17 @@ require("lazy").setup({
         git_diff_changed = {
           provider = "git_diff_changed",
           icon = " ",
-          hl = base16_hl(13, 1,'None'),
-          right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'GitSignsChange', link = false}).fg)
+            return hl
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(4, 1,'None')
+            end,
+          },
           enabled = function()
             return vim.b.gitsigns_status_dict ~= nil
           end,
@@ -854,8 +893,17 @@ require("lazy").setup({
         git_diff_removed = {
           provider = "git_diff_removed",
           icon = " ",
-          hl = base16_hl(8, 1,'None'),
-          right_sep = { str = " ", hl = base16_hl(4, 1,'None') },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'GitSignsDelete', link = false}).fg)
+            return hl
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(4, 1,'None')
+            end,
+          },
           enabled = function()
             return vim.b.gitsigns_status_dict ~= nil
           end,
@@ -877,8 +925,15 @@ require("lazy").setup({
               file_readonly_icon = "󰌾 ",
             }
           },
-          hl = base16_hl(6, 2,'None'),
-          left_sep = { str = " ", hl = base16_hl(1, 2,'None') },
+          hl = function()
+            return base16_hl(6, 2,'None')
+          end,
+          left_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(1, 2,'None')
+            end,
+          },
           right_sep = {
             str = function()
               if vim.bo.modified then
@@ -887,7 +942,9 @@ require("lazy").setup({
                 return "█"
               end
             end,
-            hl = base16_hl(2, 1,'None'),
+            hl = function()
+              return base16_hl(2, 1,'None')
+            end,
           },
         },
         file_encoding = {
@@ -906,50 +963,71 @@ require("lazy").setup({
             end
             return icon
           end,
-          hl = base16_hl(6, 2,'None'),
-          right_sep = { str = "", hl = base16_hl(1, 2,'None') },
+          hl = function()
+            return base16_hl(6, 2,'None')
+          end,
+          right_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(1, 2,'None')
+            end,
+          },
         },
         file_type = {
           provider = function()
             return fmt(" %s ", vim.bo.filetype)
           end,
-          hl = base16_hl(6, 2, "None"),
-          right_sep = { str = " ", hl = base16_hl(6, 2,'None') },
-          left_sep = { str = "", hl = base16_hl(2, 10, "None") },
+          hl = function()
+            return base16_hl(6, 2,'None')
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(6, 2,'None')
+            end,
+          },
+          left_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(2, 10, "None")
+            end,
+          },
         },
         warning = {
           provider = function()
-            str = ''
+            local str = ''
             if vim.fn.getfsize(vim.fn.expand('%:p')) < 10485760 then -- 10MB
               -- Mixed indent
-              c_like_langs = {'arduino', 'c', 'cpp', 'cuda', 'go', 'javascript', 'ld', 'php' ,'verilog', 'systemverilog'}
+              local c_like_langs = {'arduino', 'c', 'cpp', 'cuda', 'go', 'javascript', 'ld', 'php' ,'verilog', 'systemverilog', 'verilog_systemverilog'}
+              local head_space
               if index(c_like_langs, vim.o.ft) > 0 then
                 head_space = '\\v(^ +\\*@!)'
               else
                 head_space = '\\v(^ +)'
               end
-              indent_tabs = vim.fn.search('\\v(^\\t+)', 'nw', 0 ,150)
-              indent_spaces = vim.fn.search(head_space, 'nw', 0 ,150)
+              local indent_tabs = vim.fn.search('\\v(^\\t+)', 'nw', 0 ,150)
+              local indent_spaces = vim.fn.search(head_space, 'nw', 0 ,150)
               if indent_tabs > 0 and indent_spaces > 0 then
                 str = "  " .. fmt("%d:%d", indent_tabs, indent_spaces) .. str
               end
 
               -- Trailing spaces or tabs
-              trailing = vim.fn.search('\\s$', 'nw', 0 ,150)
+              local trailing = vim.fn.search('\\s$', 'nw', 0 ,150)
               if trailing > 0 then
                 str = " 󱁐 " .. fmt("%d", trailing) .. str
               end
 
               -- Git conflicts
               if vim.b.gitsigns_status_dict ~= nil then
-                annotation = '\\%([0-9A-Za-z_.:]\\+\\)\\?'
-                rst_like_langs = {'rst', 'markdown'}
+                local annotation = '\\%([0-9A-Za-z_.:]\\+\\)\\?'
+                local rst_like_langs = {'rst', 'markdown'}
+                local pattern
                 if index(rst_like_langs, vim.o.ft) > 0 then
                   pattern = '^\\%(\\%(<\\{7} ' .. annotation .. '\\)\\|\\%(>\\{7\\} ' .. annotation .. '\\)\\)$'
                 else
                   pattern = '^\\%(\\%(<\\{7} ' .. annotation .. '\\)\\|\\%(=\\{7\\}\\)\\|\\%(>\\{7\\} ' .. annotation .. '\\)\\)$'
                 end
-                conflicts = vim.fn.search(pattern, "nw", 0, 200)
+                local conflicts = vim.fn.search(pattern, "nw", 0, 200)
                 if conflicts > 0 then
                   str = "  " .. fmt("%d", conflicts) .. str
                 end
@@ -957,8 +1035,15 @@ require("lazy").setup({
             end
             return str
           end,
-          hl = base16_hl(1, 10,'None'),
-          right_sep = { str = " ", hl = base16_hl(1, 10,'None') },
+          hl = function()
+            return base16_hl(1, 10,'None')
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(1, 10,'None')
+            end,
+          },
           --updated = { 'BufWinEnter', 'ModeChanged' },
         },
         sep_warning = {
@@ -981,22 +1066,43 @@ require("lazy").setup({
               format = "{line} {col} ",
             },
           },
-          hl = vi_mode_hl,
-          left_sep = { str = "█", hl = vi_sep_hl },
+          hl = function()
+            return vi_mode_hl()
+          end,
+          left_sep = {
+            str = "█",
+            hl = function()
+              return vi_sep_hl()
+            end,
+          },
         },
         line_percentage = {
           provider = function()
             return "%p%% "
           end,
           icon = " ",
-          hl = vi_mode_hl,
+          hl = function()
+            return vi_mode_hl()
+          end,
         },
         lsp_error = {
           provider = function()
             return get_diag("ERROR")
           end,
-          hl = base16_hl(1, 8, 'None'),
-          left_sep = { str = "", hl = base16_hl(8, 1, 'None'), always_visible = true },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticError', link = false}).fg)
+            return hl
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              local hl = base16_hl(1, 1,'None')
+              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticError', link = false}).fg)
+              return hl
+            end,
+            always_visible = true
+          },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
           end,
@@ -1005,8 +1111,21 @@ require("lazy").setup({
           provider = function()
             return get_diag("WARN")
           end,
-          hl = base16_hl(1, 14, 'None'),
-          left_sep = { str = "", hl = base16_hl(14, 8, 'None'), always_visible = true },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticWarn', link = false}).fg)
+            return hl
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              local hl = {}
+              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticWarn', link = false}).fg)
+              hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticError', link = false}).fg)
+              return hl
+            end,
+            always_visible = true
+          },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
           end,
@@ -1015,8 +1134,21 @@ require("lazy").setup({
           provider = function()
             return get_diag("INFO")
           end,
-          hl = base16_hl(1, 13, 'None'),
-          left_sep = { str = "", hl = base16_hl(13, 14, 'None'), always_visible = true },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticInfo', link = false}).fg)
+            return hl
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              local hl = {}
+              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticInfo', link = false}).fg)
+              hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticWarn', link = false}).fg)
+              return hl
+            end,
+            always_visible = true
+          },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
           end,
@@ -1025,8 +1157,21 @@ require("lazy").setup({
           provider = function()
             return get_diag("HINT")
           end,
-          hl = base16_hl(1, 12, 'None'),
-          left_sep = { str = "", hl = base16_hl(12, 13, 'None'), always_visible = true },
+          hl = function()
+            local hl = base16_hl(1, 1,'None')
+            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticHint', link = false}).fg)
+            return hl
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              local hl = {}
+              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticHint', link = false}).fg)
+              hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticInfo', link = false}).fg)
+              return hl
+            end,
+            always_visible = true
+          },
           enabled = function()
             return require("feline.providers.lsp").is_lsp_attached()
           end,
@@ -1038,8 +1183,15 @@ require("lazy").setup({
           short_provider = function()
             return "  "
           end,
-          hl = base16_hl(4, 1, "None"),
-          right_sep = { str = " ", hl = base16_hl(4, 1, "None")},
+          hl = function()
+            return base16_hl(4, 1, "None")
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(4, 1, "None")
+            end,
+          },
         },
         inactive_file_info = {
           provider = {
@@ -1058,8 +1210,15 @@ require("lazy").setup({
               file_readonly_icon = "󰌾 ",
             }
           },
-          hl = base16_hl(4, 2,'None'),
-          left_sep = { str = " ", hl = base16_hl(1, 2,'None') },
+          hl = function()
+            return base16_hl(4, 2,'None')
+          end,
+          left_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(1, 2,'None')
+            end,
+          },
           right_sep = {
             str = function()
               if vim.bo.modified then
@@ -1068,7 +1227,9 @@ require("lazy").setup({
                 return "█"
               end
             end,
-            hl = base16_hl(2, 1,'None'),
+            hl = function()
+              return base16_hl(2, 1,'None')
+            end,
           },
         },
         inactive_file_encoding = {
@@ -1087,16 +1248,35 @@ require("lazy").setup({
             end
             return icon
           end,
-          hl = base16_hl(4, 2,'None'),
-          right_sep = { str = "", hl = base16_hl(1, 2,'None') },
+          hl = function()
+            return base16_hl(4, 2,'None')
+          end,
+          right_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(1, 2,'None')
+            end,
+          },
         },
         inactive_file_type = {
           provider = function()
             return fmt(" %s ", vim.bo.filetype)
           end,
-          hl = base16_hl(4, 2, "None"),
-          right_sep = { str = " ", hl = base16_hl(4, 2,'None') },
-          left_sep = { str = "", hl = base16_hl(2, 1, "None") },
+          hl = function()
+            return base16_hl(4, 2,'None')
+          end,
+          right_sep = {
+            str = " ",
+            hl = function()
+              return base16_hl(4, 2,'None')
+            end,
+          },
+          left_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(2, 1, "None")
+            end,
+          },
         },
         inactive_position = {
           provider = {
@@ -1105,15 +1285,24 @@ require("lazy").setup({
               format = "{line} {col} ",
             },
           },
-          hl = base16_hl(4, 1, "None"),
-          left_sep = { str = "  ", hl = base16_hl(4, 1, "None") },
+          hl = function()
+            return base16_hl(4, 1, "None")
+          end,
+          left_sep = {
+            str = "  ",
+            hl = function()
+              return base16_hl(4, 1, "None")
+            end,
+          },
         },
         inactive_line_percentage = {
           provider = function()
             return "%p%% "
           end,
           icon = " ",
-          hl = base16_hl(4, 1, "None"),
+          hl = function()
+            return base16_hl(4, 1, "None")
+          end,
         },
       }
 
@@ -1155,7 +1344,6 @@ require("lazy").setup({
 
       require("feline").setup({
         components = { active = active, inactive = inactive },
-        highlight_reset_triggers = {},
         force_inactive = {
           filetypes = {
             "packer",
