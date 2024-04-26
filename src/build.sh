@@ -197,7 +197,9 @@ export LDFLAGS="$TMUX_LDFLAGS"
 ## build libevent ##
 print_process_item "Build libevent" 1
 pushd libevent-$LIBEVENT_VERSION
-./configure --prefix="$TMUX_BUILD_DEPENDENCIES" --disable-openssl --enable-shared=no --enable-static=yes --with-pic
+mkdir -p build
+cd build
+cmake ../ -DCMAKE_INSTALL_PREFIX="$TMUX_BUILD_DEPENDENCIES" -DEVENT__DISABLE_OPENSSL=ON -DEVENT__DISABLE_TESTS=ON -DEVENT_LIBRARY_TYPE=STATIC
 make -j install
 if [[ 0 -ne $? ]]; then
   echo "Build libevent failed"
