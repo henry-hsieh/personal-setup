@@ -11,7 +11,7 @@ NODE_VERSION=v20.9.0
 JDK_VERSION=22
 RG_VERSION=14.0.3
 TREE_SITTER_VERSION=v0.22.2
-TINTY_VERSION=v0.11.0
+TINTY_VERSION=v0.11.1
 TMUX_VERSION=3.4
 NCURSES_VERSION=6.4
 LIBEVENT_VERSION=2.1.12-stable
@@ -159,9 +159,9 @@ chmod 755 $OUT_DIR/.local/bin/tree-sitter
 
 # tinty
 print_process_item "Download tinty" 1
-download_file https://github.com/tinted-theming/tinty/releases/download/${TINTY_VERSION}/tinty--x86_64-unknown-linux-gnu.tar.gz $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-gnu.tar.gz
+download_file https://github.com/henry-hsieh/tinty/releases/download/${TINTY_VERSION}/tinty--x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz
 mkdir -p $BUILD_DIR/tinty
-tar -axvf $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-gnu.tar.gz -C $BUILD_DIR/tinty
+tar -axvf $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR/tinty
 pushd $BUILD_DIR/tinty
 rsync -av tinty $OUT_DIR/.local/bin/
 popd
