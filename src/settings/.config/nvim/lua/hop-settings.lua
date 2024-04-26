@@ -40,7 +40,7 @@ vim.api.nvim_create_user_command('HopWordEnd', "lua require('hop-settings').hint
 -- HopWORDEnd: the sequence of non-blank characters end
 function M.hint_WORD_end()
   local pat = [[\(^\|\s\+\)\zs\S\+\ze]]
-  local opts = require('hop').opts
+  local opts = vim.deepcopy(require('hop').opts)
   opts.hint_position = require'hop.hint'.HintPosition.END
   require('hop').hint_with_regex(require('hop.jump_regex').regex_by_case_searching(pat, false, opts), opts)
 end
