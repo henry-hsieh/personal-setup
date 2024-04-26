@@ -13,6 +13,10 @@ $HOME/.tmux/plugins/tpm/bin/update_plugins
 # Build libs with musl-gcc
 export CC=musl-gcc
 
+# Download and update themes using tinty
+print_process_item "Install/update Tinty themes"
+tinty install
+
 # Download and update Neovim plugins using lazy.nvim
 print_process_item "Install/update Neovim plugins"
 nvim --headless -c "Lazy! sync" +qa

@@ -61,11 +61,32 @@ case "$(uname -a)" in
         ;;
 esac
 
-if [ -z "$VIM" ]; then # Not from Neovim terminal
-  . ~/.local/share/scripts/set_base16.sh
-  if [ ! -L ~/.base16_theme ]; then # If base16-shell is not called
-    _base16 "$HOME/.config/base16-shell/scripts/base16-default-dark.sh" default-dark
+tinty_source_shell_theme() {
+  tinty $@
+  subcommand="$1"
+
+  if [ "$subcommand" = "apply" ] || [ "$subcommand" = "init" ]; then
+    tinty_data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/tinted-theming/tinty"
+
+    for tinty_script_file in $(find "$tinty_data_dir" -maxdepth 1 -type f -name "*.sh"); do
+      . $tinty_script_file
+    done
+
+    unset data_dir_prefix tinty_data_dir
   fi
+
+  unset subcommand
+}
+
+if [ -n "$(command -v 'tinty')" ]; then
+  tinty_source_shell_theme "init"
+
+  alias tinty=tinty_source_shell_theme
+fi
+
+if [ -z "$VIM" ]; then # Not from Neovim terminal
+  # Set colorscheme
+  tinty init
 fi
 
 # Use ~~ as the trigger sequence instead of the default **
@@ -168,6 +189,7 @@ alias l='ls -CF'
 alias tmux='~/.local/share/scripts/update_display.sh;tmux -2'
 alias vim='nvim'
 alias bd=". bd -si"
+alias bat="bat --theme='base16-256'"
 
 # Source post-setup script if exist
 if [ -f ~/.bashrc.post ]; then

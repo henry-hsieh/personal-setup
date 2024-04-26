@@ -79,6 +79,15 @@
     must_not_contain:
       - "No such file or directory"
 
+- name: test tinty exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "\tinty --version"'
+  stdout:
+    contains:
+      - "tinty"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
 - name: test tmux exists
   command: bash -c 'HOME=$(pwd) bash -i -c "tmux -V"'
   stdout:

@@ -1,0 +1,16 @@
+shell = "bash -c '{}'"
+default-scheme = "base16-default-dark"
+
+[[items]]
+name = "shell"
+path = "https://github.com/tinted-theming/tinted-shell"
+themes-dir = "scripts"
+hook = ". %f"
+
+[[items]]
+path = "https://github.com/tinted-theming/tinted-fzf"
+name = "tinted-fzf"
+themes-dir = "sh"
+hook = ". %f"
+
+hooks = ["tmux source-file ~/tmux.conf"]
