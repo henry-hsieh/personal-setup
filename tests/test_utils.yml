@@ -52,6 +52,15 @@
     must_not_contain:
       - "No such file or directory"
 
+- name: test lazygit exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "which lazygit"'
+  stdout:
+    contains:
+      - "lazygit"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
 - name: test node exists
   command: bash -c 'HOME=$(pwd) bash -i -c "node --help"'
   stdout:
