@@ -2,6 +2,7 @@
 
 # Version control
 GIT_EXTRAS_VERSION=7.2.0
+LAZYGIT_VERSION=0.41.0
 NVIM_VERSION=v0.9.5
 BAT_VERSION=v0.24.0
 FD_VERSION=v9.0.0
@@ -68,6 +69,15 @@ print_process_item "Download git-extras" 1
 download_git_repo https://github.com/tj/git-extras.git $BUILD_DIR/git-extras $GIT_EXTRAS_VERSION
 pushd $BUILD_DIR/git-extras
 make install DESTDIR=$OUT_DIR/ PREFIX=.local/ SYSCONFDIR=.local/share/
+popd
+
+# lazygit
+print_process_item "Download lazygit" 1
+download_file https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz $BUILD_DIR/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz
+mkdir -p $BUILD_DIR/lazygit
+tar -axvf $BUILD_DIR/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz -C $BUILD_DIR/lazygit
+pushd $BUILD_DIR/lazygit
+rsync -av lazygit $OUT_DIR/.local/bin/
 popd
 
 # nvim
