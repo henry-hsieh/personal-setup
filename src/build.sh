@@ -165,6 +165,7 @@ tar -axvf $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C 
 pushd $BUILD_DIR/tinty
 rsync -av tinty $OUT_DIR/.local/bin/
 popd
+download_exe https://raw.githubusercontent.com/henry-hsieh/tinty/feat-add-completion/contrib/completion/tinty.bash $OUT_DIR/.local/share/bash-completion/completions/tinty
 
 # bd
 print_process_item "Download bd" 1
