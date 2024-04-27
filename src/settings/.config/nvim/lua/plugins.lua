@@ -721,7 +721,7 @@ require("lazy").setup({
         if vim.v.shell_error ~= 0 then
           return default_theme
         else
-          return theme_name
+          return theme_name:gsub("\n", "")
         end
       end
 
@@ -735,14 +735,12 @@ require("lazy").setup({
         end
       end
 
-      vim.o.termguicolors = true
-      vim.g.tinted_colorspace = 256
       local current_theme_name = get_tinty_theme()
-
       vim.cmd("colorscheme " .. current_theme_name)
 
       vim.api.nvim_create_autocmd("FocusGained", {
         callback = handle_focus_gained,
+        nested = true,
       })
 
       vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
