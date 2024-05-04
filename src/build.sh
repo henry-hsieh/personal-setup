@@ -18,6 +18,7 @@ NCURSES_VERSION=6.4
 LIBEVENT_VERSION=2.1.12-stable
 UTF8PROC_VERSION=2.6.1
 UTEMPTER_VERSION=1.2.1-alt1
+HTOP_VERSION=v3.3.0
 
 # Directory path
 ROOT_DIR=$(dirname $(dirname $(realpath $0)))
@@ -175,6 +176,16 @@ tar -axvf $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C 
 pushd $BUILD_DIR/tinty
 rsync -av tinty $OUT_DIR/.local/bin/
 rsync -av contrib/completion/tinty.bash $OUT_DIR/.local/share/bash-completion/completions/
+popd
+
+# htop
+print_process_item "Download htop" 1
+mkdir -p $BUILD_DIR/htop
+download_file https://github.com/henry-hsieh/htop.appimage/releases/download/${HTOP_VERSION}/Htop-x86_64.AppImage $BUILD_DIR/htop/Htop-x86_64.AppImage
+pushd $BUILD_DIR/htop
+chmod +x Htop-x86_64.AppImage
+mv Htop-x86_64.AppImage htop
+rsync -av htop $OUT_DIR/.local/bin/
 popd
 
 # bd

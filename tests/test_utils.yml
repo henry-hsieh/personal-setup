@@ -70,6 +70,15 @@
     must_not_contain:
       - "No such file or directory"
 
+- name: test htop exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "htop --appimage-extract > /dev/null; ./squashfs-root/AppRun --version"'
+  stdout:
+    contains:
+      - "htop"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
 - name: test nvim exists
   command: bash -c 'HOME=$(pwd) bash -i -c "nvim --version"'
   stdout:
