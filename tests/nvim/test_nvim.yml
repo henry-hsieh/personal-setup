@@ -152,3 +152,12 @@
   stderr:
     must_not_contain:
       - "Error detected"
+
+- name: test detour.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh detour
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
