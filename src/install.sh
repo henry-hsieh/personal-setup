@@ -40,7 +40,8 @@ tar -axvf $SCRIPT_DIR/home.tar.gz -C $INSTALL_DIR
 git config --file $INSTALL_DIR/.gitconfig user.name  "$GIT_NAME"
 git config --file $INSTALL_DIR/.gitconfig user.email "$GIT_EMAIL"
 
-# Install tmux-256color
+# Install xterm-256color and tmux-256color
+tic -xe xterm-256color $SCRIPT_DIR/terminfo.src -o $INSTALL_DIR/.terminfo
 tic -xe tmux-256color $SCRIPT_DIR/terminfo.src -o $INSTALL_DIR/.terminfo
 
 echo -e "===================================================================="
