@@ -42,3 +42,6 @@ vim.o.mouse = "a"
 
 -- Color
 vim.o.termguicolors = true
+
+-- Map
+vim.api.nvim_set_keymap('t', '<Esc><Esc>', '<C-\\><C-n>', { noremap = true, silent = true })

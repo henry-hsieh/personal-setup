@@ -150,12 +150,20 @@ require("lazy").setup({
 
   {
     'smoka7/hop.nvim',
-    version = '*', -- optional but strongly recommended
+    dependencies = {
+      "carbon-steel/detour.nvim",
+    },
     config = function()
       require'hop'.setup {
         keys = 'asdfghjkl;qwertyuiopzxcvbnm',
         char2_fallback_key = '<Esc>',
-        multi_windows = true
+        multi_windows = true,
+        hl_mode = 'replace',
+        windows_list = function ()
+          return vim.tbl_filter(function(window)
+            return not vim.tbl_contains(require('detour.internal').list_coverable_windows(), window)
+          end, vim.api.nvim_tabpage_list_wins(0))
+        end,
       }
     end
   },
@@ -1367,6 +1375,29 @@ require("lazy").setup({
         }, -- right
       }
 
+      inactive = {
+        { -- left
+          c.inactive,
+          c.git_branch,
+          c.git_diff_added,
+          c.git_diff_changed,
+          c.git_diff_removed,
+          c.file_info,
+        },
+        { -- right
+          c.lsp_error,
+          c.lsp_warn,
+          c.lsp_info,
+          c.lsp_hint,
+          c.sep_warning,
+          c.warning,
+          c.file_type,
+          c.file_encoding,
+          c.position,
+          c.line_percentage,
+        },
+      }
+
       require("feline").setup({
         components = { active = active, inactive = inactive },
         force_inactive = {
@@ -1483,5 +1514,119 @@ require("lazy").setup({
       -- nvim-ts-context-commentstring
       vim.g.skip_ts_context_commentstring_module = true
     end,
+  },
+
+  {
+    "carbon-steel/detour.nvim",
+    config = function ()
+      vim.keymap.set('n', '<c-w><enter>', ":Detour<cr>")
+      vim.keymap.set('n', '<c-w>.', ":DetourCurrentWindow<cr>")
+      -- Setup float for helps
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        pattern = "*",
+        callback = function(event)
+          local filetype = vim.bo[event.buf].filetype
+          local file_path = event.match
+
+          if file_path:match "/doc/" ~= nil then
+            -- Only run if the filetype is a help file
+            if filetype == "help" or filetype == "markdown" then
+              -- Get the newly opened help window
+              -- and attempt to open a Detour() float
+              local help_win = vim.api.nvim_get_current_win()
+              local ok = require("detour").Detour()
+
+              -- If we successfully create a float of the help file
+              -- Close the split
+              if ok then
+                vim.api.nvim_win_close(help_win, false)
+              end
+            end
+          end
+        end,
+      })
+
+      vim.api.nvim_set_keymap('', '<C-w>h', "<cmd>lua require('detour.movements').DetourWinCmdH()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>l', "<cmd>lua require('detour.movements').DetourWinCmdL()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>j', "<cmd>lua require('detour.movements').DetourWinCmdJ()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>k', "<cmd>lua require('detour.movements').DetourWinCmdK()<CR>", { noremap = true, silent = true })
+
+      vim.keymap.set('n', '<space>t', function()
+        local terminal_buffer_found = false
+        -- Check if we there are any existing terminal buffers.
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do -- iterate through all buffers
+          if vim.api.nvim_buf_is_loaded(buf) then       -- only check loaded buffers
+            if vim.api.nvim_buf_get_option(buf, "buftype") == "terminal" then
+              terminal_buffer_found = true
+            end
+          end
+        end
+
+        require('detour').Detour()                      -- Open a detour popup
+        if terminal_buffer_found then
+          require('telescope.builtin').buffers({})    -- Open telescope prompt
+          vim.api.nvim_feedkeys("term://", "n", true) -- populate prompt with "term://"
+        else
+          -- [OPTIONAL] Set the new window's current working directory to the directory of current file.
+          -- You can remove this line if you would prefer to open terminals from the
+          -- existing working directory.
+          -- vim.cmd.lcd(vim.fn.expand("%:p:h"))
+          -- Since there are no existing terminal buffers, open a new one.
+          vim.cmd.terminal()
+          vim.cmd.startinsert()
+        end
+
+        vim.api.nvim_create_autocmd({"TermClose"}, {
+          buffer = vim.api.nvim_get_current_buf(),
+          callback = function ()
+            -- This automated keypress skips for you the "[Process exited 0]" message
+            -- that the embedded terminal shows.
+            vim.api.nvim_feedkeys('i', 'n', false)
+          end
+        })
+      end)
+
+      vim.keymap.set("n", '<space>p', function ()
+        local ok = require('detour').Detour()  -- open a detour popup
+        if not ok then
+          return
+        end
+
+        vim.cmd.terminal('htop')     -- open a terminal buffer
+        vim.bo.bufhidden = 'delete' -- close the terminal when window closes
+
+        vim.cmd.startinsert() -- go into insert mode
+
+        vim.api.nvim_create_autocmd({"TermClose"}, {
+          buffer = vim.api.nvim_get_current_buf(),
+          callback = function ()
+            -- This automated keypress skips for you the "[Process exited 0]" message
+            -- that the embedded terminal shows.
+            vim.api.nvim_feedkeys('i', 'n', false)
+          end
+        })
+      end)
+
+      vim.keymap.set("n", '<space>g', function ()
+        local ok = require('detour').Detour()  -- open a detour popup
+        if not ok then
+          return
+        end
+
+        vim.cmd.terminal('lazygit')     -- open a terminal buffer
+        vim.bo.bufhidden = 'delete' -- close the terminal when window closes
+
+        vim.cmd.startinsert() -- go into insert mode
+
+        vim.api.nvim_create_autocmd({"TermClose"}, {
+          buffer = vim.api.nvim_get_current_buf(),
+          callback = function ()
+            -- This automated keypress skips for you the "[Process exited 0]" message
+            -- that the embedded terminal shows.
+            vim.api.nvim_feedkeys('i', 'n', false)
+          end
+        })
+      end)
+    end
   },
 })

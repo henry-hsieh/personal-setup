@@ -78,15 +78,10 @@ tinty_source_shell_theme() {
   unset subcommand
 }
 
-if [ -n "$(command -v 'tinty')" ]; then
+if [ -z "$(command -v 'tinty')" ] && [ -z "$VIM" ]; then
   tinty_source_shell_theme "init"
 
   alias tinty=tinty_source_shell_theme
-fi
-
-if [ -z "$VIM" ]; then # Not from Neovim terminal
-  # Set colorscheme
-  tinty init
 fi
 
 # Use ~~ as the trigger sequence instead of the default **
