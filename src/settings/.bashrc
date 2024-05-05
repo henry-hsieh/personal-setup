@@ -78,7 +78,7 @@ tinty_source_shell_theme() {
   unset subcommand
 }
 
-if [ -z "$(command -v 'tinty')" ] && [ -z "$VIM" ]; then
+if [ -n "$(command -v 'tinty')" ] && [ -z "$VIM" ]; then
   tinty_source_shell_theme "init"
 
   alias tinty=tinty_source_shell_theme
