@@ -16,15 +16,19 @@ local plugin_settings = {
     mappings = {
       horizontal_split = "<C-s>",
       vertical_split = "<C-v>",
-      toggle = "<F9>",
+      toggle = "<space>e",
     }
   },
   nvim_lspconfig = {
     mappings = {
       diagnostic = {
-        open_float = "<space>e",
+        open_float = "<space>d",
         goto_prev = "[d",
         goto_next = "]d",
+        goto_warn_prev = "[w",
+        goto_warn_next = "]w",
+        goto_err_prev = "[e",
+        goto_err_next = "]e",
         open_list = "<space>q",
       },
       buffer = {
