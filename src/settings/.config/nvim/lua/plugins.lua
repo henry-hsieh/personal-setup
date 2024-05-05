@@ -439,9 +439,22 @@ require("lazy").setup({
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
       local md = plugin_settings.nvim_lspconfig.mappings.diagnostic
+
+      local diagnostic_goto = function(next, severity)
+        local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+        severity = severity and vim.diagnostic.severity[severity] or nil
+        return function()
+          go({ severity = severity })
+        end
+      end
+
       vim.keymap.set('n', md.open_float, vim.diagnostic.open_float)
-      vim.keymap.set('n', md.goto_prev, vim.diagnostic.goto_prev)
-      vim.keymap.set('n', md.goto_next, vim.diagnostic.goto_next)
+      vim.keymap.set('n', md.goto_next, diagnostic_goto(true), { desc = "Next Diagnostic" })
+      vim.keymap.set('n', md.goto_prev, diagnostic_goto(false), { desc = "Prev Diagnostic" })
+      vim.keymap.set('n', md.goto_warn_next, diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
+      vim.keymap.set('n', md.goto_warn_prev, diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+      vim.keymap.set('n', md.goto_err_next, diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
+      vim.keymap.set('n', md.goto_err_prev, diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
       vim.keymap.set('n', md.open_list, vim.diagnostic.setloclist)
 
       -- Use LspAttach autocommand to only map the following keys
