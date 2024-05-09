@@ -54,7 +54,8 @@ vim.o.signcolumn = "yes"
 vim.o.showmode = false
 
 -- Map
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.keymap.set('t', '<C-q>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.keymap.set({'n', 'v'}, '<C-q>', '<cmd>close<cr>', { noremap = true, silent = true })
 vim.keymap.set("v", "<", "<gv", { noremap = true})
 vim.keymap.set("v", ">", ">gv", { noremap = true})
 
