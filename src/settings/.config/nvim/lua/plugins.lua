@@ -756,9 +756,6 @@ require("lazy").setup({
         end
       end
 
-      local current_theme_name = get_tinty_theme()
-      vim.cmd("colorscheme " .. current_theme_name)
-
       vim.api.nvim_create_autocmd("FocusGained", {
         callback = handle_focus_gained,
         nested = true,
@@ -770,6 +767,9 @@ require("lazy").setup({
           base16.highlight.DiagnosticWarn = { guifg = base16.colors.base09, guibg = nil, gui = 'none', guisp = nil, ctermfg = base16.colors.cterm0E, ctermbg = nil }
         end
       })
+
+      local current_theme_name = get_tinty_theme()
+      vim.cmd("colorscheme " .. current_theme_name)
     end,
   },
 
