@@ -71,7 +71,7 @@
       - "No such file or directory"
 
 - name: test htop exists
-  command: bash -c 'HOME=$(pwd) bash -i -c "htop --appimage-extract > /dev/null; ./squashfs-root/AppRun --version"'
+  command: bash -c 'HOME=$(pwd) bash -i -c "htop --appimage-extract-and-run --version"'
   stdout:
     contains:
       - "htop"
