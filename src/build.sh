@@ -13,11 +13,7 @@ JDK_VERSION=22
 RG_VERSION=14.0.3
 TREE_SITTER_VERSION=v0.22.2
 TINTY_VERSION=v0.12.0
-TMUX_VERSION=3.4
-NCURSES_VERSION=6.4
-LIBEVENT_VERSION=2.1.12-stable
-UTF8PROC_VERSION=2.6.1
-UTEMPTER_VERSION=1.2.1-alt1
+TMUX_VERSION=v3.4
 HTOP_VERSION=v3.3.0
 
 # Directory path
@@ -181,9 +177,8 @@ popd
 # htop
 print_process_item "Download htop" 1
 mkdir -p $BUILD_DIR/htop
-download_file https://github.com/henry-hsieh/htop.appimage/releases/download/${HTOP_VERSION}/Htop-x86_64.AppImage $BUILD_DIR/htop/Htop-x86_64.AppImage
+download_exe https://github.com/henry-hsieh/htop.appimage/releases/download/${HTOP_VERSION}/Htop-x86_64.AppImage $BUILD_DIR/htop/Htop-x86_64.AppImage
 pushd $BUILD_DIR/htop
-chmod +x Htop-x86_64.AppImage
 mv Htop-x86_64.AppImage htop
 rsync -av htop $OUT_DIR/.local/bin/
 popd
@@ -198,114 +193,12 @@ print_process_item "Download goto" 1
 download_exe https://raw.githubusercontent.com/iridakos/goto/master/goto.sh $OUT_DIR/.local/share/scripts/goto.sh
 
 # tmux
-print_process_item "Download tmux sources" 1
-download_file https://github.com/libevent/libevent/releases/download/release-$LIBEVENT_VERSION/libevent-$LIBEVENT_VERSION.tar.gz $BUILD_DIR/tmux/libevent-$LIBEVENT_VERSION.tar.gz
-tar -axvf $BUILD_DIR/tmux/libevent-$LIBEVENT_VERSION.tar.gz -C $BUILD_DIR/tmux
-download_file https://invisible-mirror.net/archives/ncurses/ncurses-$NCURSES_VERSION.tar.gz $BUILD_DIR/tmux/ncurses-$NCURSES_VERSION.tar.gz
-tar -axvf $BUILD_DIR/tmux/ncurses-$NCURSES_VERSION.tar.gz -C $BUILD_DIR/tmux
-download_file https://github.com/JuliaLang/utf8proc/archive/v$UTF8PROC_VERSION.tar.gz $BUILD_DIR/tmux/utf8proc-$UTF8PROC_VERSION.tar.gz
-tar -axvf $BUILD_DIR/tmux/utf8proc-$UTF8PROC_VERSION.tar.gz -C $BUILD_DIR/tmux
-download_file https://github.com/altlinux/libutempter/archive/refs/tags/$UTEMPTER_VERSION.tar.gz $BUILD_DIR/tmux/libutempter-$UTEMPTER_VERSION.tar.gz
-tar -axvf $BUILD_DIR/tmux/libutempter-$UTEMPTER_VERSION.tar.gz -C $BUILD_DIR/tmux
-download_file https://github.com/tmux/tmux/releases/download/$TMUX_VERSION/tmux-$TMUX_VERSION.tar.gz $BUILD_DIR/tmux/tmux-$TMUX_VERSION.tar.gz
-tar -axvf $BUILD_DIR/tmux/tmux-$TMUX_VERSION.tar.gz -C $BUILD_DIR/tmux
+print_process_item "Download tmux" 1
+mkdir -p $BUILD_DIR/tmux
+download_exe https://github.com/henry-hsieh/tmux.appimage/releases/download/${TMUX_VERSION}/Tmux-x86_64.AppImage $BUILD_DIR/tmux/Tmux-x86_64.AppImage
 pushd $BUILD_DIR/tmux
-TMUX_BUILD_DEPENDENCIES=$BUILD_DIR/tmux/dependencies
-TMUX_CFLAGS="-fPIC -I$TMUX_BUILD_DEPENDENCIES/include -I$TMUX_BUILD_DEPENDENCIES/include/ncurses"
-TMUX_LDFLAGS="-L$TMUX_BUILD_DEPENDENCIES/lib"
-TMUX_PKG_CONFIG_PATH=$TMUX_BUILD_DEPENDENCIES/lib/pkgconfig
-TMUX_NCURSESW_PC_PATH=$(find $(pkg-config --variable pc_path pkg-config|tr ':' ' ') -name "ncursesw.pc" 2>/dev/null)
-TMUX_NCURSES_PC_PATH=$(find $(pkg-config --variable pc_path pkg-config|tr ':' ' ') -name "ncurses.pc" 2>/dev/null)
-TEMP_CC=${CC}
-TEMP_CFLAGS=${CFLAGS}
-TEMP_LDFLAGS=${LDFLAGS}
-export CC=musl-gcc
-export CFLAGS="$TMUX_CFLAGS"
-export LDFLAGS="$TMUX_LDFLAGS"
-## build libevent ##
-print_process_item "Build libevent" 1
-pushd libevent-$LIBEVENT_VERSION
-mkdir -p build
-cd build
-cmake ../ -DCMAKE_INSTALL_PREFIX="$TMUX_BUILD_DEPENDENCIES" -DEVENT__DISABLE_OPENSSL=ON -DEVENT__DISABLE_TESTS=ON -DEVENT_LIBRARY_TYPE=STATIC
-make -j install
-if [[ 0 -ne $? ]]; then
-  echo "Build libevent failed"
-  exit 1
-fi
-popd
-## build ncurses ##
-print_process_item "Build ncurses" 1
-pushd ncurses-$NCURSES_VERSION
-./configure --prefix="$TMUX_BUILD_DEPENDENCIES" --without-cxx --without-cxx-binding --with-termlib --enable-termcap \
---enable-ext-colors --enable-ext-mouse --enable-bsdpad --enable-opaque-curses \
---with-terminfo-dirs=/etc/terminfo:/usr/share/terminfo:/lib/terminfo \
---with-termpath=/etc/termcap:/usr/share/misc/termcap
-make -j install
-if [[ 0 -ne $? ]]; then
-  echo "Build ncurses failed"
-  exit 1
-fi
-popd
-## build utf8proc ##
-print_process_item "Build utf8proc" 1
-mkdir -p utf8proc-$UTF8PROC_VERSION/build
-pushd utf8proc-$UTF8PROC_VERSION/build
-cmake .. -DCMAKE_INSTALL_PREFIX="$TMUX_BUILD_DEPENDENCIES" -DBUILD_SHARED_LIBS=OFF
-cmake --build . --target install -j
-if [[ 0 -ne $? ]]; then
-  echo "Build utf8proc failed"
-  exit 1
-fi
-popd
-## build utempter ##
-print_process_item "Build libutempter" 1
-pushd libutempter-$UTEMPTER_VERSION/libutempter
-make -j
-if [[ 0 -ne $? ]]; then
-  echo "Build libutempter failed"
-  exit 1
-fi
-# rm -rf $TMUX_BUILD_DEPENDENCIES/share/man/man3/utempter* # Add for rebuild error
-make install DESTDIR="$TMUX_BUILD_DEPENDENCIES" libdir="/lib" libexecdir="/lib" includedir="/include" mandir="/share/man"
-popd
-## build tmux ##
-print_process_item "Build tmux" 1
-pushd tmux-$TMUX_VERSION
-if [[ "$TMUX_NCURSESW_PC_PATH" != "" ]]; then
-  TMUX_NCURSES_CFLAGS="$(pkg-config --cflags $TMUX_NCURSESW_PC_PATH)"
-  TMUX_NCURSES_LIBS="$(pkg-config --libs $TMUX_NCURSESW_PC_PATH)"
-elif [[ "$TMUX_NCURSES_PC_PATH" != "" ]]; then
-  TMUX_NCURSES_CFLAGS="$(pkg-config --cflags $TMUX_NCURSES_PC_PATH)"
-  TMUX_NCURSES_LIBS="$(pkg-config --libs $TMUX_NCURSES_PC_PATH)"
-else
-  TMUX_NCURSES_CFLAGS=""
-  TMUX_NCURSES_LIBS=""
-fi
-./configure --prefix="$OUT_DIR/.local/" \
---enable-static --enable-utf8proc --enable-utempter \
-PKG_CONFIG_PATH="$TMUX_PKG_CONFIG_PATH" \
-LIBNCURSES_CFLAGS="$TMUX_NCURSES_CFLAGS" \
-LIBNCURSES_LIBS="$TMUX_NCURSES_LIBS" \
-LIBEVENT_CFLAGS="$(pkg-config --cflags $TMUX_BUILD_DEPENDENCIES/lib/pkgconfig/libevent.pc)" \
-LIBEVENT_LIBS="$(pkg-config --libs $TMUX_BUILD_DEPENDENCIES/lib/pkgconfig/libevent.pc)" \
-LIBUTF8PROC_CFLAGS="-I$TMUX_BUILD_DEPENDENCIES/include" \
-LIBUTF8PROC_LIBS="-L$TMUX_BUILD_DEPENDENCIES/lib -lutempter"
-make -j install
-if [[ 0 -ne $? ]]; then
-  echo "Build tmux failed"
-  exit 1
-fi
-popd
-## copy terminfo ##
-print_process_item "Copy terminfo" 1
-rsync -av ncurses-$NCURSES_VERSION/misc/terminfo.src $TAR_DIR
-TEMP_CC=${CC}
-TEMP_CFLAGS=${CFLAGS}
-TEMP_LDFLAGS=${LDFLAGS}
-export CC=${TEMP_CC}
-export CFLAGS="$TEMP_CFLAGS"
-export LDFLAGS="$TEMP_LDFLAGS"
+mv Tmux-x86_64.AppImage tmux
+rsync -av tmux $OUT_DIR/.local/bin/
 popd
 
 # tpm

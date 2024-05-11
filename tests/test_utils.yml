@@ -107,7 +107,7 @@
       - "No such file or directory"
 
 - name: test tmux exists
-  command: bash -c 'HOME=$(pwd) bash -i -c "tmux -V"'
+  command: bash -c 'HOME=$(pwd) bash -i -c "tmux --appimage-extract-and-run -V"'
   stdout:
     contains:
       - "tmux"
