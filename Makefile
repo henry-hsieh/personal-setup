@@ -5,7 +5,7 @@ TEST_SRC_DIR = $(CURDIR)/tests
 TEST_DIR = $(BUILD_DIR)/test
 TEST_HOME = $(TEST_DIR)/home
 OUT = $(BUILD_DIR)/personal-setup.tar.gz
-EXCLUDES += .cache .npm .base16_theme .bash_history .tcsh_history
+EXCLUDES += .cache .npm .bash_history .tcsh_history nvim/telescope_history .local/state tinty/current_scheme
 TAR_EXCLUDES := $(addprefix --exclude=',$(addsuffix ', $(EXCLUDES)))
 
 .PHONY: all release test clean
