@@ -54,3 +54,5 @@
     generic = P parent
 [git-p4]
     skipSubmitEdit = true
+[fetch]
+    prune = true
