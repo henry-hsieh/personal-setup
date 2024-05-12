@@ -15,6 +15,7 @@ TREE_SITTER_VERSION=v0.22.2
 TINTY_VERSION=v0.12.0
 TMUX_VERSION=v3.4
 HTOP_VERSION=v3.3.0
+RUSTUP_VERSION=1.27.1
 
 # Directory path
 ROOT_DIR=$(dirname $(dirname $(realpath $0)))
@@ -148,6 +149,11 @@ pushd $OUT_DIR/.local/lib
 ln -s jvm/jdk-${JDK_VERSION} java
 popd
 popd
+
+# rustup
+print_process_item "Download rustup" 1
+download_exe https://static.rust-lang.org/rustup/archive/$RUSTUP_VERSION/x86_64-unknown-linux-gnu/rustup-init $BUILD_DIR/rustup-init-$RUSTUP_VERSION
+CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup $BUILD_DIR/rustup-init-$RUSTUP_VERSION -y
 
 # ripgrep
 print_process_item "Download ripgrep" 1
