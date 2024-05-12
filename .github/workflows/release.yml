@@ -28,6 +28,7 @@ jobs:
         uses: ScribeMD/docker-cache@0.5.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles('src/Dockerfile') }}
+          read-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Build docker images
         run: |
