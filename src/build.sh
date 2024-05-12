@@ -154,6 +154,7 @@ popd
 print_process_item "Download rustup" 1
 download_exe https://static.rust-lang.org/rustup/archive/$RUSTUP_VERSION/x86_64-unknown-linux-gnu/rustup-init $BUILD_DIR/rustup-init-$RUSTUP_VERSION
 CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup $BUILD_DIR/rustup-init-$RUSTUP_VERSION -y
+PATH=$OUT_DIR/.local/cargo/bin/:$PATH CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup rustup default stable
 
 # ripgrep
 print_process_item "Download ripgrep" 1
@@ -166,9 +167,12 @@ cp -f complete/rg.bash $OUT_DIR/.local/share/bash-completion/completions/
 popd
 
 # tree-sitter
-download_file https://github.com/tree-sitter/tree-sitter/releases/download/${TREE_SITTER_VERSION}/tree-sitter-linux-x64.gz $BUILD_DIR/tree-sitter-${TREE_SITTER_VERSION}-linux-x64.gz
-gzip -dc < $BUILD_DIR/tree-sitter-${TREE_SITTER_VERSION}-linux-x64.gz > $OUT_DIR/.local/bin/tree-sitter
-chmod 755 $OUT_DIR/.local/bin/tree-sitter
+print_process_item "Download tree-sitter" 1
+download_git_repo https://github.com/tree-sitter/tree-sitter.git $BUILD_DIR/tree-sitter $TREE_SITTER_VERSION
+pushd $BUILD_DIR/tree-sitter
+PATH=$OUT_DIR/.local/cargo/bin/:$PATH CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup cargo build --release
+rsync -av target/release/tree-sitter $OUT_DIR/.local/bin/
+popd
 
 # tinty
 print_process_item "Download tinty" 1

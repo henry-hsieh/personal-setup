@@ -1,10 +1,9 @@
 # Dockerfile
 
-FROM ubuntu:latest
-
-# Avoid interactive
-ARG DEBIAN_FRONTEND=noninteractive
+FROM centos:7
 
 # Install necessary packages
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --no-install-suggests -y musl musl-dev musl-tools gcc libtinfo-dev gzip xz-utils make cmake git curl rsync ca-certificates pkg-config unzip file bison bsdmainutils
+RUN yum update -y && \
+    yum install -y https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm epel-release && \
+    yum groupinstall -y 'Development Tools' && \
+    yum install -y gzip xz unzip git curl rsync
