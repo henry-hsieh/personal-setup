@@ -13,24 +13,23 @@ TAR_EXCLUDES := $(addprefix --exclude=',$(addsuffix ', $(EXCLUDES)))
 all: build
 
 build:
-	mkdir -p $(LOG_DIR)
-	docker run --user $(shell id -u):$(shell id -g) -v $(CURDIR):/setup -w /setup personal-setup bash -c "HOME=/setup/build ./src/build.sh >build/logs/build.log 2> >(tee build/logs/build_err.log >&2)"
-	docker run --user $(shell id -u):$(shell id -g) -v $(CURDIR):/setup -w /setup personal-setup bash -c 'HOME=/setup/build/personal-setup/build_home PATH=$$PATH:/setup/build/personal-setup/build_home/.local/bin exec ./src/init.sh 2>&1 | tee build/logs/init.log'
+	docker run --user $(shell id -u):$(shell id -g) -v $(CURDIR):$(CURDIR) -w $(CURDIR) personal-setup ./src/build.sh
+	docker run --user $(shell id -u):$(shell id -g) -v $(CURDIR):$(CURDIR) -w $(CURDIR) -e HOME=$(CURDIR)/build/personal-setup/build_home personal-setup bash -i -c './src/init.sh'
 
 build_docker:
 	docker build -t personal-setup $(SRC_DIR)
 
 $(OUT): build
 	cd $(BUILD_DIR)/personal-setup && \
-	tar -czvf home.tar.gz $(TAR_EXCLUDES) build_home --transform='s/build_home/./' > $(LOG_DIR)/tar.log
+	tar -czf home.tar.gz $(TAR_EXCLUDES) build_home --transform='s/build_home/./'
 	cd $(BUILD_DIR) && \
-	tar -czvf $(notdir $@) --exclude='build_home' personal-setup | tee -a $(LOG_DIR)/tar.log
+	tar -czf $(notdir $@) --exclude='build_home' personal-setup
 
 release: $(OUT)
 
 test: $(OUT) _build_test_docker
-	mkdir -p $(TEST_DIR)
-	tar -axvf $< -C $(TEST_DIR) > $(LOG_DIR)/untar.log
+	mkdir -p $(TEST_DIR) $(LOG_DIR)
+	tar -axf $< -C $(TEST_DIR)
 	rm -rf $(TEST_HOME)
 	@echo "Installing environment..."
 	$(TEST_DIR)/personal-setup/install.sh $(TEST_HOME) > $(LOG_DIR)/install.log

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Directory path
 ROOT_DIR=$(dirname $(dirname $(realpath $0)))
