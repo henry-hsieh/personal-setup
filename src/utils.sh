@@ -110,33 +110,23 @@ get_openjdk_download_url() {
   echo "$download_url"
 }
 
-# print_process_item string [mode]
+# print_process_item string
 print_process_item() {
   if [[ $# -eq 1 ]]; then
-    local mode=0
-    local string="$1"
-  elif [[ $# -eq 2 ]]; then
-    local mode=$2
     local string="$1"
   else
-    local mode=2
     local string="print_process_item command error"
   fi
-  if [[ $mode -eq 0 ]]; then
+  if [[ $# -eq 1 ]]; then
     echo ""
     echo "=================================="
     echo "${string}..."
     echo "=================================="
-  elif [[ $mode -eq 1 ]]; then
-    echo ""
-    echo "==================================" | tee /dev/stderr
-    echo "${string}..." | tee /dev/stderr
-    echo "==================================" | tee /dev/stderr
   else
     echo ""
     echo "==================================" > /dev/stderr
     echo "$string" > /dev/stderr
     echo "==================================" > /dev/stderr
-    exit $mode
+    exit 1
   fi
 }
