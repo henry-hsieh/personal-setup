@@ -24,9 +24,16 @@ jobs:
         uses: wagoid/commitlint-github-action@v6
 
       - name: Cache docker images
+        id: cache_image
         uses: ScribeMD/docker-cache@0.5.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles('src/Dockerfile') }}
+
+      - name: Build docker image
+        run: |
+          if [[ "$(docker images | grep 'personal-setup')" == "" ]]; then
+            make build_docker
+          fi
 
       - name: Run tests
         id: run_test
@@ -59,7 +66,7 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          
+
       - name: Create release
         id: create_release
         uses: google-github-actions/release-please-action@v4
