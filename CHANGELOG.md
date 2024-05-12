@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.0](https://github.com/henry-hsieh/personal-setup/compare/v1.2.0...v1.3.0) (2024-05-12)
+
+
+### Features
+
+* **git:** always prune removed remote branches ([#38](https://github.com/henry-hsieh/personal-setup/issues/38)) ([63356ae](https://github.com/henry-hsieh/personal-setup/commit/63356ae436235e11a401a90964ec4f2d13fbaf73))
+* **lazygit:** add lazygit config ([#31](https://github.com/henry-hsieh/personal-setup/issues/31)) ([92ef232](https://github.com/henry-hsieh/personal-setup/commit/92ef2327dfadfd3409a806d8e2096468cf08df4d))
+* **nvim:** change keymap of terminal exit ([#29](https://github.com/henry-hsieh/personal-setup/issues/29)) ([064b35d](https://github.com/henry-hsieh/personal-setup/commit/064b35d6991ee05aa192287c263e61638289dba8))
+* **rustup:** add rustup ([#39](https://github.com/henry-hsieh/personal-setup/issues/39)) ([8e59c10](https://github.com/henry-hsieh/personal-setup/commit/8e59c10f52c83a29c14d1e983870b02f7f141386))
+* **tmux:** remove tmux-yank and use built-in copy ([#34](https://github.com/henry-hsieh/personal-setup/issues/34)) ([43b3c6c](https://github.com/henry-hsieh/personal-setup/commit/43b3c6cd498a4bb150ebb6a852010f3276fdd90b))
+
+
+### Bug Fixes
+
+* **nvim:** change colorscheme after create autocmd ([#28](https://github.com/henry-hsieh/personal-setup/issues/28)) ([2ebf260](https://github.com/henry-hsieh/personal-setup/commit/2ebf2606b587bed8655c029eb13fa3a9517b63f7))
+* **tinty:** move tinty config to correct path ([#32](https://github.com/henry-hsieh/personal-setup/issues/32)) ([2c201bd](https://github.com/henry-hsieh/personal-setup/commit/2c201bd79dcf4a3a191b296662a1104967981616))
+* **tmux:** set TMUX_PLUGIN_MANAGER_PATH in .tmux.conf ([#36](https://github.com/henry-hsieh/personal-setup/issues/36)) ([40e9e8e](https://github.com/henry-hsieh/personal-setup/commit/40e9e8e96da8aa6d240a5aa23f854048a70159c0))
+
 ## [1.2.0](https://github.com/henry-hsieh/personal-setup/compare/v1.1.0...v1.2.0) (2024-05-05)
 
 
