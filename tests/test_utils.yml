@@ -115,6 +115,15 @@
     must_not_contain:
       - "No such file or directory"
 
+- name: test rustup exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "rustup --version"'
+  stdout:
+    contains:
+      - "rustup"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
+
 - name: test tree-sitter exists
   command: bash -c 'HOME=$(pwd) bash -i -c "tree-sitter --version"'
   stdout:

@@ -162,6 +162,11 @@ PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 export JAVA_HOME="$HOME/.local/lib/java"
 export PATH="$JAVA_HOME/bin:$PATH"
 
+# Rustup and Cargo
+export RUSTUP_HOME="$HOME/.local/rustup"
+export CARGO_HOME="$HOME/.local/cargo"
+export PATH="$CARGO_HOME/bin:$PATH"
+
 alias mv='mv -i'
 alias cp='cp -i'
 alias rm='rm -i'
