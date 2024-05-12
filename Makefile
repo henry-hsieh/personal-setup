@@ -12,12 +12,12 @@ TAR_EXCLUDES := $(addprefix --exclude=',$(addsuffix ', $(EXCLUDES)))
 
 all: build
 
-build: _build_docker
+build:
 	mkdir -p $(LOG_DIR)
 	docker run --user $(shell id -u):$(shell id -g) -v $(CURDIR):/setup -w /setup personal-setup bash -c "HOME=/setup/build ./src/build.sh >build/logs/build.log 2> >(tee build/logs/build_err.log >&2)"
 	docker run --user $(shell id -u):$(shell id -g) -v $(CURDIR):/setup -w /setup personal-setup bash -c 'HOME=/setup/build/personal-setup/build_home PATH=$$PATH:/setup/build/personal-setup/build_home/.local/bin exec ./src/init.sh 2>&1 | tee build/logs/init.log'
 
-_build_docker:
+build_docker:
 	docker build -t personal-setup $(SRC_DIR)
 
 $(OUT): build
