@@ -172,7 +172,10 @@ require("lazy").setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-      require'nvim-treesitter.install'.command_extra_args = {["musl-gcc"] = {"-static"}}
+      require'nvim-treesitter.install'.command_extra_args = {
+        ["musl-gcc"] = {"-static"},
+        ["cc"] = {"-std=c99"},
+      }
       require'nvim-treesitter.configs'.setup {
         ensure_installed = ensure_ts,
         -- Install parsers synchronously (only applied to `ensure_installed`)
