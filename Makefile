@@ -27,16 +27,16 @@ $(OUT): build
 
 release: $(OUT)
 
-test: $(OUT) _build_test_docker
+test: $(OUT)
 	mkdir -p $(TEST_DIR) $(LOG_DIR)
 	tar -axf $< -C $(TEST_DIR)
 	rm -rf $(TEST_HOME)
 	@echo "Installing environment..."
 	$(TEST_DIR)/personal-setup/install.sh $(TEST_HOME) > $(LOG_DIR)/install.log
 	/usr/bin/cp -r $(TEST_SRC_DIR) $(TEST_HOME)
-	docker run --user $(shell id -u):$(shell id -g) -e HOME=/home -v $(TEST_HOME):/home -v $(LOG_DIR):/log -w /home pytest-workflow bash -i -c "pytest --symlink --kwdof --wt 16 --basetemp '/log/'"
+	docker run --rm --user $(shell id -u):$(shell id -g) -e HOME=/home -v $(TEST_HOME):/home -v $(LOG_DIR):/log -w /home pytest-workflow bash -i -c "pytest --symlink --kwdof --wt 16 --basetemp '/log/'"
 
-_build_test_docker:
+build_test_docker:
 	docker build -t pytest-workflow $(TEST_SRC_DIR)
 
 clean:
