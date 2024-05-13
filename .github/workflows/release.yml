@@ -12,8 +12,8 @@ permissions:
   pull-requests: write
 
 jobs:
-  test:
-    name: Test
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -30,18 +30,15 @@ jobs:
           key: docker-${{ runner.os }}-${{ hashFiles('src/Dockerfile') }}
           read-only: ${{ github.event_name == 'pull_request' }}
 
-      - name: Build docker images
+      - name: Build docker image
         run: |
           if [[ "$(docker images | grep 'personal-setup')" == "" ]]; then
             make build_docker
           fi
-          if [[ "$(docker images | grep 'pytest-workflow')" == "" ]]; then
-            make build_test_docker
-          fi
 
-      - name: Run tests
-        id: run_test
-        run: make test
+      - name: Build
+        id: run_build
+        run: make release
 
       - name: Upload logs
         if: ${{ always() }}
@@ -51,11 +48,76 @@ jobs:
           path: build/logs
 
       - name: Upload release artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.run_test.outcome == 'success'
+        if: steps.run_build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: release-artifact
           path: build/personal-setup.tar.gz
+
+  test:
+    name: Test
+    needs: build
+    strategy:
+      matrix:
+        include:
+          - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:latest'}
+          - { os: ubuntu-latest, manager: 'yum', image: 'centos:7'     }
+          - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:16.04' }
+          - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:18.04' }
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache docker images
+        id: cache_image
+        uses: ScribeMD/docker-cache@0.5.0
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles('Dockerfile') }}
+          read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Install dependencies
+        run: |
+          if [[ "${{ matrix.manager }}" == "apt" ]]; then
+            echo "FROM ${{ matrix.image }}" > Dockerfile
+            echo "RUN apt update" >> Dockerfile
+            echo "RUN apt install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
+          elif [[ "${{ matrix.manager }}" == "yum" ]]; then
+            echo "FROM ${{ matrix.image }}" > Dockerfile
+            echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
+          fi
+          echo "RUN mkdir -p ~/miniconda3" >> Dockerfile
+          echo "RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh" >> Dockerfile
+          echo "RUN bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3" >> Dockerfile
+          echo "RUN rm -rf ~/miniconda3/miniconda.sh" >> Dockerfile
+          echo "RUN ln -s ~/miniconda3/bin/python /usr/local/bin/python" >> Dockerfile
+          echo "RUN python -m pip install pytest-workflow" >> Dockerfile
+          echo "RUN ln -s ~/miniconda3/bin/pytest /usr/local/bin/pytest" >> Dockerfile
+          docker build -t pytest-workflow-${{ matrix.image }} .
+
+      - name: Download release artifact
+        id: download_release_artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifact
+          path: build/
+
+      - name: Run tests
+        id: run_test
+        run: docker run --rm -v $(pwd):$(pwd) -w $(pwd) pytest-workflow-${{ matrix.image }} bash -c 'make test'
+
+      - name: Create log name
+        run: |
+          IMAGE_NAME="${{ matrix.image }}"
+          echo "IMAGE_NAME=${IMAGE_NAME/:/_}" >> $GITHUB_ENV
+
+      - name: Upload logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ env.IMAGE_NAME }}
+          path: build/logs
 
   release:
     name: Release

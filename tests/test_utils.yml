@@ -35,7 +35,7 @@
       - "No such file or directory"
 
 - name: test fzf-tmux exists
-  command: bash -c 'HOME=$(pwd) bash -i -c "which fzf-tmux"'
+  command: bash -c 'HOME=$(pwd) bash -i -c "command -v fzf-tmux"'
   stdout:
     contains:
       - "fzf-tmux"
@@ -44,7 +44,7 @@
       - "No such file or directory"
 
 - name: test git-extras exists
-  command: bash -c 'HOME=$(pwd) bash -i -c "which git-extras"'
+  command: bash -c 'HOME=$(pwd) bash -i -c "command -v git-extras"'
   stdout:
     contains:
       - "git-extras"
@@ -53,7 +53,7 @@
       - "No such file or directory"
 
 - name: test lazygit exists
-  command: bash -c 'HOME=$(pwd) bash -i -c "which lazygit"'
+  command: bash -c 'HOME=$(pwd) bash -i -c "command -v lazygit"'
   stdout:
     contains:
       - "lazygit"
