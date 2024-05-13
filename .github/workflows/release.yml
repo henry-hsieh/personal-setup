@@ -29,10 +29,13 @@ jobs:
         with:
           key: docker-${{ runner.os }}-${{ hashFiles('src/Dockerfile') }}
 
-      - name: Build docker image
+      - name: Build docker images
         run: |
           if [[ "$(docker images | grep 'personal-setup')" == "" ]]; then
             make build_docker
+          fi
+          if [[ "$(docker images | grep 'pytest-workflow')" == "" ]]; then
+            make build_test_docker
           fi
 
       - name: Run tests
