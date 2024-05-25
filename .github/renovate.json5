@@ -36,6 +36,7 @@
                 "name:\\s*(?<depName>.*?)\\n",
                 "version:\\s*(?<currentDigest>.*?)\\n",
                 "datasource:\\s*git-refs\\n",
+                "branch:\\s*(?<currentValue>.*?)\\n",
                 "versioning:\\s*(?<versioning>.*?)\\n",
                 "package:\\s*(?<packageName>.*?)\\n",
             ],
