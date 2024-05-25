@@ -1,0 +1,77 @@
+{
+    automerge: true,
+    extends: ["config:recommended", ":dependencyDashboard"],
+    platformAutomerge: true,
+    automergeType: "pr",
+    commitMessagePrefix: "feat({{depName}}):",
+    commitMessageAction: "bump",
+    commitMessageTopic: "{{depName}} version",
+    separateMajorMinor: false,
+    prHourlyLimit: 0,
+    prConcurrentLimit: 0,
+    branchConcurrentLimit: 0,
+    rebaseWhen: "behind-base-branch",
+    enabledManagers: [
+        "custom.regex",
+    ],
+    customManagers: [
+        {
+            fileMatch: ["package\\.yaml$"],
+            matchStringsStrategy: "combination",
+            matchStrings: [
+                "name:\\s*(?<depName>.*?)\\n",
+                "version:\\s*(?<currentValue>.*?)\\n",
+                "datasource:\\s*(?<datasource>github-.*?)\\n",
+                "versioning:\\s*(?<versioning>.*?)\\n",
+                "package:\\s*(?<packageName>.*?)\\n",
+            ],
+            datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+            versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+            packageNameTemplate: "{{packageName}}",
+        },
+        {
+            fileMatch: ["package\\.yaml$"],
+            matchStringsStrategy: "combination",
+            matchStrings: [
+                "name:\\s*(?<depName>.*?)\\n",
+                "version:\\s*(?<currentDigest>.*?)\\n",
+                "datasource:\\s*git-refs\\n",
+                "versioning:\\s*(?<versioning>.*?)\\n",
+                "package:\\s*(?<packageName>.*?)\\n",
+            ],
+            datasourceTemplate: "git-refs",
+            packageNameTemplate: "https://github.com/{{packageName}}",
+        },
+        {
+            fileMatch: ["package\\.yaml$"],
+            matchStringsStrategy: "combination",
+            matchStrings: [
+                "name:\\s*(?<depName>.*?)\\n",
+                "version:\\s*(?<currentValue>.*?)\\n",
+                "datasource:\\s*generic\\n",
+                "versioning:\\s*(?<versioning>.*?)\\n",
+                "url:\\s*(?<registryUrl>.*?)\\n",
+                "extract:\\s*(?<extractVersion>.*?)\\n",
+            ],
+            datasourceTemplate: "custom.html",
+            versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+            registryUrlTemplate: "{{registryUrl}}",
+            extractVersionTemplate: "{{extractVersion}}",
+        },
+        {
+            fileMatch: ["package\\.yaml$"],
+            matchStringsStrategy: "combination",
+            matchStrings: [
+                "name:\\s*(?<depName>.*?)\\n",
+                "version:\\s*(?<currentValue>.*?)\\n",
+                "datasource:\\s*(?<datasource>java-version?)\\n",
+            ],
+            datasourceTemplate: "{{datasource}}",
+        },
+    ],
+    customDatasources: {
+        html: {
+            format: "html",
+        },
+    },
+}

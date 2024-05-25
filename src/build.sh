@@ -1,31 +1,32 @@
 #!/usr/bin/env bash
 
-# Version control
-GIT_EXTRAS_VERSION=7.2.0
-LAZYGIT_VERSION=0.41.0
-NVIM_VERSION=v0.9.5
-BAT_VERSION=v0.24.0
-FD_VERSION=v9.0.0
-FZF_VERSION=0.44.1
-FZF_TAB_COMP_VERSION=ff97a3c398e0163194ac1dfea9a4fb7e039c10f1
-NODE_VERSION=v20.9.0
-JDK_VERSION=22
-RG_VERSION=14.0.3
-TREE_SITTER_VERSION=v0.22.2
-TINTY_VERSION=v0.12.0
-TMUX_VERSION=v3.4
-HTOP_VERSION=v3.3.0
-BD_VERSION=v1.03
-GOTO_VERSION=v2.0.0
-RUSTUP_VERSION=1.27.1
-TPM_VERSION=v3.1.0
-
 # Directory path
 ROOT_DIR=$(dirname $(dirname $(realpath $0)))
+PKG_DIR=${ROOT_DIR}/packages
 BUILD_DIR=${ROOT_DIR}/build/
 TAR_DIR=${BUILD_DIR}/personal-setup/
 OUT_DIR=${TAR_DIR}/build_home/
 SETTINGS_DIR=$(dirname $(realpath $0))/settings/
+
+# Version control
+GIT_EXTRAS_VERSION=$(cat ${PKG_DIR}/git-extras/package.yaml | grep version: | sed 's/.\+:\s//g')
+LAZYGIT_VERSION=$(cat ${PKG_DIR}/lazygit/package.yaml | grep version: | sed 's/.\+:\s//g')
+NVIM_VERSION=$(cat ${PKG_DIR}/nvim/package.yaml | grep version: | sed 's/.\+:\s//g')
+BAT_VERSION=$(cat ${PKG_DIR}/bat/package.yaml | grep version: | sed 's/.\+:\s//g')
+FD_VERSION=$(cat ${PKG_DIR}/fd/package.yaml | grep version: | sed 's/.\+:\s//g')
+FZF_VERSION=$(cat ${PKG_DIR}/fzf/package.yaml | grep version: | sed 's/.\+:\s//g')
+FZF_TAB_COMP_VERSION=$(cat ${PKG_DIR}/fzf-tab-comp/package.yaml | grep version: | sed 's/.\+:\s//g')
+NODE_VERSION=$(cat ${PKG_DIR}/node/package.yaml | grep version: | sed 's/.\+:\s//g')
+JDK_VERSION=$(cat ${PKG_DIR}/jdk/package.yaml | grep version: | sed 's/.\+:\s//g')
+RG_VERSION=$(cat ${PKG_DIR}/rg/package.yaml | grep version: | sed 's/.\+:\s//g')
+TREE_SITTER_VERSION=$(cat ${PKG_DIR}/tree-sitter/package.yaml | grep version: | sed 's/.\+:\s//g')
+TINTY_VERSION=$(cat ${PKG_DIR}/tinty/package.yaml | grep version: | sed 's/.\+:\s//g')
+TMUX_VERSION=$(cat ${PKG_DIR}/tmux/package.yaml | grep version: | sed 's/.\+:\s//g')
+HTOP_VERSION=$(cat ${PKG_DIR}/htop/package.yaml | grep version: | sed 's/.\+:\s//g')
+BD_VERSION=$(cat ${PKG_DIR}/bd/package.yaml | grep version: | sed 's/.\+:\s//g')
+GOTO_VERSION=$(cat ${PKG_DIR}/goto/package.yaml | grep version: | sed 's/.\+:\s//g')
+RUSTUP_VERSION=$(cat ${PKG_DIR}/rustup/package.yaml | grep version: | sed 's/.\+:\s//g')
+TPM_VERSION=$(cat ${PKG_DIR}/tpm/package.yaml | grep version: | sed 's/.\+:\s//g')
 
 # Command detection
 if ! command -v git &> /dev/null
@@ -84,7 +85,7 @@ popd
 
 # nvim
 print_process_item "Download nvim"
-download_file https://github.com/neovim/neovim/releases/download/$NVIM_VERSION/nvim-linux64.tar.gz $BUILD_DIR/nvim-linux64.tar.gz
+download_file https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/nvim-linux64.tar.gz $BUILD_DIR/nvim-linux64.tar.gz
 tar -axf $BUILD_DIR/nvim-linux64.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/nvim-linux64
 rsync -a bin $OUT_DIR/.local/
@@ -95,9 +96,9 @@ popd
 
 # bat
 print_process_item "Download bat"
-download_file https://github.com/sharkdp/bat/releases/download/$BAT_VERSION/bat-${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/bat-${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz
-tar -axf $BUILD_DIR/bat-${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
-pushd $BUILD_DIR/bat-${BAT_VERSION}-x86_64-unknown-linux-musl
+download_file https://github.com/sharkdp/bat/releases/download/v$BAT_VERSION/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz
+tar -axf $BUILD_DIR/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
+pushd $BUILD_DIR/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl
 rsync -a bat $OUT_DIR/.local/bin/
 rsync -a bat.1 $OUT_DIR/.local/man/man1/
 cp -f autocomplete/bat.bash $OUT_DIR/.local/share/bash-completion/completions/
@@ -105,9 +106,9 @@ popd
 
 # fd
 print_process_item "Download fd"
-download_file https://github.com/sharkdp/fd/releases/download/$FD_VERSION/fd-${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/fd-${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz
-tar -axf $BUILD_DIR/fd-${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
-pushd $BUILD_DIR/fd-${FD_VERSION}-x86_64-unknown-linux-musl
+download_file https://github.com/sharkdp/fd/releases/download/v$FD_VERSION/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz
+tar -axf $BUILD_DIR/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
+pushd $BUILD_DIR/fd-v${FD_VERSION}-x86_64-unknown-linux-musl
 rsync -a fd $OUT_DIR/.local/bin/
 rsync -a fd.1 $OUT_DIR/.local/man/man1/
 cp -f autocomplete/fd.bash $OUT_DIR/.local/share/bash-completion/completions/
@@ -132,9 +133,9 @@ download_exe https://raw.githubusercontent.com/lincheney/fzf-tab-completion/$FZF
 
 # node (use unofficial builds)
 print_process_item "Download node"
-download_file https://unofficial-builds.nodejs.org/download/release/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz $BUILD_DIR/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz
-tar -axf $BUILD_DIR/node-${NODE_VERSION}-linux-x64-glibc-217.tar.xz -C $BUILD_DIR
-pushd $BUILD_DIR/node-${NODE_VERSION}-linux-x64-glibc-217
+download_file https://unofficial-builds.nodejs.org/download/release/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64-glibc-217.tar.xz $BUILD_DIR/node-v${NODE_VERSION}-linux-x64-glibc-217.tar.xz
+tar -axf $BUILD_DIR/node-v${NODE_VERSION}-linux-x64-glibc-217.tar.xz -C $BUILD_DIR
+pushd $BUILD_DIR/node-v${NODE_VERSION}-linux-x64-glibc-217
 rsync -a bin $OUT_DIR/.local/
 rsync -a include $OUT_DIR/.local/
 rsync -a lib $OUT_DIR/.local/
@@ -172,7 +173,7 @@ popd
 
 # tree-sitter
 print_process_item "Download tree-sitter"
-download_git_repo https://github.com/tree-sitter/tree-sitter.git $BUILD_DIR/tree-sitter $TREE_SITTER_VERSION
+download_git_repo https://github.com/tree-sitter/tree-sitter.git $BUILD_DIR/tree-sitter v$TREE_SITTER_VERSION
 pushd $BUILD_DIR/tree-sitter
 PATH=$OUT_DIR/.local/cargo/bin/:$PATH CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup cargo build --release
 rsync -a target/release/tree-sitter $OUT_DIR/.local/bin/
@@ -180,9 +181,9 @@ popd
 
 # tinty
 print_process_item "Download tinty"
-download_file https://github.com/tinted-theming/tinty/releases/download/${TINTY_VERSION}/tinty--x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz
+download_file https://github.com/tinted-theming/tinty/releases/download/v${TINTY_VERSION}/tinty--x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/tinty-v${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz
 mkdir -p $BUILD_DIR/tinty
-tar -axf $BUILD_DIR/tinty-${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR/tinty
+tar -axf $BUILD_DIR/tinty-v${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR/tinty
 pushd $BUILD_DIR/tinty
 rsync -a tinty $OUT_DIR/.local/bin/
 rsync -a contrib/completion/tinty.bash $OUT_DIR/.local/share/bash-completion/completions/
@@ -191,7 +192,7 @@ popd
 # htop
 print_process_item "Download htop"
 mkdir -p $BUILD_DIR/htop
-download_exe https://github.com/henry-hsieh/htop.appimage/releases/download/${HTOP_VERSION}/Htop-x86_64.AppImage $BUILD_DIR/htop/Htop-x86_64.AppImage
+download_exe https://github.com/henry-hsieh/htop.appimage/releases/download/v${HTOP_VERSION}/Htop-x86_64.AppImage $BUILD_DIR/htop/Htop-x86_64.AppImage
 pushd $BUILD_DIR/htop
 mv Htop-x86_64.AppImage htop
 rsync -a htop $OUT_DIR/.local/bin/
@@ -199,17 +200,17 @@ popd
 
 # bd
 print_process_item "Download bd"
-download_exe https://raw.githubusercontent.com/vigneshwaranr/bd/$BD_VERSION/bd $OUT_DIR/.local/bin/bd
-download_exe https://raw.githubusercontent.com/vigneshwaranr/bd/$BD_VERSION/bash_completion.d/bd $OUT_DIR/.local/share/bash-completion/completions/bd
+download_exe https://raw.githubusercontent.com/vigneshwaranr/bd/v$BD_VERSION/bd $OUT_DIR/.local/bin/bd
+download_exe https://raw.githubusercontent.com/vigneshwaranr/bd/v$BD_VERSION/bash_completion.d/bd $OUT_DIR/.local/share/bash-completion/completions/bd
 
 # goto
 print_process_item "Download goto"
-download_exe https://raw.githubusercontent.com/iridakos/goto/$GOTO_VERSION/goto.sh $OUT_DIR/.local/share/scripts/goto.sh
+download_exe https://raw.githubusercontent.com/iridakos/goto/v$GOTO_VERSION/goto.sh $OUT_DIR/.local/share/scripts/goto.sh
 
 # tmux
 print_process_item "Download tmux"
 mkdir -p $BUILD_DIR/tmux
-download_exe https://github.com/henry-hsieh/tmux.appimage/releases/download/${TMUX_VERSION}/Tmux-x86_64.AppImage $BUILD_DIR/tmux/Tmux-x86_64.AppImage
+download_exe https://github.com/henry-hsieh/tmux.appimage/releases/download/v${TMUX_VERSION}/Tmux-x86_64.AppImage $BUILD_DIR/tmux/Tmux-x86_64.AppImage
 pushd $BUILD_DIR/tmux
 mv Tmux-x86_64.AppImage tmux
 rsync -a tmux $OUT_DIR/.local/bin/
@@ -217,4 +218,4 @@ popd
 
 # tpm
 print_process_item "Clone tpm"
-download_git_repo https://github.com/tmux-plugins/tpm.git $OUT_DIR/.tmux/plugins/tpm $TPM_VERSION
+download_git_repo https://github.com/tmux-plugins/tpm.git $OUT_DIR/.tmux/plugins/tpm v$TPM_VERSION

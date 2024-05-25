@@ -1,0 +1,4 @@
+name: lazygit
+version: 0.41.0
+datasource: github-releases
+package: jesseduffield/lazygit

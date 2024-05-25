@@ -1,0 +1,4 @@
+name: htop
+version: 3.3.0
+datasource: github-releases
+package: henry-hsieh/htop.appimage
