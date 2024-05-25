@@ -1,0 +1,4 @@
+name: tpm
+version: 3.1.0
+datasource: github-tags
+package: tmux-plugins/tpm

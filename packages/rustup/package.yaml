@@ -1,0 +1,4 @@
+name: rustup
+version: 1.27.1
+datasource: github-tags
+package: rust-lang/rustup
