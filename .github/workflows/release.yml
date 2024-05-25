@@ -97,7 +97,7 @@ jobs:
 
       - name: Build docker image
         run: |
-          if [[ "$(docker images | grep 'pytest-workflow-${{ matrix.image }}')" == "" ]]; then
+          if [[ "$(docker images --format '{{.Repository}}:{{.Tag}}' | grep 'pytest-workflow-${{ matrix.image }}')" == "" ]]; then
             docker build -t pytest-workflow-${{ matrix.image }} .
           fi
 
