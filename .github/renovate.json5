@@ -59,17 +59,17 @@
             matchStrings: [
                 "name:\\s*(?<depName>.*?)\\n",
                 "version:\\s*(?<currentValue>.*?)\\n",
-                "datasource:\\s*(?<datasource>node-version?)\\n",
             ],
-            datasourceTemplate: "custom.node",
+            datasourceTemplate: "custom.unofficial_node",
+            versioningTemplate: "semver",
         },
     ],
     customDatasources: {
-        node: {
-          defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
-          transformTemplates: [
-            "{ \"releases\": $map($[\"linux-x64-glibc-217\" in files], function($v) { { \"version\": $v.version } }) }"
-          ],
+        unofficial_node: {
+            defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
+            transformTemplates: [
+                "{ \"releases\": $map($[\"linux-x64-glibc-217\" in files], function($v) { { \"version\": $v.version } }) }"
+            ],
         },
     },
 }
