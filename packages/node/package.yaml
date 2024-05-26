@@ -1,5 +1,3 @@
 name: node
 version: 20.9.0
-datasource: generic
-url: https://unofficial-builds.nodejs.org/download/release/
-extract: ^v(?<currentValue>.*?)/$
+datasource: node-version
