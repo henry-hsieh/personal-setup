@@ -68,12 +68,8 @@
         node: {
           defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
           transformTemplates: [
-            "{\"releases\":[{\"version\": $$.['linux-x64-glibc-217' in files].version}]}"
-          ]
-        }
-    },
-    packageRules: [
-        {
+            "{ \"releases\": $map($[\"linux-x64-glibc-217\" in files], function($v) { { \"version\": $v.version } }) }"
+          ],
         },
-    ],
+    },
 }
