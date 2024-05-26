@@ -67,9 +67,13 @@
     customDatasources: {
         node: {
           defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
-          "transformTemplates": [
+          transformTemplates: [
             "{\"releases\":[{\"version\": $$.['linux-x64-glibc-217' in files].version}]}"
           ]
         }
     },
+    packageRules: [
+        {
+        },
+    ],
 }
