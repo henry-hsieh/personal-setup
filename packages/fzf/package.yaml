@@ -1,4 +1,4 @@
 name: fzf
-version: 0.44.1
+version: 0.52.1
 datasource: github-releases
 package: junegunn/fzf
