@@ -44,35 +44,32 @@
             packageNameTemplate: "https://github.com/{{packageName}}",
         },
         {
-            fileMatch: ["package\\.yaml$"],
-            matchStringsStrategy: "combination",
-            matchStrings: [
-                "name:\\s*(?<depName>.*?)\\n",
-                "version:\\s*(?<currentValue>.*?)\\n",
-                "datasource:\\s*generic\\n",
-                "versioning:\\s*(?<versioning>.*?)\\n",
-                "url:\\s*(?<registryUrl>.*?)\\n",
-                "extract:\\s*(?<extractVersion>.*?)\\n",
-            ],
-            datasourceTemplate: "custom.html",
-            versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
-            registryUrlTemplate: "{{registryUrl}}",
-            extractVersionTemplate: "{{extractVersion}}",
-        },
-        {
-            fileMatch: ["package\\.yaml$"],
+            fileMatch: ["jdk/package\\.yaml$"],
             matchStringsStrategy: "combination",
             matchStrings: [
                 "name:\\s*(?<depName>.*?)\\n",
                 "version:\\s*(?<currentValue>.*?)\\n",
                 "datasource:\\s*(?<datasource>java-version?)\\n",
             ],
-            datasourceTemplate: "{{datasource}}",
+            datasourceTemplate: "java-version",
+        },
+        {
+            fileMatch: ["node/package\\.yaml$"],
+            matchStringsStrategy: "combination",
+            matchStrings: [
+                "name:\\s*(?<depName>.*?)\\n",
+                "version:\\s*(?<currentValue>.*?)\\n",
+                "datasource:\\s*(?<datasource>node-version?)\\n",
+            ],
+            datasourceTemplate: "custom.node",
         },
     ],
     customDatasources: {
-        html: {
-            format: "html",
-        },
+        node: {
+          defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
+          "transformTemplates": [
+            "{\"releases\":[{\"version\": $$.['linux-x64-glibc-217' in files].version}]}"
+          ]
+        }
     },
 }
