@@ -1,4 +1,4 @@
 name: tinty
-version: 0.14.0
+version: 8720da6211f08ba2b1c84bec7ffb4d67834df0d3
 datasource: github-releases
 package: tinted-theming/tinty
