@@ -85,12 +85,11 @@ popd
 
 # nvim
 print_process_item "Download nvim"
-download_file https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/nvim-linux64.tar.gz $BUILD_DIR/nvim-linux64.tar.gz
+download_file https://github.com/neovim/neovim-releases/releases/download/v$NVIM_VERSION/nvim-linux64.tar.gz $BUILD_DIR/nvim-linux64.tar.gz
 tar -axf $BUILD_DIR/nvim-linux64.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/nvim-linux64
 rsync -a bin $OUT_DIR/.local/
 rsync -a lib $OUT_DIR/.local/
-rsync -a man $OUT_DIR/.local/
 rsync -a share $OUT_DIR/.local/
 popd
 
