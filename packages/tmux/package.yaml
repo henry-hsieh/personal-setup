@@ -1,5 +1,5 @@
 name: tmux
-version: 3.4
+version: f16a3ad22e4b84cb3a2d063072201c6a4fa62253
 datasource: github-releases
 package: henry-hsieh/tmux.appimage
 versioning: loose
