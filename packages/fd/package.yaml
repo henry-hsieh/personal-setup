@@ -1,4 +1,4 @@
 name: fd
-version: 10.1.0
+version: 29936f0fbae1e52984ab582b2b2c98685d6ad638
 datasource: github-releases
 package: sharkdp/fd
