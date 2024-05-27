@@ -70,6 +70,9 @@ vim.o.undolevels = 10000
 -- Updatetime
 vim.o.updatetime = 200
 
+-- Autoread
+vim.o.autoread = true
+
 -- Tab
 vim.keymap.set("n", "<space><tab>n", "<cmd>tabnew<cr>", { desc = "New Tab" })
 vim.keymap.set("n", "<space><tab>q", "<cmd>tabclose<cr>", { desc = "Close Tab" })
