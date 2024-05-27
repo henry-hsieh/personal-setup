@@ -1,5 +1,8 @@
 {
     automerge: true,
+    digest: {
+      automerge: true
+    }
     extends: ["config:recommended", ":dependencyDashboard"],
     platformAutomerge: true,
     automergeType: "pr",
