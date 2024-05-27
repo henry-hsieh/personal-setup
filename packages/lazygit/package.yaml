@@ -1,4 +1,4 @@
 name: lazygit
-version: 0.42.0
+version: ef1daf314af3df584249ac479a6efaa4669f4804
 datasource: github-releases
 package: jesseduffield/lazygit
