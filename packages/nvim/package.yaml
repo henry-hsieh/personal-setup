@@ -1,4 +1,4 @@
 name: nvim
-version: 0.9.5
+version: c4eb0b64bd4923a72fe737837cfe234c80fb539c
 datasource: github-releases
 package: neovim/neovim
