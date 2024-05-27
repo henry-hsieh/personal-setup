@@ -1,4 +1,4 @@
 name: rustup
-version: 1.27.1
+version: 1cf1b5a6d80c978e0dcaabbce5f10b3861612425
 datasource: github-tags
 package: rust-lang/rustup
