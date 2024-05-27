@@ -1,4 +1,4 @@
 name: goto
-version: b7fda54e0817b9cb47e22a78bd00b4571011cf58
+version: 2.0.0
 datasource: github-releases
 package: iridakos/goto
