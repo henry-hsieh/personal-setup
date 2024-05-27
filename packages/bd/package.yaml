@@ -1,5 +1,5 @@
 name: bd
-version: 1.03
+version: 4277ad8483357ccfa95264f4084fff9cf7887097
 datasource: github-tags
 versioning: loose
 package: vigneshwaranr/bd
