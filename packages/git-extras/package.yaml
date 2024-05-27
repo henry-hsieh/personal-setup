@@ -1,4 +1,4 @@
 name: git-extras
-version: 7.2.0
+version: e34dea9b7aa241b05b73e0931c7307a398a5020f
 datasource: github-releases
 package: tj/git-extras
