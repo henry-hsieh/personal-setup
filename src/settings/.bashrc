@@ -131,7 +131,9 @@ fi
 source ~/.local/share/scripts/git-prompt.sh
 source ~/.local/share/scripts/fzf-completion.bash
 source ~/.local/share/scripts/fzf-key-bindings.bash
-source ~/.local/share/scripts/fzf-bash-completion.sh
+if ! [[ "$DISABLE_FZF_TAB_COMP" == "true" ]]; then
+  source ~/.local/share/scripts/fzf-bash-completion.sh
+fi
 source ~/.local/share/scripts/goto.sh
 
 set_prompt()
