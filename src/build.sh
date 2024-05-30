@@ -192,6 +192,7 @@ popd
 print_process_item "Download htop"
 mkdir -p $BUILD_DIR/htop
 download_exe https://github.com/henry-hsieh/htop.appimage/releases/download/v${HTOP_VERSION}/Htop-x86_64.AppImage $BUILD_DIR/htop/Htop-x86_64.AppImage
+download_file https://github.com/henry-hsieh/htop.appimage/releases/download/v${TMUX_VERSION}/htop.1 $OUT_DIR/.local/man/man1/htop.1
 pushd $BUILD_DIR/htop
 mv Htop-x86_64.AppImage htop
 rsync -a htop $OUT_DIR/.local/bin/
