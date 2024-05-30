@@ -210,6 +210,7 @@ download_exe https://raw.githubusercontent.com/iridakos/goto/v$GOTO_VERSION/goto
 print_process_item "Download tmux"
 mkdir -p $BUILD_DIR/tmux
 download_exe https://github.com/henry-hsieh/tmux.appimage/releases/download/v${TMUX_VERSION}/Tmux-x86_64.AppImage $BUILD_DIR/tmux/Tmux-x86_64.AppImage
+download_file https://github.com/henry-hsieh/tmux.appimage/releases/download/v${TMUX_VERSION}/tmux.1 $OUT_DIR/.local/man/man1/tmux.1
 pushd $BUILD_DIR/tmux
 mv Tmux-x86_64.AppImage tmux
 rsync -a tmux $OUT_DIR/.local/bin/
