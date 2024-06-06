@@ -1629,6 +1629,7 @@ require("lazy").setup({
           return
         end
 
+        vim.cmd.lcd(vim.fn.expand("%:p:h"))
         vim.cmd.terminal('lazygit')     -- open a terminal buffer
         vim.bo.bufhidden = 'delete' -- close the terminal when window closes
 
