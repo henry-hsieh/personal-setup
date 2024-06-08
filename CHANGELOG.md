@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.4.0](https://github.com/henry-hsieh/personal-setup/compare/v1.3.0...v1.4.0) (2024-06-08)
+
+
+### Features
+
+* **bash:** add option to disable fzf-tab-comp ([#91](https://github.com/henry-hsieh/personal-setup/issues/91)) ([28980f5](https://github.com/henry-hsieh/personal-setup/commit/28980f511776863ce9172b03b03d6bb5d929e673))
+* **fd:** bump fd version to v10 ([#78](https://github.com/henry-hsieh/personal-setup/issues/78)) ([584d12a](https://github.com/henry-hsieh/personal-setup/commit/584d12ad47eceddd7baf4a0a40db1e3234d89fed))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 2262b9f ([#86](https://github.com/henry-hsieh/personal-setup/issues/86)) ([caf17c4](https://github.com/henry-hsieh/personal-setup/commit/caf17c44373bd3820ee8798dd32ca6ea315f941c))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 255dc81 ([#94](https://github.com/henry-hsieh/personal-setup/issues/94)) ([7fb0abc](https://github.com/henry-hsieh/personal-setup/commit/7fb0abcf53b09536e75fbf91619761053ea53bb8))
+* **fzf:** bump fzf version to v0.52.1 ([#73](https://github.com/henry-hsieh/personal-setup/issues/73)) ([a630ce1](https://github.com/henry-hsieh/personal-setup/commit/a630ce1e200d86e2928091144c9275b3be1384cc))
+* **fzf:** bump fzf version to v0.53.0 ([#95](https://github.com/henry-hsieh/personal-setup/issues/95)) ([f946919](https://github.com/henry-hsieh/personal-setup/commit/f946919274991b723ce82600f49b960ceecf7e6a))
+* **fzf:** remove fzf-tmux in favor of builtin option ([#97](https://github.com/henry-hsieh/personal-setup/issues/97)) ([f28052d](https://github.com/henry-hsieh/personal-setup/commit/f28052d24ec764a708f114fd47b39c40ad9e5eea))
+* **goto:** bump goto digest to b7fda54 ([#62](https://github.com/henry-hsieh/personal-setup/issues/62)) ([dac6361](https://github.com/henry-hsieh/personal-setup/commit/dac6361c9ac1f6a94aac15ac93daef1e4ed0e8b3))
+* **htop:** add man of htop ([#93](https://github.com/henry-hsieh/personal-setup/issues/93)) ([22b784d](https://github.com/henry-hsieh/personal-setup/commit/22b784d8e6eb59ac52beea8a777477841b8a9313))
+* **lazygit:** bump lazygit version to v0.42.0 ([#74](https://github.com/henry-hsieh/personal-setup/issues/74)) ([c8b2291](https://github.com/henry-hsieh/personal-setup/commit/c8b2291a51df05729b2b16ef05734f536f8e51f4))
+* **node:** bump node version to v22 ([#79](https://github.com/henry-hsieh/personal-setup/issues/79)) ([abce844](https://github.com/henry-hsieh/personal-setup/commit/abce844502149a0ce2526786ed761d55e2c3718b))
+* **nvim:** change directory to current file when open lazygit ([#96](https://github.com/henry-hsieh/personal-setup/issues/96)) ([c43d4d2](https://github.com/henry-hsieh/personal-setup/commit/c43d4d23064dd7b802f7c405b3921afa79f5ba89))
+* **nvim:** enable autoread ([#90](https://github.com/henry-hsieh/personal-setup/issues/90)) ([5724e7a](https://github.com/henry-hsieh/personal-setup/commit/5724e7a2ae9d8a4f965a60b2e41b619ca97716e5))
+* **rg:** bump rg version to v14.1.0 ([#76](https://github.com/henry-hsieh/personal-setup/issues/76)) ([77b7110](https://github.com/henry-hsieh/personal-setup/commit/77b711016b303a06419b3758db2528b1297627e3))
+* **tinty:** bump tinty version to v0.14.0 ([#77](https://github.com/henry-hsieh/personal-setup/issues/77)) ([f0ed461](https://github.com/henry-hsieh/personal-setup/commit/f0ed46103badc6bbda8cb01cc4bf95c76e8f68d7))
+* **tmux:** add man of tmux ([#92](https://github.com/henry-hsieh/personal-setup/issues/92)) ([41b7408](https://github.com/henry-hsieh/personal-setup/commit/41b7408dceb3d5cd7594b8844fbfdee8128c6e71))
+* **tree-sitter:** bump tree-sitter version to v0.22.6 ([#72](https://github.com/henry-hsieh/personal-setup/issues/72)) ([60d1414](https://github.com/henry-hsieh/personal-setup/commit/60d14140df9d0a24ba0703385c2aa62d96dc6459))
+
+
+### Bug Fixes
+
+* **goto:** revert to release version ([#84](https://github.com/henry-hsieh/personal-setup/issues/84)) ([70745db](https://github.com/henry-hsieh/personal-setup/commit/70745dba16b12c6aec915acbf50f488fcfc99daf))
+
 ## [1.3.0](https://github.com/henry-hsieh/personal-setup/compare/v1.2.0...v1.3.0) (2024-05-12)
 
 
