@@ -121,10 +121,8 @@ pushd $BUILD_DIR/
 rsync -a fzf $OUT_DIR/.local/bin/
 popd
 download_file https://raw.githubusercontent.com/junegunn/fzf/$FZF_VERSION/man/man1/fzf.1 $OUT_DIR/.local/man/man1/fzf.1
-download_file https://raw.githubusercontent.com/junegunn/fzf/$FZF_VERSION/man/man1/fzf-tmux.1 $OUT_DIR/.local/man/man1/fzf-tmux.1
 download_exe https://raw.githubusercontent.com/junegunn/fzf/$FZF_VERSION/shell/completion.bash $OUT_DIR/.local/share/scripts/fzf-completion.bash
 download_exe https://raw.githubusercontent.com/junegunn/fzf/$FZF_VERSION/shell/key-bindings.bash $OUT_DIR/.local/share/scripts/fzf-key-bindings.bash
-download_exe https://raw.githubusercontent.com/junegunn/fzf/$FZF_VERSION/bin/fzf-tmux $OUT_DIR/.local/bin/fzf-tmux
 
 # fzf-tab-completion
 print_process_item "Download fzf-tab-completion"
