@@ -29,7 +29,7 @@
   command: bash -c 'HOME=$(pwd) bash -i -c "fzf --help"'
   stdout:
     contains:
-      - "usage: fzf"
+      - "Usage: fzf"
   stderr:
     must_not_contain:
       - "No such file or directory"
