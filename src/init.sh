@@ -9,9 +9,9 @@ tmux() {
   /usr/bin/env tmux --appimage-extract-and-run $@
 }
 export -f tmux
-chmod +x $HOME/.tmux/plugins/tpm/bin/*_plugins
-$HOME/.tmux/plugins/tpm/bin/install_plugins
-$HOME/.tmux/plugins/tpm/bin/update_plugins
+chmod +x $HOME/.config/tmux/plugins/tpm/bin/*_plugins
+$HOME/.config/tmux/plugins/tpm/bin/install_plugins
+$HOME/.config/tmux/plugins/tpm/bin/update_plugins
 
 # Download and update themes using tinty
 print_process_item "Install/update Tinty themes"

@@ -217,4 +217,4 @@ popd
 
 # tpm
 print_process_item "Clone tpm"
-download_git_repo https://github.com/tmux-plugins/tpm.git $OUT_DIR/.tmux/plugins/tpm v$TPM_VERSION
+download_git_repo https://github.com/tmux-plugins/tpm.git $OUT_DIR/.config/tmux/plugins/tpm v$TPM_VERSION
