@@ -29,7 +29,7 @@ function backup() {
 
 backup $INSTALL_DIR/.bashrc
 backup $INSTALL_DIR/.cshrc
-backup $INSTALL_DIR/.gitconfig
+backup $INSTALL_DIR/.config/git/config
 backup $INSTALL_DIR/.tmux.conf
 backup $INSTALL_DIR/.config/nvim/init.lua
 
@@ -37,8 +37,8 @@ backup $INSTALL_DIR/.config/nvim/init.lua
 tar -axvf $SCRIPT_DIR/home.tar.gz -C $INSTALL_DIR
 
 # Restore origin git name and email
-git config --file $INSTALL_DIR/.gitconfig user.name  "$GIT_NAME"
-git config --file $INSTALL_DIR/.gitconfig user.email "$GIT_EMAIL"
+git config --file $INSTALL_DIR/.config/git/config user.name  "$GIT_NAME"
+git config --file $INSTALL_DIR/.config/git/config user.email "$GIT_EMAIL"
 
 echo -e "===================================================================="
 echo -e "Installation completed!\n"
