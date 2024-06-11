@@ -30,7 +30,7 @@ function backup() {
 backup $INSTALL_DIR/.bashrc
 backup $INSTALL_DIR/.cshrc
 backup $INSTALL_DIR/.config/git/config
-backup $INSTALL_DIR/.tmux.conf
+backup $INSTALL_DIR/.config/tmux/tmux.conf
 backup $INSTALL_DIR/.config/nvim/init.lua
 
 # Install environment
