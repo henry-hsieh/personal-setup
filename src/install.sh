@@ -34,7 +34,20 @@ backup $INSTALL_DIR/.tmux.conf
 backup $INSTALL_DIR/.config/nvim/init.lua
 
 # Install environment
-tar -axvf $SCRIPT_DIR/home.tar.gz -C $INSTALL_DIR
+function untar() {
+    archive="$1"
+
+    originalsize=$(file $archive | rev | cut -d' ' -f1 | rev)
+    step=100
+    blocks=$(echo "$originalsize / 512 / 20 / $step" | bc)
+
+    tar -ax --checkpoint=$step --totals \
+    --checkpoint-action="exec='p=\$(echo "\$TAR_CHECKPOINT/$blocks" | bc -l);printf \"%.2f%%\r\" \$p'" \
+    -f $archive -C $INSTALL_DIR
+}
+
+echo -e "Start installing:"
+untar $SCRIPT_DIR/home.tar.gz
 
 # Restore origin git name and email
 git config --file $INSTALL_DIR/.config/git/config user.name  "$GIT_NAME"
