@@ -55,7 +55,6 @@ alias ll 'ls -alF'
 alias la 'ls -A'
 alias l  'ls -CF'
 
-alias tmux '~/.local/share/scripts/update_display.sh;\tmux -2'
 alias h 'history'
 alias vim 'nvim'
 alias bd 'set __bd_dir="`\bd -si \!:1`"; if ( "$__bd_dir" == "No such occurrence." ) echo "$__bd_dir"; if ( "$__bd_dir" != "No such occurrence." ) cd "$__bd_dir"; unset __bd_dir'
