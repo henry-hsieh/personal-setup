@@ -154,7 +154,15 @@ set_prompt()
     PS1+="\n\[$txtblue\]└─ \$ ▶\[$txtreset\]\[$txtwhite\] "
     PS2="\[$txtbold\]\[$txtblue\]└─ \$ ▶\[$txtreset\]\[$txtwhite\] "
     if ! [ -z $TMUX ]; then
-        export DISPLAY=$(\tmux show-env | sed -n 's/^DISPLAY=//p')
+        local env_update_list=$(tmux show-options -g @env_update_list | sed -n 's/@env_update_list//p' | sed -r 's/"//g')
+        IFS=' ' read -ra env_update_list <<< "$env_update_list"
+        for var in "$env_update_list"; do
+            if [[ "$(tmux show-env -g | grep -e ^$var=)" == "" ]]; then
+                unset $var
+            else
+                export $(tmux show-env -g $var)
+            fi
+        done
     fi
 }
 PROMPT_COMMAND='set_prompt'
@@ -188,7 +196,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-alias tmux='~/.local/share/scripts/update_display.sh;tmux -2'
 alias vim='nvim'
 alias bd=". bd -si"
 alias bat="bat --theme='base16-256'"
