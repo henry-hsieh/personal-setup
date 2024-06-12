@@ -57,7 +57,7 @@ alias l  'ls -CF'
 
 alias h 'history'
 alias vim 'nvim'
-alias bd 'set __bd_dir="`\bd -si \!:1`"; if ( "$__bd_dir" == "No such occurrence." ) echo "$__bd_dir"; if ( "$__bd_dir" != "No such occurrence." ) cd "$__bd_dir"; unset __bd_dir'
+alias bd 'set __bd_cmd=`echo \!! | sed -n "s/bd/bd -si/p"`; set __bd_dir="`/usr/bin/env $__bd_cmd`"; if ( "$__bd_dir" == "No such occurrence." ) echo "$__bd_dir"; if ( "$__bd_dir" != "No such occurrence." ) cd "$__bd_dir"; unset __bd_cmd __bd_dir'
 
 # Set display if the host is WSL
 if ( "`uname -a`" =~ *WSL* ) then
