@@ -120,9 +120,11 @@ _fzf_comprun() {
 }
 
 # FZF Tab Completion
-export FZF_COMPLETION_AUTO_COMMON_PREFIX=true
-export FZF_COMPLETION_AUTO_COMMON_PREFIX_PART=true
-bind -x '"\t": fzf_bash_completion'
+if ! [[ "$DISABLE_FZF_TAB_COMP" == "true" ]]; then
+  export FZF_COMPLETION_AUTO_COMMON_PREFIX=true
+  export FZF_COMPLETION_AUTO_COMMON_PREFIX_PART=true
+  bind -x '"\t": fzf_bash_completion'
+fi
 
 # Put bash completion at first
 if [ -f /usr/share/bash-completion/bash_completion ]; then
