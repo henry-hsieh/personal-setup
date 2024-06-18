@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.5.0](https://github.com/henry-hsieh/personal-setup/compare/v1.4.0...v1.5.0) (2024-06-18)
+
+
+### Features
+
+* **fzf-tab-comp:** bump fzf-tab-comp digest to ae8462e ([#110](https://github.com/henry-hsieh/personal-setup/issues/110)) ([b3a73a0](https://github.com/henry-hsieh/personal-setup/commit/b3a73a0f0556047e613fd10cc4179ef663676cda))
+* **git:** move config to XDG_CONFIG_HOME ([#98](https://github.com/henry-hsieh/personal-setup/issues/98)) ([a336bb6](https://github.com/henry-hsieh/personal-setup/commit/a336bb601452c5be3ff2a1f6cd07e02dce8e3140))
+* **tinty:** bump tinty version to v0.15.0 ([#101](https://github.com/henry-hsieh/personal-setup/issues/101)) ([ed2eeeb](https://github.com/henry-hsieh/personal-setup/commit/ed2eeebeddd8716c7ad5a32edaf0e8f3fda8a24c))
+* **tmux:** bring back tmux-yank for clipboard selection ([#109](https://github.com/henry-hsieh/personal-setup/issues/109)) ([476b58a](https://github.com/henry-hsieh/personal-setup/commit/476b58ac90dc20c0ac791479140eae8fef955f0c))
+* **tmux:** improve environment variables update ([#106](https://github.com/henry-hsieh/personal-setup/issues/106)) ([69e6d73](https://github.com/henry-hsieh/personal-setup/commit/69e6d73fc957f3f962baf204018204d371149573))
+* **tmux:** move config to XDG_CONFIG_HOME ([#102](https://github.com/henry-hsieh/personal-setup/issues/102)) ([d5bcea7](https://github.com/henry-hsieh/personal-setup/commit/d5bcea74c93b9c312b90cc9a172f3bf6ee0af081))
+
+
+### Bug Fixes
+
+* **bash:** fzf-tab-comb disable option ([#108](https://github.com/henry-hsieh/personal-setup/issues/108)) ([32fd945](https://github.com/henry-hsieh/personal-setup/commit/32fd9458d3795b01541356de83ae37c5876d3008))
+* **bd:** tcsh error when executing bd without argument ([#107](https://github.com/henry-hsieh/personal-setup/issues/107)) ([988c90d](https://github.com/henry-hsieh/personal-setup/commit/988c90d0f4b439f5dcfb83267d579cca5aeb1ff5))
+* **htop:** wrong manual download path ([#105](https://github.com/henry-hsieh/personal-setup/issues/105)) ([d9dc975](https://github.com/henry-hsieh/personal-setup/commit/d9dc975baa886a7a6d10184c6db3c2d270a68b57))
+* **tmux:** path of tmux.conf reload is not correct ([#103](https://github.com/henry-hsieh/personal-setup/issues/103)) ([5334011](https://github.com/henry-hsieh/personal-setup/commit/53340118319b437c8726119946453c610ecbafad))
+
 ## [1.4.0](https://github.com/henry-hsieh/personal-setup/compare/v1.3.0...v1.4.0) (2024-06-08)
 
 
