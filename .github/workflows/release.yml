@@ -78,6 +78,8 @@ jobs:
             echo "RUN apt install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
+            echo "RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*" >> Dockerfile
+            echo "RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*" >> Dockerfile
             echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
           fi
           echo "RUN mkdir -p ~/miniconda3" >> Dockerfile
