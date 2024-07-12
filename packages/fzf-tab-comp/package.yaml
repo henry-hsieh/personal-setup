@@ -1,5 +1,5 @@
 name: fzf-tab-comp
-version: ae8462e19035af84586ac6871809e911d641a50c
+version: 11122590127ab62c51dd4bbfd0d432cee30f9984
 datasource: git-refs
 branch: master
 package: lincheney/fzf-tab-completion
