@@ -115,8 +115,8 @@ popd
 
 # fzf
 print_process_item "Download fzf"
-download_file https://github.com/junegunn/fzf/releases/download/$FZF_VERSION/fzf-${FZF_VERSION}-linux_amd64.tar.gz $BUILD_DIR/fzf-${FZF_VERSION}-linux_amd64.tar.gz
-tar -axf $BUILD_DIR/fzf-${FZF_VERSION}-linux_amd64.tar.gz -C $BUILD_DIR
+download_file https://github.com/junegunn/fzf/releases/download/$FZF_VERSION/fzf-${FZF_VERSION#v}-linux_amd64.tar.gz $BUILD_DIR/fzf-${FZF_VERSION#v}-linux_amd64.tar.gz
+tar -axf $BUILD_DIR/fzf-${FZF_VERSION#v}-linux_amd64.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/
 rsync -a fzf $OUT_DIR/.local/bin/
 popd
