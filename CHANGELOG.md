@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.5.0](https://github.com/henry-hsieh/personal-setup/compare/v1.4.0...v1.5.0) (2024-07-13)
+
+
+### Features
+
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 1112259 ([#114](https://github.com/henry-hsieh/personal-setup/issues/114)) ([ee085a8](https://github.com/henry-hsieh/personal-setup/commit/ee085a868c0817d4018e21ea70fd62129388c302))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to ae8462e ([#110](https://github.com/henry-hsieh/personal-setup/issues/110)) ([b3a73a0](https://github.com/henry-hsieh/personal-setup/commit/b3a73a0f0556047e613fd10cc4179ef663676cda))
+* **fzf:** bump fzf version to v0.54.0 ([#113](https://github.com/henry-hsieh/personal-setup/issues/113)) ([703b408](https://github.com/henry-hsieh/personal-setup/commit/703b408036524779c9274d8045b854c0ed60f02f))
+* **git:** move config to XDG_CONFIG_HOME ([#98](https://github.com/henry-hsieh/personal-setup/issues/98)) ([a336bb6](https://github.com/henry-hsieh/personal-setup/commit/a336bb601452c5be3ff2a1f6cd07e02dce8e3140))
+* **lazygit:** bump lazygit version to v0.43.0 ([#115](https://github.com/henry-hsieh/personal-setup/issues/115)) ([4fdd0e0](https://github.com/henry-hsieh/personal-setup/commit/4fdd0e0e3f103807dde75eb2f714b9997a2ff55d))
+* **tinty:** bump tinty version to v0.15.0 ([#101](https://github.com/henry-hsieh/personal-setup/issues/101)) ([ed2eeeb](https://github.com/henry-hsieh/personal-setup/commit/ed2eeebeddd8716c7ad5a32edaf0e8f3fda8a24c))
+* **tinty:** bump tinty version to v0.18.0 ([#111](https://github.com/henry-hsieh/personal-setup/issues/111)) ([a6ec7bd](https://github.com/henry-hsieh/personal-setup/commit/a6ec7bde126d1991b9c776b1449fd87c79d7b04d))
+* **tmux:** bring back tmux-yank for clipboard selection ([#109](https://github.com/henry-hsieh/personal-setup/issues/109)) ([476b58a](https://github.com/henry-hsieh/personal-setup/commit/476b58ac90dc20c0ac791479140eae8fef955f0c))
+* **tmux:** improve environment variables update ([#106](https://github.com/henry-hsieh/personal-setup/issues/106)) ([69e6d73](https://github.com/henry-hsieh/personal-setup/commit/69e6d73fc957f3f962baf204018204d371149573))
+* **tmux:** move config to XDG_CONFIG_HOME ([#102](https://github.com/henry-hsieh/personal-setup/issues/102)) ([d5bcea7](https://github.com/henry-hsieh/personal-setup/commit/d5bcea74c93b9c312b90cc9a172f3bf6ee0af081))
+* **yq:** add yq ([#116](https://github.com/henry-hsieh/personal-setup/issues/116)) ([e203c57](https://github.com/henry-hsieh/personal-setup/commit/e203c57fe016e4cb29ecc07e764a4039f8a45a84))
+
+
+### Bug Fixes
+
+* **bash:** fzf-tab-comb disable option ([#108](https://github.com/henry-hsieh/personal-setup/issues/108)) ([32fd945](https://github.com/henry-hsieh/personal-setup/commit/32fd9458d3795b01541356de83ae37c5876d3008))
+* **bd:** tcsh error when executing bd without argument ([#107](https://github.com/henry-hsieh/personal-setup/issues/107)) ([988c90d](https://github.com/henry-hsieh/personal-setup/commit/988c90d0f4b439f5dcfb83267d579cca5aeb1ff5))
+* **htop:** wrong manual download path ([#105](https://github.com/henry-hsieh/personal-setup/issues/105)) ([d9dc975](https://github.com/henry-hsieh/personal-setup/commit/d9dc975baa886a7a6d10184c6db3c2d270a68b57))
+* **tmux:** path of tmux.conf reload is not correct ([#103](https://github.com/henry-hsieh/personal-setup/issues/103)) ([5334011](https://github.com/henry-hsieh/personal-setup/commit/53340118319b437c8726119946453c610ecbafad))
+
 ## [1.4.0](https://github.com/henry-hsieh/personal-setup/compare/v1.3.0...v1.4.0) (2024-06-08)
 
 
