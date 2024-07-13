@@ -132,3 +132,12 @@
   stderr:
     must_not_contain:
       - "No such file or directory"
+
+- name: test yq exists
+  command: bash -c 'HOME=$(pwd) bash -i -c "yq --version"'
+  stdout:
+    contains:
+      - "yq"
+  stderr:
+    must_not_contain:
+      - "No such file or directory"
