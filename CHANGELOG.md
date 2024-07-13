@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.1](https://github.com/henry-hsieh/personal-setup/compare/v1.5.0...v1.5.1) (2024-07-13)
+
+
+### Features
+
+* **lazygit:** bump lazygit version to v0.43.1 ([#117](https://github.com/henry-hsieh/personal-setup/issues/117)) ([3c10bc1](https://github.com/henry-hsieh/personal-setup/commit/3c10bc114e51a7a074f59489488b40b7b2641ba6))
+
+
+### Miscellaneous Chores
+
+* apply bug fix of lazygit ([#119](https://github.com/henry-hsieh/personal-setup/issues/119)) ([7684867](https://github.com/henry-hsieh/personal-setup/commit/7684867766123c2b608df4a909f3dd943c40d7ed))
+
 ## [1.5.0](https://github.com/henry-hsieh/personal-setup/compare/v1.4.0...v1.5.0) (2024-07-13)
 
 
