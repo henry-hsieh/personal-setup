@@ -26,6 +26,7 @@ HTOP_VERSION=$(cat ${PKG_DIR}/htop/package.yaml | grep version: | sed 's/.\+:\s/
 BD_VERSION=$(cat ${PKG_DIR}/bd/package.yaml | grep version: | sed 's/.\+:\s//g')
 GOTO_VERSION=$(cat ${PKG_DIR}/goto/package.yaml | grep version: | sed 's/.\+:\s//g')
 RUSTUP_VERSION=$(cat ${PKG_DIR}/rustup/package.yaml | grep version: | sed 's/.\+:\s//g')
+YQ_VERSION=$(cat ${PKG_DIR}/yq/package.yaml | grep version: | sed 's/.\+:\s//g')
 TPM_VERSION=$(cat ${PKG_DIR}/tpm/package.yaml | grep version: | sed 's/.\+:\s//g')
 
 # Command detection
@@ -213,6 +214,18 @@ download_file https://github.com/henry-hsieh/tmux.appimage/releases/download/v${
 pushd $BUILD_DIR/tmux
 mv Tmux-x86_64.AppImage tmux
 rsync -a tmux $OUT_DIR/.local/bin/
+popd
+
+# yq
+print_process_item "Download yq"
+download_file https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz $BUILD_DIR/yq_linux_amd64.tar.gz
+mkdir -p $BUILD_DIR/yq
+tar -axf $BUILD_DIR/yq_linux_amd64.tar.gz -C $BUILD_DIR/yq
+pushd $BUILD_DIR/yq
+mv yq_linux_amd64 yq
+rsync -a yq $OUT_DIR/.local/bin/
+rsync -a yq.1 $OUT_DIR/.local/man/man1/
+./yq shell-completion bash > $OUT_DIR/.local/share/bash-completion/completions/yq.bash
 popd
 
 # tpm
