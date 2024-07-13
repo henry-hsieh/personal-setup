@@ -178,7 +178,7 @@ popd
 
 # tinty
 print_process_item "Download tinty"
-download_file https://github.com/tinted-theming/tinty/releases/download/v${TINTY_VERSION}/tinty--x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/tinty-v${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz
+download_file https://github.com/tinted-theming/tinty/releases/download/v${TINTY_VERSION}/tinty-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/tinty-v${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz
 mkdir -p $BUILD_DIR/tinty
 tar -axf $BUILD_DIR/tinty-v${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR/tinty
 pushd $BUILD_DIR/tinty
