@@ -23,7 +23,7 @@ GIT_EMAIL=$(git config --global --get user.email)
 function backup() {
     file=$1
     if [[ -f $file ]]; then
-        /usr/bin/cp "$file" "$file~"
+        cp "$file" "$file~"
     fi
 }
 
@@ -37,13 +37,16 @@ backup $INSTALL_DIR/.config/nvim/init.lua
 function untar() {
     archive="$1"
 
-    originalsize=$(file $archive | rev | cut -d' ' -f1 | rev)
-    step=100
-    blocks=$(echo "$originalsize / 512 / 20 / $step" | bc)
-
-    tar -ax --checkpoint=$step --totals \
-    --checkpoint-action="exec='p=\$(echo "\$TAR_CHECKPOINT/$blocks" | bc -l);printf \"%.2f%%\r\" \$p'" \
-    -f $archive -C $INSTALL_DIR
+    if command -v pv &> /dev/null; then
+        pv $archive | tar -zxf - -C $INSTALL_DIR
+    else
+        originalsize=$(gzip -l $archive | tail -1 | awk -F' ' '{print $2}')
+        step=100
+        blocks=$(($originalsize / 512 / 20 / $step))
+        tar -zx --checkpoint=$step --totals \
+            --checkpoint-action="exec='p=\$(awk \"BEGIN { print \$TAR_CHECKPOINT/$blocks }\");printf \"%.2f%%\r\" \$p'" \
+            -f $archive -C $INSTALL_DIR
+    fi
 }
 
 echo -e "Start installing:"
