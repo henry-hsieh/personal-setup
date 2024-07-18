@@ -36,7 +36,7 @@ function ToggleTabstop()
 end
 
 -- Map the ToggleTabstop to a key
-vim.api.nvim_set_keymap('n', '<leader><Tab>', [[:lua ToggleTabstop()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>t<Tab>', [[:lua ToggleTabstop()<CR>]], { desc = "Toggle Tabstop Width", noremap = true, silent = true })
 
 -- Mouse
 vim.o.mouse = "a"
@@ -54,10 +54,10 @@ vim.o.signcolumn = "yes"
 vim.o.showmode = false
 
 -- Map
-vim.keymap.set('t', '<C-q>', '<C-\\><C-n>', { noremap = true, silent = true })
-vim.keymap.set({'n', 'v'}, '<C-q>', '<cmd>close<cr>', { noremap = true, silent = true })
-vim.keymap.set("v", "<", "<gv", { noremap = true})
-vim.keymap.set("v", ">", ">gv", { noremap = true})
+vim.keymap.set('t', '<C-q>', '<C-\\><C-n>', { desc = "Enter Normal Mode", noremap = true, silent = true })
+vim.keymap.set({'n', 'v'}, '<C-q>', '<cmd>close<cr>', { desc = "Close Window", noremap = true, silent = true })
+vim.keymap.set("v", "<", "<gv", { desc = "Shift Left", noremap = true})
+vim.keymap.set("v", ">", ">gv", { desc = "Shift Right", noremap = true})
 
 -- Grep
 vim.o.grepformat = "%f:%l:%c:%m"
