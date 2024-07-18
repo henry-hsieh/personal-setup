@@ -127,7 +127,7 @@ require("lazy").setup({
         local api = require "nvim-tree.api"
 
         local function opts(desc)
-          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+          return { desc = "Explorer " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
 
         -- default mappings
@@ -144,7 +144,7 @@ require("lazy").setup({
       }
 
       -- map F9 to toogle NvimTree and focus on current file
-      vim.api.nvim_set_keymap('n', m.toggle, '<cmd>NvimTreeFindFileToggle!<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', m.toggle, '<cmd>NvimTreeFindFileToggle!<CR>', { desc = "Toggle Explorer", noremap = true, silent = true })
     end
   },
 
@@ -451,14 +451,14 @@ require("lazy").setup({
         end
       end
 
-      vim.keymap.set('n', md.open_float, vim.diagnostic.open_float)
+      vim.keymap.set('n', md.open_float, vim.diagnostic.open_float, { desc = "Open Diagnostic Message" })
       vim.keymap.set('n', md.goto_next, diagnostic_goto(true), { desc = "Next Diagnostic" })
       vim.keymap.set('n', md.goto_prev, diagnostic_goto(false), { desc = "Prev Diagnostic" })
       vim.keymap.set('n', md.goto_warn_next, diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
       vim.keymap.set('n', md.goto_warn_prev, diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
       vim.keymap.set('n', md.goto_err_next, diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
       vim.keymap.set('n', md.goto_err_prev, diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-      vim.keymap.set('n', md.open_list, vim.diagnostic.setloclist)
+      vim.keymap.set('n', md.open_list, vim.diagnostic.setloclist, { desc = "Open Diagnostic List" })
 
       -- Use LspAttach autocommand to only map the following keys
       -- after the language server attaches to the current buffer
@@ -470,25 +470,27 @@ require("lazy").setup({
 
           -- Buffer local mappings.
           -- See `:help vim.lsp.*` for documentation on any of the below functions
-          local opts = { buffer = ev.buf }
+          local function opts(desc)
+            return { desc = desc, buffer = ev.buf, noremap = true, silent = true, nowait = true }
+          end
           local mb = plugin_settings.nvim_lspconfig.mappings.buffer
-          vim.keymap.set('n', mb.goto_declaration, vim.lsp.buf.declaration, opts)
-          vim.keymap.set('n', mb.goto_definition, vim.lsp.buf.definition, opts)
-          vim.keymap.set('n', mb.hover, vim.lsp.buf.hover, opts)
-          vim.keymap.set('n', mb.goto_implementation, vim.lsp.buf.implementation, opts)
-          vim.keymap.set('n', mb.signature_help, vim.lsp.buf.signature_help, opts)
-          vim.keymap.set('n', mb.add_workspace_folder, vim.lsp.buf.add_workspace_folder, opts)
-          vim.keymap.set('n', mb.remove_workspace_folder, vim.lsp.buf.remove_workspace_folder, opts)
+          vim.keymap.set('n', mb.goto_declaration, vim.lsp.buf.declaration, opts("Goto Declaration"))
+          vim.keymap.set('n', mb.goto_definition, vim.lsp.buf.definition, opts("Goto Definition"))
+          vim.keymap.set('n', mb.hover, vim.lsp.buf.hover, opts("Hover"))
+          vim.keymap.set('n', mb.goto_implementation, vim.lsp.buf.implementation, opts("Goto Implementation"))
+          vim.keymap.set('n', mb.signature_help, vim.lsp.buf.signature_help, opts("Signature Help"))
+          vim.keymap.set('n', mb.add_workspace_folder, vim.lsp.buf.add_workspace_folder, opts("Add Workspace Folder"))
+          vim.keymap.set('n', mb.remove_workspace_folder, vim.lsp.buf.remove_workspace_folder, opts("Remove Workspace Folder"))
           vim.keymap.set('n', mb.list_workspace_folder, function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-          end, opts)
-          vim.keymap.set('n', mb.type_definition, vim.lsp.buf.type_definition, opts)
-          vim.keymap.set('n', mb.rename, vim.lsp.buf.rename, opts)
-          vim.keymap.set({ 'n', 'v' }, mb.code_action, vim.lsp.buf.code_action, opts)
-          vim.keymap.set('n', mb.goto_reference, vim.lsp.buf.references, opts)
+          end, opts("List Workspace Folder"))
+          vim.keymap.set('n', mb.type_definition, vim.lsp.buf.type_definition, opts("Type Definition"))
+          vim.keymap.set('n', mb.rename, vim.lsp.buf.rename, opts("Rename"))
+          vim.keymap.set({ 'n', 'v' }, mb.code_action, vim.lsp.buf.code_action, opts("Code Action"))
+          vim.keymap.set('n', mb.goto_reference, vim.lsp.buf.references, opts("Goto Reference"))
           vim.keymap.set({ 'n', 'v' }, mb.format, function()
             vim.lsp.buf.format { async = true }
-          end, opts)
+          end, opts("Format"))
         end,
       })
     end,
@@ -538,21 +540,21 @@ require("lazy").setup({
           end, {expr=true})
 
           -- Actions
-          map('n', m.stage_hunk, gs.stage_hunk)
-          map('n', m.reset_hunk, gs.reset_hunk)
-          map('v', m.stage_hunk, function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
-          map('v', m.reset_hunk, function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
-          map('n', m.stage_buffer, gs.stage_buffer)
-          map('n', m.reset_buffer, gs.reset_buffer)
-          map('n', m.undo_stage_hunk, gs.undo_stage_hunk)
-          map('n', m.preview_hunk, gs.preview_hunk)
-          map('n', m.blame_hunk, function() gs.blame_line{full=true} end)
-          map('n', m.toggle_blame, gs.toggle_current_line_blame)
-          map('n', m.diff_hunk, gs.diffthis)
-          map('n', m.toggle_deleted, gs.toggle_deleted)
+          map('n', m.stage_hunk, gs.stage_hunk, {desc = "Stage Hunk"})
+          map('n', m.reset_hunk, gs.reset_hunk, {desc = "Reset Hunk"})
+          map('v', m.stage_hunk, function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Stage Hunk"})
+          map('v', m.reset_hunk, function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, {desc = "Reset Hunk"})
+          map('n', m.stage_buffer, gs.stage_buffer, {desc = "Stage Buffer"})
+          map('n', m.reset_buffer, gs.reset_buffer, {desc = "Reset Buffer"})
+          map('n', m.undo_stage_hunk, gs.undo_stage_hunk, {desc = "Undo Stage Hunk"})
+          map('n', m.preview_hunk, gs.preview_hunk, {desc = "Preview Hunk"})
+          map('n', m.blame_hunk, function() gs.blame_line{full=true} end, {desc = "Blame Hunk"})
+          map('n', m.toggle_blame, gs.toggle_current_line_blame, {desc = "Toggle Blame"})
+          map('n', m.diff_hunk, gs.diffthis, {desc = "Diff Hunk"})
+          map('n', m.toggle_deleted, gs.toggle_deleted, {desc = "Toggle Deleted"})
 
           -- Text object
-          map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+          map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', {desc = "Select Hunk"})
         end
       }
     end,
@@ -1451,14 +1453,14 @@ require("lazy").setup({
       }
       local m = plugin_settings.truezen.mappings
       -- map <C-w>a to toogle Ataraxis Mode
-      vim.api.nvim_set_keymap('', m.ataraxis, '<cmd>TZAtaraxis<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('i', m.ataraxis, '<cmd>TZAtaraxis<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', m.ataraxis, '<cmd>TZAtaraxis<CR>', { desc = "Toggle Ataraxis Mode", noremap = true, silent = true })
+      vim.api.nvim_set_keymap('i', m.ataraxis, '<cmd>TZAtaraxis<CR>', { desc = "Toggle Ataraxis Mode", noremap = true, silent = true })
       -- map <C-w>z to toogle Focus Mode
-      vim.api.nvim_set_keymap('', m.focus, '<cmd>TZFocus<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('i', m.focus, '<cmd>TZFocus<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', m.focus, '<cmd>TZFocus<CR>', { desc = "Toggle Focus Mode", noremap = true, silent = true })
+      vim.api.nvim_set_keymap('i', m.focus, '<cmd>TZFocus<CR>', { desc = "Toggle Focus Mode", noremap = true, silent = true })
       -- map <C-w>m to toogle Minimalist Mode
-      vim.api.nvim_set_keymap('', m.minimalist, '<cmd>TZMinimalist<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('i', m.minimalist, '<cmd>TZMinimalist<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', m.minimalist, '<cmd>TZMinimalist<CR>', { desc = "Toggle Minimalist Mode", noremap = true, silent = true })
+      vim.api.nvim_set_keymap('i', m.minimalist, '<cmd>TZMinimalist<CR>', { desc = "Toggle Minimalist Mode", noremap = true, silent = true })
     end,
   },
 
@@ -1535,8 +1537,8 @@ require("lazy").setup({
   {
     "carbon-steel/detour.nvim",
     config = function ()
-      vim.keymap.set('n', '<c-w><enter>', ":Detour<cr>")
-      vim.keymap.set('n', '<c-w>.', ":DetourCurrentWindow<cr>")
+      vim.keymap.set('n', '<c-w><enter>', ":Detour<cr>", { desc = "Detour", noremap = true, silent = true })
+      vim.keymap.set('n', '<c-w>.', ":DetourCurrentWindow<cr>", { desc = "Detour Current Window", noremap = true, silent = true })
       -- Setup float for helps
       vim.api.nvim_create_autocmd("BufWinEnter", {
         pattern = "*",
@@ -1562,10 +1564,10 @@ require("lazy").setup({
         end,
       })
 
-      vim.api.nvim_set_keymap('', '<C-w>h', "<cmd>lua require('detour.movements').DetourWinCmdH()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('', '<C-w>l', "<cmd>lua require('detour.movements').DetourWinCmdL()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('', '<C-w>j', "<cmd>lua require('detour.movements').DetourWinCmdJ()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('', '<C-w>k', "<cmd>lua require('detour.movements').DetourWinCmdK()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>h', "<cmd>lua require('detour.movements').DetourWinCmdH()<CR>", { desc = "Goto Left Window", noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>l', "<cmd>lua require('detour.movements').DetourWinCmdL()<CR>", { desc = "Goto Right Window", noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>j', "<cmd>lua require('detour.movements').DetourWinCmdJ()<CR>", { desc = "Go Down Window", noremap = true, silent = true })
+      vim.api.nvim_set_keymap('', '<C-w>k', "<cmd>lua require('detour.movements').DetourWinCmdK()<CR>", { desc = "Go Up Window", noremap = true, silent = true })
 
       vim.keymap.set('n', '<space>t', function()
         local terminal_buffer_found = false
@@ -1600,7 +1602,7 @@ require("lazy").setup({
             vim.api.nvim_feedkeys('i', 'n', false)
           end
         })
-      end)
+      end, { desc = "Open Terminal"})
 
       vim.keymap.set("n", '<space>p', function ()
         local ok = require('detour').Detour()  -- open a detour popup
@@ -1621,7 +1623,7 @@ require("lazy").setup({
             vim.api.nvim_feedkeys('i', 'n', false)
           end
         })
-      end)
+      end, { desc = "Open Htop"})
 
       vim.keymap.set("n", '<space>g', function ()
         local ok = require('detour').Detour()  -- open a detour popup
@@ -1643,7 +1645,31 @@ require("lazy").setup({
             vim.api.nvim_feedkeys('i', 'n', false)
           end
         })
-      end)
+      end, { desc = "Open LazyGit"})
     end
   },
+
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      spec = {
+        { "<leader>h"   , group = "Hunk"},
+        { "<leader>t"   , group = "Toggle"},
+        { "<space>w"    , group = "Workspace"},
+        { "<space><Tab>", group = "Tab"},
+        { "]c"          , desc  = "Next Hunk" },
+        { "[c"          , desc  = "Previous Hunk" },
+      },
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
+  }
 })

@@ -161,3 +161,12 @@
   stderr:
     must_not_contain:
       - "Error detected"
+
+- name: test which-key.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh which-key
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
