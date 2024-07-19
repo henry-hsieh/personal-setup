@@ -80,7 +80,11 @@ tinty_source_shell_theme() {
 
 if [ -n "$(command -v 'tinty')" ] && [ -z "$VIM" ]; then
   tinty_source_shell_theme "init"
-
+  if [[ "${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 4 || "${BASH_VERSINFO[0]}" -gt 4 ]]; then
+    complete -F _tinty -o nosort -o bashdefault -o default tinty_source_shell_theme
+  else
+    complete -F _tinty -o bashdefault -o default tinty_source_shell_theme
+  fi
   alias tinty=tinty_source_shell_theme
 fi
 
