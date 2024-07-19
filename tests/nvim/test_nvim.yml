@@ -170,3 +170,12 @@
   stderr:
     must_not_contain:
       - "Error detected"
+
+- name: test bufferline.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh bufferline
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
