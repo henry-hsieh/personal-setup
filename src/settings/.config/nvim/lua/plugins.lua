@@ -1574,7 +1574,7 @@ require("lazy").setup({
         -- Check if we there are any existing terminal buffers.
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do -- iterate through all buffers
           if vim.api.nvim_buf_is_loaded(buf) then       -- only check loaded buffers
-            if vim.api.nvim_buf_get_option(buf, "buftype") == "terminal" then
+            if vim.api.nvim_get_option_value("buftype", { buf = buf }) == "terminal" then
               terminal_buffer_found = true
             end
           end
@@ -1585,11 +1585,8 @@ require("lazy").setup({
           require('telescope.builtin').buffers({})    -- Open telescope prompt
           vim.api.nvim_feedkeys("term://", "n", true) -- populate prompt with "term://"
         else
-          -- [OPTIONAL] Set the new window's current working directory to the directory of current file.
-          -- You can remove this line if you would prefer to open terminals from the
-          -- existing working directory.
-          -- vim.cmd.lcd(vim.fn.expand("%:p:h"))
-          -- Since there are no existing terminal buffers, open a new one.
+          vim.wo.signcolumn = "no"
+          vim.cmd.lcd(vim.fn.expand("%:p:h"))
           vim.cmd.terminal()
           vim.cmd.startinsert()
         end
@@ -1610,6 +1607,7 @@ require("lazy").setup({
           return
         end
 
+        vim.wo.signcolumn = "no"
         vim.cmd.terminal('htop')     -- open a terminal buffer
         vim.bo.bufhidden = 'delete' -- close the terminal when window closes
 
@@ -1631,6 +1629,7 @@ require("lazy").setup({
           return
         end
 
+        vim.wo.signcolumn = "no"
         vim.cmd.lcd(vim.fn.expand("%:p:h"))
         vim.cmd.terminal('lazygit')     -- open a terminal buffer
         vim.bo.bufhidden = 'delete' -- close the terminal when window closes
