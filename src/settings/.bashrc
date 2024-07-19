@@ -78,7 +78,7 @@ tinty_source_shell_theme() {
   unset subcommand
 }
 
-if [ -n "$(command -v 'tinty')" ] && [ -z "$VIM" ]; then
+if [ -n "$(command -v 'tinty')" ] && [ -z "$NVIM" ]; then
   tinty_source_shell_theme "init"
   if [[ "${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 4 || "${BASH_VERSINFO[0]}" -gt 4 ]]; then
     complete -F _tinty -o nosort -o bashdefault -o default tinty_source_shell_theme
