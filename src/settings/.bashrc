@@ -124,11 +124,7 @@ _fzf_comprun() {
 }
 
 # FZF Tab Completion
-if ! [[ "$DISABLE_FZF_TAB_COMP" == "true" ]]; then
-  export FZF_COMPLETION_AUTO_COMMON_PREFIX=true
-  export FZF_COMPLETION_AUTO_COMMON_PREFIX_PART=true
-  bind -x '"\t": fzf_bash_completion'
-fi
+bind -x '"\C-g": fzf_bash_completion'
 
 # Put bash completion at first
 if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -137,9 +133,7 @@ fi
 source ~/.local/share/scripts/git-prompt.sh
 source ~/.local/share/scripts/fzf-completion.bash
 source ~/.local/share/scripts/fzf-key-bindings.bash
-if ! [[ "$DISABLE_FZF_TAB_COMP" == "true" ]]; then
-  source ~/.local/share/scripts/fzf-bash-completion.sh
-fi
+source ~/.local/share/scripts/fzf-bash-completion.sh
 source ~/.local/share/scripts/goto.sh
 
 set_prompt()
