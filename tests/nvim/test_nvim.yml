@@ -61,8 +61,8 @@
     must_not_contain:
       - "Error detected"
 
-- name: test nlsp-settings.nvim exists
-  command: bash ./tests/nvim/test-lua-package-exist.sh nlspsettings
+- name: test neoconf.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh neoconf
   stdout:
     contains:
       - "Test pass"
@@ -173,6 +173,15 @@
 
 - name: test bufferline.nvim exists
   command: bash ./tests/nvim/test-lua-package-exist.sh bufferline
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
+- name: test lazydev.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh lazydev
   stdout:
     contains:
       - "Test pass"
