@@ -25,6 +25,7 @@ local ensure_lsp = {
   "ltex",
   "bashls",
   "tsserver",
+  "jsonls",
 }
 
 -- Tree-Sitter list
@@ -45,6 +46,8 @@ local ensure_ts = {
   "markdown",
   "latex",
   "rust",
+  "jsonc",
+  "json5",
 }
 
 local plugin_settings = require("plugin-settings")
@@ -328,6 +331,7 @@ require("lazy").setup({
   {
     'williamboman/mason-lspconfig.nvim',
     dependencies = {
+      'folke/neoconf.nvim',
       'henry-hsieh/mason.nvim',
       'hrsh7th/cmp-nvim-lsp',
     },
@@ -366,12 +370,8 @@ require("lazy").setup({
           }
         end,
         ["svlangserver"] = function ()
-          local on_attach = function(client, bufnr)
-            require('nlspsettings').update_settings(client.name)
-          end
           local lspconfig = require("lspconfig")
           lspconfig.svlangserver.setup {
-            on_attach = on_attach,
             filetypes = {'verilog', 'systemverilog', 'verilog_systemverilog'},
             capabilities = capabilities,
           }
@@ -497,18 +497,24 @@ require("lazy").setup({
   },
 
   {
-    'tamago324/nlsp-settings.nvim',
-    dependencies = {
-      'neovim/nvim-lspconfig',
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
     },
+  },
+
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+
+  {
+    'folke/neoconf.nvim',
     config = function()
-      require'nlspsettings'.setup{
-        config_home = vim.fn.stdpath('config') .. '/nlsp-settings',
-        local_settings_dir = ".nlsp-settings",
-        local_settings_root_markers = { '.git' },
-        append_default_schemas = false,
-        loader = 'json'
-      }
+      require("neoconf").setup({
+      })
     end
   },
 
@@ -583,6 +589,13 @@ require("lazy").setup({
       -- 'dcampos/nvim-snippy',
       -- 'dcampos/cmp-snippy',
     },
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
+    end,
     config = function()
       local has_words_before = function()
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
