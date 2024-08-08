@@ -79,5 +79,10 @@ vim.keymap.set("n", "<space><tab>q", "<cmd>tabclose<cr>", { desc = "Close Tab" }
 vim.keymap.set("n", "]<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 vim.keymap.set("n", "[<tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
+-- Buffer
+vim.keymap.set("n", "<space>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
+vim.keymap.set("n", "<space>bn", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+vim.keymap.set("n", "<space>bp", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
+
 -- Clear search with <esc>
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
