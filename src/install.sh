@@ -44,7 +44,7 @@ function untar() {
         step=100
         blocks=$(($originalsize / 512 / 20 / $step))
         tar -zx --checkpoint=$step --totals \
-            --checkpoint-action="exec='p=\$(awk \"BEGIN { print \$TAR_CHECKPOINT/$blocks }\");printf \"%.2f%%\r\" \$p'" \
+            --checkpoint-action=exec="awk \"BEGIN { printf \\\"%.2f%%\r\\\", \$TAR_CHECKPOINT/$blocks }\"" \
             -f $archive -C $INSTALL_DIR
     fi
 }
