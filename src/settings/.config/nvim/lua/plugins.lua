@@ -287,28 +287,28 @@ require("lazy").setup({
             goto_next_start = {
               ["]b"] = "@block.outer",
               ["]f"] = "@function.outer",
-              ["]]"] = "@class.outer",
+              ["]c"] = "@class.outer",
               ["]s"] = "@statement.outer",
               ["]m"] = "@comment.outer",
             },
             goto_next_end = {
               ["]B"] = "@block.outer",
               ["]F"] = "@function.outer",
-              ["]["] = "@class.outer",
+              ["]C"] = "@class.outer",
               ["]S"] = "@statement.outer",
               ["]M"] = "@comment.outer",
             },
             goto_previous_start = {
               ["[b"] = "@block.outer",
               ["[f"] = "@function.outer",
-              ["[["] = "@class.outer",
+              ["[c"] = "@class.outer",
               ["[s"] = "@statement.outer",
               ["[m"] = "@comment.outer",
             },
             goto_previous_end = {
               ["[B"] = "@block.outer",
               ["[F"] = "@function.outer",
-              ["[]"] = "@class.outer",
+              ["[C"] = "@class.outer",
               ["[S"] = "@statement.outer",
               ["[M"] = "@comment.outer",
             },
@@ -534,16 +534,22 @@ require("lazy").setup({
           local m = plugin_settings.gitsigns.mappings
           -- Navigation
           map('n', m.next_hunk, function()
-            if vim.wo.diff then return ']c' end
-            vim.schedule(function() gs.next_hunk() end)
-            return '<Ignore>'
-          end, {expr=true})
+            if vim.wo.diff then
+              vim.cmd.normal({']c', bang = true})
+            else
+              gs.nav_hunk('next')
+            end
+          end)
 
           map('n', m.prev_hunk, function()
-            if vim.wo.diff then return '[c' end
-            vim.schedule(function() gs.prev_hunk() end)
-            return '<Ignore>'
-          end, {expr=true})
+            if vim.wo.diff then
+              vim.cmd.normal({'[c', bang = true})
+            else
+              gs.nav_hunk('prev')
+            end
+          end)
+          map("n", m.last_hunk, function() gs.nav_hunk("last") end, "Last Hunk")
+          map("n", m.first_hunk, function() gs.nav_hunk("first") end, "First Hunk")
 
           -- Actions
           map('n', m.stage_hunk, gs.stage_hunk, {desc = "Stage Hunk"})

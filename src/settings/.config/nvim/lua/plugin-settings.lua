@@ -50,8 +50,10 @@ local plugin_settings = {
   },
   gitsigns = {
     mappings = {
-      next_hunk = "]c",
-      prev_hunk = "[c",
+      next_hunk = "]h",
+      prev_hunk = "[h",
+      last_hunk = "]H",
+      first_hunk = "[H",
       stage_hunk = "<leader>hs",
       reset_hunk = "<leader>hr",
       stage_buffer = "<leader>hS",
