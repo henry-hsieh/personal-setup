@@ -180,6 +180,15 @@
     must_not_contain:
       - "Error detected"
 
+- name: test noice.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh noice
+  stdout:
+    contains:
+      - "Test pass"
+  stderr:
+    must_not_contain:
+      - "Error detected"
+
 - name: test lazydev.nvim exists
   command: bash ./tests/nvim/test-lua-package-exist.sh lazydev
   stdout:
