@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.6.0](https://github.com/henry-hsieh/personal-setup/compare/v1.5.1...v1.6.0) (2024-08-08)
+
+
+### Features
+
+* **fzf:** bump fzf version to v0.54.1 ([#124](https://github.com/henry-hsieh/personal-setup/issues/124)) ([8762ab5](https://github.com/henry-hsieh/personal-setup/commit/8762ab5146c98e43c1806a1e809062fdebb0d2ac))
+* **fzf:** bump fzf version to v0.54.2 ([#131](https://github.com/henry-hsieh/personal-setup/issues/131)) ([2361fb6](https://github.com/henry-hsieh/personal-setup/commit/2361fb61d38dd15568c6adebe1f401095193eef8))
+* **fzf:** bump fzf version to v0.54.3 ([#132](https://github.com/henry-hsieh/personal-setup/issues/132)) ([3f14983](https://github.com/henry-hsieh/personal-setup/commit/3f14983520a4042ddb05215b09d81caf38af914f))
+* **install:** optimize installation progress ([#122](https://github.com/henry-hsieh/personal-setup/issues/122)) ([8a945fc](https://github.com/henry-hsieh/personal-setup/commit/8a945fca38be8ae53bc2a3fde6740273cd816a0a))
+* **nvim:** add bufferline.nvim ([#128](https://github.com/henry-hsieh/personal-setup/issues/128)) ([b870fe9](https://github.com/henry-hsieh/personal-setup/commit/b870fe97955741e1aab76f86c4940e56cfbd88b8))
+* **nvim:** add noice.nvim ([#138](https://github.com/henry-hsieh/personal-setup/issues/138)) ([75e3be2](https://github.com/henry-hsieh/personal-setup/commit/75e3be2ce4bed0d65058065f60eb220cfd694133))
+* **nvim:** add which-key.nvim ([#123](https://github.com/henry-hsieh/personal-setup/issues/123)) ([d5df390](https://github.com/henry-hsieh/personal-setup/commit/d5df39011657c1e5d3205b9a96b91e0ba450b8f6))
+* **nvim:** bump nvim version to v0.10.1 ([#129](https://github.com/henry-hsieh/personal-setup/issues/129)) ([56a611b](https://github.com/henry-hsieh/personal-setup/commit/56a611b8b5fa60006a4507212913b0217b1712fa))
+* **nvim:** migrate project settings to neoconf.nvim ([#130](https://github.com/henry-hsieh/personal-setup/issues/130)) ([ead3531](https://github.com/henry-hsieh/personal-setup/commit/ead3531ff6320991f96bdbf70226a1d9444e85e2))
+* **nvim:** update keymaps ([#136](https://github.com/henry-hsieh/personal-setup/issues/136)) ([9e6940c](https://github.com/henry-hsieh/personal-setup/commit/9e6940c6010ec10b004aa3b22dc651128583d409))
+* **tmux:** change statusline position to top ([#137](https://github.com/henry-hsieh/personal-setup/issues/137)) ([034632b](https://github.com/henry-hsieh/personal-setup/commit/034632b6ec478995074bed66df3d97f3ede927c9))
+* **yq:** bump yq version to v4.44.3 ([#133](https://github.com/henry-hsieh/personal-setup/issues/133)) ([7d374a8](https://github.com/henry-hsieh/personal-setup/commit/7d374a83cc1e3001baf23404bb1bff94e1d93fd2))
+
+
+### Bug Fixes
+
+* **nvim:** detour display flaws ([#127](https://github.com/henry-hsieh/personal-setup/issues/127)) ([2469fcc](https://github.com/henry-hsieh/personal-setup/commit/2469fcc0a858f515bfc1bde65e57b0c5346211d4))
+* **tinty:** add completion to tinty wrap function ([#125](https://github.com/henry-hsieh/personal-setup/issues/125)) ([8cbd3e3](https://github.com/henry-hsieh/personal-setup/commit/8cbd3e3f36357b34239e99d3b7321a0c79e5e564))
+* **tmux:** default shell should be a path to the shell ([#120](https://github.com/henry-hsieh/personal-setup/issues/120)) ([a4bfd03](https://github.com/henry-hsieh/personal-setup/commit/a4bfd03a05b5443f75438e193e2ce9794df01a8b))
+
 ## [1.5.1](https://github.com/henry-hsieh/personal-setup/compare/v1.5.0...v1.5.1) (2024-07-13)
 
 
