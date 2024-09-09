@@ -1,4 +1,4 @@
 name: rg
-version: 14.1.0
+version: 14.1.1
 datasource: github-releases
 package: BurntSushi/ripgrep
