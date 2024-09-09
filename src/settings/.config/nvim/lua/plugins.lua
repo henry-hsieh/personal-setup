@@ -548,8 +548,8 @@ require("lazy").setup({
               gs.nav_hunk('prev')
             end
           end)
-          map("n", m.last_hunk, function() gs.nav_hunk("last") end, "Last Hunk")
-          map("n", m.first_hunk, function() gs.nav_hunk("first") end, "First Hunk")
+          map("n", m.last_hunk, function() gs.nav_hunk("last") end, {desc = "Last Hunk"})
+          map("n", m.first_hunk, function() gs.nav_hunk("first") end, {desc = "First Hunk"})
 
           -- Actions
           map('n', m.stage_hunk, gs.stage_hunk, {desc = "Stage Hunk"})
