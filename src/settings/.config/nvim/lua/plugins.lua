@@ -24,7 +24,7 @@ local ensure_lsp = {
   "pyright",
   "ltex",
   "bashls",
-  "tsserver",
+  "ts_ls",
   "jsonls",
 }
 
