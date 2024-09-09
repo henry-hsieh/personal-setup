@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.6.1](https://github.com/henry-hsieh/personal-setup/compare/v1.6.0...v1.6.1) (2024-09-09)
+
+
+### Features
+
+* **rg:** bump rg version to v14.1.1 ([#145](https://github.com/henry-hsieh/personal-setup/issues/145)) ([cb9f4c6](https://github.com/henry-hsieh/personal-setup/commit/cb9f4c67aba43d96ecf33cffffe5a0af36c85ce1))
+* **ts_ls:** rename tsserver to ts_ls ([#146](https://github.com/henry-hsieh/personal-setup/issues/146)) ([82ebeda](https://github.com/henry-hsieh/personal-setup/commit/82ebeda8b11b10838f4076b5ba56ff076f8b7ec4))
+
+
+### Bug Fixes
+
+* **gitsigns:** keymap desc should be wrapped in an option table ([#148](https://github.com/henry-hsieh/personal-setup/issues/148)) ([208f55b](https://github.com/henry-hsieh/personal-setup/commit/208f55ba395d0f720c0fa00a53deb57f4d5417a2))
+
+
+### Miscellaneous Chores
+
+* change version to 1.6.1 ([3785a7e](https://github.com/henry-hsieh/personal-setup/commit/3785a7e6da68fd03bcd97f62a596ed3c4eb1e42e))
+
 ## [1.6.0](https://github.com/henry-hsieh/personal-setup/compare/v1.5.1...v1.6.0) (2024-09-07)
 
 
