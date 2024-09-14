@@ -1713,6 +1713,7 @@ require("lazy").setup({
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
+      "stevearc/dressing.nvim",
     },
     config = function()
       require("noice").setup({
