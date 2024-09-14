@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.2](https://github.com/henry-hsieh/personal-setup/compare/v1.6.1...v1.6.2) (2024-09-14)
+
+
+### Features
+
+* **nvim:** add dressing.nvim as dependency of noice.nvim ([#149](https://github.com/henry-hsieh/personal-setup/issues/149)) ([99ed1ba](https://github.com/henry-hsieh/personal-setup/commit/99ed1ba62c335f4f26b4cd82598d1d6482c240cb))
+
+
+### Miscellaneous Chores
+
+* change version to 1.6.2 ([44316d9](https://github.com/henry-hsieh/personal-setup/commit/44316d933b9fc4039653bd7ae773002f4e62a11b))
+
 ## [1.6.1](https://github.com/henry-hsieh/personal-setup/compare/v1.6.0...v1.6.1) (2024-09-09)
 
 
