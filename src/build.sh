@@ -142,9 +142,8 @@ popd
 
 # jdk
 print_process_item "Download jdk"
-JDK_URL=$(get_openjdk_download_url $JDK_VERSION linux-x64)
-download_file $JDK_URL $BUILD_DIR/openjdk-${JDK_VERSION}_linux-x64_bin.tar.gz
-tar -axf $BUILD_DIR/openjdk-${JDK_VERSION}_linux-x64_bin.tar.gz -C $BUILD_DIR
+download_file https://api.adoptium.net/v3/binary/version/jdk-$JDK_VERSION/linux/x64/jdk/hotspot/normal/adoptium $BUILD_DIR/jdk_x64_linux-${JDK_VERSION}.tar.gz
+tar -axf $BUILD_DIR/jdk_x64_linux-${JDK_VERSION}.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR
 mkdir -p $OUT_DIR/.local/lib/jvm/
 rsync -a jdk-${JDK_VERSION} $OUT_DIR/.local/lib/jvm/
