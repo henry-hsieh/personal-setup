@@ -183,7 +183,7 @@ mkdir -p $BUILD_DIR/tinty
 tar -axf $BUILD_DIR/tinty-v${TINTY_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR/tinty
 pushd $BUILD_DIR/tinty
 rsync -a tinty $OUT_DIR/.local/bin/
-rsync -a contrib/completion/tinty.bash $OUT_DIR/.local/share/bash-completion/completions/
+download_exe https://raw.githubusercontent.com/tinted-theming/tinty/v${TINTY_VERSION}/contrib/completion/tinty.bash $OUT_DIR/.local/share/bash-completion/completions/tinty.bash
 popd
 
 # htop
