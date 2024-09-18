@@ -77,39 +77,6 @@ function download_git_repo() {
   fi
 }
 
-# get_openjdk_download_url version arch
-get_openjdk_download_url() {
-  local version="$1"
-  local arch="$2"
-
-  # Initialize download url list
-  local download_url_list=""
-
-  # Retrieve the HTML content of the JDK archive page
-  local html_content=$(curl -s "https://jdk.java.net/archive/")
-
-  # Extract the list of non-archive versions and generate URLs
-  local page_list=$(echo "$html_content" | grep 'GA Releases' | grep -oP '(?<=href=")[^"]+' | grep -oP '\.\./\d+' | grep -oP '\d+' | sed 's/^/https:\/\/jdk.java.net\//' | sed 's/$/\//')
-
-  # Add JDK archive page into download page list
-  page_list="${page_list} https://jdk.java.net/archive/"
-
-  # Iterate through each download page
-  for url in $page_list; do
-    # Retrieve the HTML content of the page
-    html_content=$(curl -s "$url")
-
-    # Extract and append the list of download URLs
-    download_url_list="$download_url_list $(echo "$html_content" | grep 'href' | grep -v 'sha256' | grep -e 'https:\/\/download.java.net\/' | grep -oP '(?<=href=")[^"]+')"
-  done
-
-  # Extract the download URL for the specified version and architecture
-  local download_url=$(echo "$download_url_list" | grep "openjdk-${version}_${arch}" | head -n 1)
-
-  # Print the download URL
-  echo "$download_url"
-}
-
 # print_process_item string
 print_process_item() {
   if [[ $# -eq 1 ]]; then

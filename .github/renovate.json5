@@ -39,8 +39,10 @@
             matchStringsStrategy: "combination",
             matchStrings: [
                 "name:\\s*(?<depName>.*?)\\n",
-                "version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>java-version?)\\n",
+                "version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.jdk_lts?)\\n",
             ],
+            versioningTemplate: "loose",
+            extractVersionTemplate: "^jdk-(?<version>.*)$",
         },
         {
             fileMatch: ["package\\.yaml$"],
@@ -58,6 +60,12 @@
             defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
             transformTemplates: [
                 "{ \"releases\": $map($[\"linux-x64-glibc-217\" in files], function($v) { { \"version\": $v.version } }) }"
+            ],
+        },
+        jdk_lts: {
+            defaultRegistryUrlTemplate: "https://api.adoptium.net/v3/info/release_names?architecture=x64&heap_size=normal&image_type=jdk&jvm_impl=hotspot&lts=true&os=linux&page=0&page_size=10&project=jdk&release_type=ga&semver=false&sort_method=DEFAULT&sort_order=DESC&vendor=eclipse"
+            transformTemplates: [
+                "{ \"releases\": { \"version\": $$.releases[0] } }"
             ],
         },
     },
