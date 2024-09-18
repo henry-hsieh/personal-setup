@@ -43,7 +43,7 @@
             ],
             datasourceTemplate: "{{datasource}}",
             versioningTemplate: "loose",
-            extractVersionTemplate: "^jdk-(?<version>.*)$",
+            extractVersionTemplate: "^jdk-(?<version>.*)$"
         },
         {
             fileMatch: ["package\\.yaml$"],
@@ -66,7 +66,7 @@
         jdk_lts: {
             defaultRegistryUrlTemplate: "https://api.adoptium.net/v3/info/release_names?architecture=x64&heap_size=normal&image_type=jdk&jvm_impl=hotspot&lts=true&os=linux&page=0&page_size=10&project=jdk&release_type=ga&semver=false&sort_method=DEFAULT&sort_order=DESC&vendor=eclipse",
             transformTemplates: [
-                "{ \"releases\": { \"version\": $$.releases[0] } }"
+                "{ \"releases\": $map($.releases, function($v) { { \"version\": $v } }) }"
             ],
         },
     },
