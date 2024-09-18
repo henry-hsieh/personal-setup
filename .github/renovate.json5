@@ -41,6 +41,7 @@
                 "name:\\s*(?<depName>.*?)\\n",
                 "version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.jdk_lts?)\\n",
             ],
+            datasourceTemplate: "{{datasource}}",
             versioningTemplate: "loose",
             extractVersionTemplate: "^jdk-(?<version>.*)$",
         },
