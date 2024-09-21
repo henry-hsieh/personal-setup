@@ -37,7 +37,7 @@ M.project_grep = function()
 end
 
 -- Telescope picker
-vim.api.nvim_set_keymap('n', '<leader>t', '<cmd>Telescope<CR>', { noremap = true, silent = true, desc = "Telescope Picker" })
+vim.api.nvim_set_keymap('n', '<leader>T', '<cmd>Telescope<CR>', { noremap = true, silent = true, desc = "Telescope Picker" })
 -- Telescope project_files
 vim.api.nvim_set_keymap('n', '<leader>F', '<cmd>lua require("telescope-settings").project_files()<CR>', { noremap = true, silent = true, desc = "Find Project Files" })
 -- Telescope find_files
