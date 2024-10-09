@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.7.0](https://github.com/henry-hsieh/personal-setup/compare/v1.6.2...v1.7.0) (2024-10-09)
+
+
+### Features
+
+* **jdk:** use LTS JDK released by adoptium ([#155](https://github.com/henry-hsieh/personal-setup/issues/155)) ([658dc04](https://github.com/henry-hsieh/personal-setup/commit/658dc044bea5f21c036288bca8bf049067ef6457))
+* **lazygit:** bump lazygit version to v0.44.1 ([#153](https://github.com/henry-hsieh/personal-setup/issues/153)) ([958d53d](https://github.com/henry-hsieh/personal-setup/commit/958d53d805acfec9cf4a74ab1962ae6f91cf1c7c))
+* **node:** bump node version to v22.9.0 ([#151](https://github.com/henry-hsieh/personal-setup/issues/151)) ([1bfa3ea](https://github.com/henry-hsieh/personal-setup/commit/1bfa3ea6d3058bb1eee15268e4d246876ce86c13))
+* **nvim:** bump nvim version to v0.10.2 ([#168](https://github.com/henry-hsieh/personal-setup/issues/168)) ([2496d93](https://github.com/henry-hsieh/personal-setup/commit/2496d939049f85920c3d53629dfe2823b821dafe))
+* **tinty:** bump tinty version to v0.19.0 ([#160](https://github.com/henry-hsieh/personal-setup/issues/160)) ([eb19a1f](https://github.com/henry-hsieh/personal-setup/commit/eb19a1f55144187ad45f1664caa60723dbeb1489))
+* **tinty:** bump tinty version to v0.20.0 ([#161](https://github.com/henry-hsieh/personal-setup/issues/161)) ([47fb952](https://github.com/henry-hsieh/personal-setup/commit/47fb952435193dbad9357329eb37adf4b69c1dae))
+* **tinty:** bump tinty version to v0.20.1 ([#162](https://github.com/henry-hsieh/personal-setup/issues/162)) ([6eaa51e](https://github.com/henry-hsieh/personal-setup/commit/6eaa51e50cf600f3e77f5145bbccf975919dcfe9))
+* **tinty:** bump tinty version to v0.21.0 ([#165](https://github.com/henry-hsieh/personal-setup/issues/165)) ([0a8601e](https://github.com/henry-hsieh/personal-setup/commit/0a8601ea2b823a7ab871eae52f3253eedd9cad69))
+* **tinty:** bump tinty version to v0.21.1 ([#167](https://github.com/henry-hsieh/personal-setup/issues/167)) ([34ad151](https://github.com/henry-hsieh/personal-setup/commit/34ad151759d11a72491cf02182a3b63838e12ccc))
+* **tinty:** bump tinty version to v0.22.0 ([#171](https://github.com/henry-hsieh/personal-setup/issues/171)) ([efa1b29](https://github.com/henry-hsieh/personal-setup/commit/efa1b29f6b44b5d609bc5f4b15284266ab61a41c))
+* **tinty:** download tinty completion directly from Github ([#158](https://github.com/henry-hsieh/personal-setup/issues/158)) ([50663cb](https://github.com/henry-hsieh/personal-setup/commit/50663cbd0fde26339bfda28a280a03222356811e))
+* **tmux:** bump tmux version to v3.5 ([#163](https://github.com/henry-hsieh/personal-setup/issues/163)) ([23b6c71](https://github.com/henry-hsieh/personal-setup/commit/23b6c7182e2e0964673d8ccaead1fbcad5420a22))
+* **tree-sitter:** bump tree-sitter version to v0.23.1 ([#164](https://github.com/henry-hsieh/personal-setup/issues/164)) ([81eae15](https://github.com/henry-hsieh/personal-setup/commit/81eae158f68c204a0ace744b9feb40c8da48ecb4))
+* **tree-sitter:** bump tree-sitter version to v0.23.2 ([#166](https://github.com/henry-hsieh/personal-setup/issues/166)) ([18b37a3](https://github.com/henry-hsieh/personal-setup/commit/18b37a338db5673fac0260592d2c8bbf3452fa6b))
+* **tree-sitter:** bump tree-sitter version to v0.24.1 ([#169](https://github.com/henry-hsieh/personal-setup/issues/169)) ([c47df37](https://github.com/henry-hsieh/personal-setup/commit/c47df373cbd58eaf97a8540834b7567edfd5660d))
+* **tree-sitter:** bump tree-sitter version to v0.24.2 ([#170](https://github.com/henry-hsieh/personal-setup/issues/170)) ([76c718a](https://github.com/henry-hsieh/personal-setup/commit/76c718af3e56c1974a3609d60b35cf2c86c340ce))
+* **tree-sitter:** bump tree-sitter version to v0.24.3 ([#172](https://github.com/henry-hsieh/personal-setup/issues/172)) ([cfdce1b](https://github.com/henry-hsieh/personal-setup/commit/cfdce1b225aee3c5ea2c0ed121aae90874ebc388))
+
 ## [1.6.2](https://github.com/henry-hsieh/personal-setup/compare/v1.6.1...v1.6.2) (2024-09-14)
 
 
