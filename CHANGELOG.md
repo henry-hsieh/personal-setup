@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/henry-hsieh/personal-setup/compare/v1.7.1...v1.8.0) (2024-10-16)
+
+
+### Features
+
+* **jdk:** bump jdk version to v21.0.5+11 ([#175](https://github.com/henry-hsieh/personal-setup/issues/175)) ([53ca716](https://github.com/henry-hsieh/personal-setup/commit/53ca716fa45f283c9b0bff525258aee0a5aac85d))
+* **node:** bump node version to v23 ([#176](https://github.com/henry-hsieh/personal-setup/issues/176)) ([7b34af8](https://github.com/henry-hsieh/personal-setup/commit/7b34af8523fbb02a6439262777b12fdc22393dd7))
+
 ## [1.7.1](https://github.com/henry-hsieh/personal-setup/compare/v1.7.0...v1.7.1) (2024-10-16)
 
 
