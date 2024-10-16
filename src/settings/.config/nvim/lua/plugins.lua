@@ -120,9 +120,10 @@ require("lazy").setup({
   },
 
   {
-    'kyazdani42/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
     dependencies = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icon
+      'nvim-tree/nvim-web-devicons', -- optional, for file icon
     },
     config = function()
       local m = plugin_settings.nvim_tree.mappings
