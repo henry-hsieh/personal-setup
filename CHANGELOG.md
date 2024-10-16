@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/henry-hsieh/personal-setup/compare/v1.7.0...v1.7.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* **nvim:** change nvim-tree to release version ([#173](https://github.com/henry-hsieh/personal-setup/issues/173)) ([95740cf](https://github.com/henry-hsieh/personal-setup/commit/95740cf984dc15f1a080059303cab30fd575508d))
+
 ## [1.7.0](https://github.com/henry-hsieh/personal-setup/compare/v1.6.2...v1.7.0) (2024-10-09)
 
 
