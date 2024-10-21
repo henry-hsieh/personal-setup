@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.8.0](https://github.com/henry-hsieh/personal-setup/compare/v1.7.1...v1.8.0) (2024-10-21)
+
+
+### Features
+
+* **git-extras:** bump git-extras version to v7.3.0 ([#178](https://github.com/henry-hsieh/personal-setup/issues/178)) ([5e60583](https://github.com/henry-hsieh/personal-setup/commit/5e60583b0d24fd16d2abdf169e76e635d8ec7886))
+* **jdk:** bump jdk version to v21.0.5+11 ([#175](https://github.com/henry-hsieh/personal-setup/issues/175)) ([53ca716](https://github.com/henry-hsieh/personal-setup/commit/53ca716fa45f283c9b0bff525258aee0a5aac85d))
+* **node:** bump node version to v23 ([#176](https://github.com/henry-hsieh/personal-setup/issues/176)) ([7b34af8](https://github.com/henry-hsieh/personal-setup/commit/7b34af8523fbb02a6439262777b12fdc22393dd7))
+
+
+### Bug Fixes
+
+* **nvim:** make sure neoconf.nvim is loaded before nvim-lspconfig ([#179](https://github.com/henry-hsieh/personal-setup/issues/179)) ([4304158](https://github.com/henry-hsieh/personal-setup/commit/430415828a1707484769015ba03c4287be9c54aa))
+
 ## [1.7.1](https://github.com/henry-hsieh/personal-setup/compare/v1.7.0...v1.7.1) (2024-10-16)
 
 
