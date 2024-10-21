@@ -424,6 +424,7 @@ require("lazy").setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       'williamboman/mason-lspconfig.nvim',
+      'folke/neoconf.nvim',
     },
     config = function()
       -- Set LSP symbols
