@@ -381,6 +381,7 @@ require("lazy").setup({
           local lspconfig = require("lspconfig")
           lspconfig.verible.setup {
             cmd = {'verible-verilog-ls', '--rules_config_search'},
+            root_dir = lspconfig.util.root_pattern('verible.filelist', '.git'),
             filetypes = {'verilog', 'systemverilog', 'verilog_systemverilog'},
             capabilities = capabilities,
           }
