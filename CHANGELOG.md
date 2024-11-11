@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.8.0](https://github.com/henry-hsieh/personal-setup/compare/v1.7.1...v1.8.0) (2024-11-11)
+
+
+### Features
+
+* **fzf:** bump fzf version to v0.56.0 ([#182](https://github.com/henry-hsieh/personal-setup/issues/182)) ([06549e2](https://github.com/henry-hsieh/personal-setup/commit/06549e24f45cb2a134fbc0ba148f1087e393b010))
+* **fzf:** bump fzf version to v0.56.1 ([#184](https://github.com/henry-hsieh/personal-setup/issues/184)) ([5cb68d7](https://github.com/henry-hsieh/personal-setup/commit/5cb68d763104109b673475cab3543239419aacd5))
+* **fzf:** bump fzf version to v0.56.2 ([#185](https://github.com/henry-hsieh/personal-setup/issues/185)) ([93b7cc0](https://github.com/henry-hsieh/personal-setup/commit/93b7cc0cbaef1c0bfc9eb61ae04d58bd54897b00))
+* **git-extras:** bump git-extras version to v7.3.0 ([#178](https://github.com/henry-hsieh/personal-setup/issues/178)) ([5e60583](https://github.com/henry-hsieh/personal-setup/commit/5e60583b0d24fd16d2abdf169e76e635d8ec7886))
+* **jdk:** bump jdk version to v21.0.5+11 ([#175](https://github.com/henry-hsieh/personal-setup/issues/175)) ([53ca716](https://github.com/henry-hsieh/personal-setup/commit/53ca716fa45f283c9b0bff525258aee0a5aac85d))
+* **node:** bump node version to v23 ([#176](https://github.com/henry-hsieh/personal-setup/issues/176)) ([7b34af8](https://github.com/henry-hsieh/personal-setup/commit/7b34af8523fbb02a6439262777b12fdc22393dd7))
+* **node:** bump node version to v23.1.0 ([#181](https://github.com/henry-hsieh/personal-setup/issues/181)) ([938c7ab](https://github.com/henry-hsieh/personal-setup/commit/938c7ab7e89214028f622c2906444cfb95c2f42c))
+* **tree-sitter:** bump tree-sitter version to v0.24.4 ([#183](https://github.com/henry-hsieh/personal-setup/issues/183)) ([1b6d189](https://github.com/henry-hsieh/personal-setup/commit/1b6d18943d420b5eb53fc370a3c72d925bcc8c02))
+
+
+### Bug Fixes
+
+* **nvim:** add verible.filelist as root_pattern of verible ([#180](https://github.com/henry-hsieh/personal-setup/issues/180)) ([5ab31ee](https://github.com/henry-hsieh/personal-setup/commit/5ab31ee200fc714518379502bee0b950a4b96ea4))
+* **nvim:** make sure neoconf.nvim is loaded before nvim-lspconfig ([#179](https://github.com/henry-hsieh/personal-setup/issues/179)) ([4304158](https://github.com/henry-hsieh/personal-setup/commit/430415828a1707484769015ba03c4287be9c54aa))
+
 ## [1.7.1](https://github.com/henry-hsieh/personal-setup/compare/v1.7.0...v1.7.1) (2024-10-16)
 
 
