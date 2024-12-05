@@ -38,6 +38,9 @@ end
 -- Map the ToggleTabstop to a key
 vim.api.nvim_set_keymap('n', '<leader>t<Tab>', [[:lua ToggleTabstop()<CR>]], { desc = "Toggle Tabstop Width", noremap = true, silent = true })
 
+-- Map the Toggle Wrap to a key
+vim.api.nvim_set_keymap('n', '<leader>tw', [[:set wrap!<CR>]], { desc = "Toggle Wrap", noremap = true, silent = true })
+
 -- Mouse
 vim.o.mouse = "a"
 
