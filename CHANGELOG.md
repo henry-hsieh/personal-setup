@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.9.0](https://github.com/henry-hsieh/personal-setup/compare/v1.8.0...v1.9.0) (2024-12-05)
+
+
+### Features
+
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 3e9ff06 ([#194](https://github.com/henry-hsieh/personal-setup/issues/194)) ([8114e19](https://github.com/henry-hsieh/personal-setup/commit/8114e1912f02ce7782d5d2d05f7aac6f97e1b78d))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 5bbbf61 ([#191](https://github.com/henry-hsieh/personal-setup/issues/191)) ([0ffb8e6](https://github.com/henry-hsieh/personal-setup/commit/0ffb8e6391762109e9c03b2b84c12ea90995bd98))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 5ff8ab0 ([#195](https://github.com/henry-hsieh/personal-setup/issues/195)) ([ca16842](https://github.com/henry-hsieh/personal-setup/commit/ca16842ccb5e812f5aabf3c420a9c62d479af0a4))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 7979a16 ([#192](https://github.com/henry-hsieh/personal-setup/issues/192)) ([eb5cd99](https://github.com/henry-hsieh/personal-setup/commit/eb5cd99ae810dabcf2da25b11347f279d14ad7a1))
+* **fzf:** bump fzf version to v0.56.3 ([#186](https://github.com/henry-hsieh/personal-setup/issues/186)) ([dce29ac](https://github.com/henry-hsieh/personal-setup/commit/dce29acf58301d085423262b8cf5c3b58bcd5806))
+* **node:** bump node version to v23.2.0 ([#188](https://github.com/henry-hsieh/personal-setup/issues/188)) ([44dd31f](https://github.com/henry-hsieh/personal-setup/commit/44dd31f8d90c6f55fb7071b1c3632f64b81cc653))
+* **node:** bump node version to v23.3.0 ([#193](https://github.com/henry-hsieh/personal-setup/issues/193)) ([9ad129c](https://github.com/henry-hsieh/personal-setup/commit/9ad129c46cf294ef109dd9d5d255babd3ef333aa))
+* **nvim:** add keymap for wrapping toggle ([#196](https://github.com/henry-hsieh/personal-setup/issues/196)) ([226c7b5](https://github.com/henry-hsieh/personal-setup/commit/226c7b543f7a25df148458cf1b23d28bf27d847c))
+* **tinty:** bump tinty version to v0.23.0 ([#190](https://github.com/henry-hsieh/personal-setup/issues/190)) ([0b66c1e](https://github.com/henry-hsieh/personal-setup/commit/0b66c1e5eacef4d048ed861bd2dd5ce2bd298a79))
+* **yq:** bump yq version to v4.44.5 ([#189](https://github.com/henry-hsieh/personal-setup/issues/189)) ([a3e6f1a](https://github.com/henry-hsieh/personal-setup/commit/a3e6f1aaffe2c6554738ceb8e5f6d9665d2b2073))
+
 ## [1.8.0](https://github.com/henry-hsieh/personal-setup/compare/v1.7.1...v1.8.0) (2024-11-11)
 
 
