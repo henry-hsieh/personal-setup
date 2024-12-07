@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/henry-hsieh/personal-setup/compare/v1.9.0...v1.10.0) (2024-12-07)
+
+
+### Features
+
+* **yq:** bump yq version to v4.44.6 ([#197](https://github.com/henry-hsieh/personal-setup/issues/197)) ([5d2d679](https://github.com/henry-hsieh/personal-setup/commit/5d2d67973ec71d633f7237021e7261930dc92370))
+
 ## [1.9.0](https://github.com/henry-hsieh/personal-setup/compare/v1.8.0...v1.9.0) (2024-12-05)
 
 
