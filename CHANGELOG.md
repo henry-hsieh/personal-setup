@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.10.0](https://github.com/henry-hsieh/personal-setup/compare/v1.9.0...v1.10.0) (2024-12-11)
+
+
+### Features
+
+* **node:** bump node version to v23.4.0 ([#199](https://github.com/henry-hsieh/personal-setup/issues/199)) ([9cbc162](https://github.com/henry-hsieh/personal-setup/commit/9cbc162def8865f006f562db119ba9fb9a810f08))
+* **tree-sitter:** bump tree-sitter version to v0.24.5 ([#200](https://github.com/henry-hsieh/personal-setup/issues/200)) ([f5ea7f8](https://github.com/henry-hsieh/personal-setup/commit/f5ea7f877a479d42a10fbe6432106226535ebe90))
+* **yq:** bump yq version to v4.44.6 ([#197](https://github.com/henry-hsieh/personal-setup/issues/197)) ([5d2d679](https://github.com/henry-hsieh/personal-setup/commit/5d2d67973ec71d633f7237021e7261930dc92370))
+
 ## [1.9.0](https://github.com/henry-hsieh/personal-setup/compare/v1.8.0...v1.9.0) (2024-12-05)
 
 
