@@ -1,4 +1,4 @@
 name: bat
-version: 0.24.0
+version: 0.25.0
 datasource: github-releases
 package: sharkdp/bat
