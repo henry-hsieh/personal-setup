@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.10.0](https://github.com/henry-hsieh/personal-setup/compare/v1.9.0...v1.10.0) (2025-01-20)
+
+
+### Features
+
+* **bat:** bump bat version to v0.25.0 ([#206](https://github.com/henry-hsieh/personal-setup/issues/206)) ([feb5885](https://github.com/henry-hsieh/personal-setup/commit/feb58855d1b5dd1db626351883ccc5f67bc0c926))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 4850357 ([#215](https://github.com/henry-hsieh/personal-setup/issues/215)) ([30d3b25](https://github.com/henry-hsieh/personal-setup/commit/30d3b250240af0329553f4073b32747b7751ef95))
+* **fzf:** bump fzf version to v0.57.0 ([#201](https://github.com/henry-hsieh/personal-setup/issues/201)) ([47144df](https://github.com/henry-hsieh/personal-setup/commit/47144df0532c54986e47ef748a3dec932efee25c))
+* **fzf:** bump fzf version to v0.58.0 ([#214](https://github.com/henry-hsieh/personal-setup/issues/214)) ([0b4a9ca](https://github.com/henry-hsieh/personal-setup/commit/0b4a9cab05eea2f1fb33d929da63191e6e78d817))
+* **lazygit:** bump lazygit version to v0.45.0 ([#208](https://github.com/henry-hsieh/personal-setup/issues/208)) ([d18d077](https://github.com/henry-hsieh/personal-setup/commit/d18d077bb2d10000675bb72707f526e1d3076e9d))
+* **lazygit:** bump lazygit version to v0.45.2 ([#212](https://github.com/henry-hsieh/personal-setup/issues/212)) ([b6c965c](https://github.com/henry-hsieh/personal-setup/commit/b6c965cb1cd1b1b02782aaef36cde4c01a5a07f1))
+* **node:** bump node version to v23.4.0 ([#199](https://github.com/henry-hsieh/personal-setup/issues/199)) ([9cbc162](https://github.com/henry-hsieh/personal-setup/commit/9cbc162def8865f006f562db119ba9fb9a810f08))
+* **node:** bump node version to v23.5.0 ([#202](https://github.com/henry-hsieh/personal-setup/issues/202)) ([ed2f75d](https://github.com/henry-hsieh/personal-setup/commit/ed2f75dbc8da77cd48c9d0797d49bb3dc6253445))
+* **node:** bump node version to v23.6.0 ([#207](https://github.com/henry-hsieh/personal-setup/issues/207)) ([281263a](https://github.com/henry-hsieh/personal-setup/commit/281263a371ed157d29f7a5a6a8870cf472cb94be))
+* **nvim:** bump nvim version to v0.10.3 ([#205](https://github.com/henry-hsieh/personal-setup/issues/205)) ([47f8984](https://github.com/henry-hsieh/personal-setup/commit/47f8984c5bac2e3e7265554ad6ea2b72376d8732))
+* **tinty:** bump tinty version to v0.24.0 ([#203](https://github.com/henry-hsieh/personal-setup/issues/203)) ([230c070](https://github.com/henry-hsieh/personal-setup/commit/230c070cd0680189775d7464cf8d9f06fbf7bea1))
+* **tinty:** bump tinty version to v0.25.0 ([#211](https://github.com/henry-hsieh/personal-setup/issues/211)) ([72294b0](https://github.com/henry-hsieh/personal-setup/commit/72294b047ce2d59374aee8a2681ba834870e2c69))
+* **tinty:** bump tinty version to v0.26.0 ([#213](https://github.com/henry-hsieh/personal-setup/issues/213)) ([9873fb7](https://github.com/henry-hsieh/personal-setup/commit/9873fb7156a9cdffde552eaa38a1e5543bff3ff8))
+* **tree-sitter:** bump tree-sitter version to v0.24.5 ([#200](https://github.com/henry-hsieh/personal-setup/issues/200)) ([f5ea7f8](https://github.com/henry-hsieh/personal-setup/commit/f5ea7f877a479d42a10fbe6432106226535ebe90))
+* **tree-sitter:** bump tree-sitter version to v0.24.6 ([#204](https://github.com/henry-hsieh/personal-setup/issues/204)) ([9dab47c](https://github.com/henry-hsieh/personal-setup/commit/9dab47c1e295340d5c59c6a866ff56a5a269cd8d))
+* **tree-sitter:** bump tree-sitter version to v0.24.7 ([#210](https://github.com/henry-hsieh/personal-setup/issues/210)) ([74339af](https://github.com/henry-hsieh/personal-setup/commit/74339afac34747df3971605809852204915f8bce))
+* **yq:** bump yq version to v4.44.6 ([#197](https://github.com/henry-hsieh/personal-setup/issues/197)) ([5d2d679](https://github.com/henry-hsieh/personal-setup/commit/5d2d67973ec71d633f7237021e7261930dc92370))
+* **yq:** bump yq version to v4.45.1 ([#209](https://github.com/henry-hsieh/personal-setup/issues/209)) ([2396108](https://github.com/henry-hsieh/personal-setup/commit/2396108c6938ab9a9a7b19462ec832a430794543))
+
 ## [1.9.0](https://github.com/henry-hsieh/personal-setup/compare/v1.8.0...v1.9.0) (2024-12-05)
 
 
