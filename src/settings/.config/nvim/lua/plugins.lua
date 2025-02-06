@@ -801,7 +801,7 @@ require("lazy").setup({
   },
 
   {
-    'freddiehaddad/feline.nvim',
+    'famiu/feline.nvim',
     version = '*',
     config = function()
       -- Feline statusline definition.
