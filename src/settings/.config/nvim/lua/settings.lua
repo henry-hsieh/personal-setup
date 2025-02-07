@@ -75,6 +75,22 @@ vim.o.updatetime = 200
 
 -- Autoread
 vim.o.autoread = true
+local function reload_all_buffers_in_tab()
+    local tab_buffers = vim.fn.tabpagebuflist(vim.fn.tabpagenr())  -- Get buf list of current tab
+    for _, buf in ipairs(tab_buffers) do
+        if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" then
+            vim.api.nvim_buf_call(buf, function()
+                vim.cmd("checktime")
+            end)
+        end
+    end
+    vim.cmd("redraw!")
+end
+
+vim.api.nvim_create_autocmd("TermClose", {
+    pattern = "*",
+    callback = reload_all_buffers_in_tab,
+})
 
 -- Tab
 vim.keymap.set("n", "<space><tab>n", "<cmd>tabnew<cr>", { desc = "New Tab" })
