@@ -172,7 +172,7 @@ popd
 print_process_item "Download tree-sitter"
 download_git_repo https://github.com/tree-sitter/tree-sitter.git $BUILD_DIR/tree-sitter v$TREE_SITTER_VERSION
 pushd $BUILD_DIR/tree-sitter
-PATH=$OUT_DIR/.local/cargo/bin/:$PATH CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup cargo build --release
+PATH=$OUT_DIR/.local/cargo/bin/:$PATH CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup CFLAGS="-O3 -D_BSD_SOURCE" cargo build --release
 rsync -a target/release/tree-sitter $OUT_DIR/.local/bin/
 popd
 

@@ -1,4 +1,4 @@
 name: tree-sitter
-version: 0.24.7
+version: 0.25.1
 datasource: github-releases
 package: tree-sitter/tree-sitter
