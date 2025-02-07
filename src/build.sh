@@ -99,6 +99,7 @@ print_process_item "Download bat"
 download_file https://github.com/sharkdp/bat/releases/download/v$BAT_VERSION/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz
 tar -axf $BUILD_DIR/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/bat-v${BAT_VERSION}-x86_64-unknown-linux-musl
+mkdir -p $OUT_DIR/.local/man/man1/
 rsync -a bat $OUT_DIR/.local/bin/
 rsync -a bat.1 $OUT_DIR/.local/man/man1/
 cp -f autocomplete/bat.bash $OUT_DIR/.local/share/bash-completion/completions/
@@ -109,6 +110,7 @@ print_process_item "Download fd"
 download_file https://github.com/sharkdp/fd/releases/download/v$FD_VERSION/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz
 tar -axf $BUILD_DIR/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/fd-v${FD_VERSION}-x86_64-unknown-linux-musl
+mkdir -p $OUT_DIR/.local/man/man1/
 rsync -a fd $OUT_DIR/.local/bin/
 rsync -a fd.1 $OUT_DIR/.local/man/man1/
 cp -f autocomplete/fd.bash $OUT_DIR/.local/share/bash-completion/completions/
