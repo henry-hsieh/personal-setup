@@ -1666,8 +1666,57 @@ require("lazy").setup({
   {
     "carbon-steel/detour.nvim",
     config = function ()
-      vim.keymap.set('n', '<c-w><enter>', ":Detour<cr>", { desc = "Detour", noremap = true, silent = true })
-      vim.keymap.set('n', '<c-w>.', ":DetourCurrentWindow<cr>", { desc = "Detour Current Window", noremap = true, silent = true })
+      require("detour").setup({
+        title = "none",
+      })
+      vim.keymap.set('n', '<c-w><enter>', function()
+        local popup_id = require("detour").Detour() -- Open a detour popup
+        if not popup_id then
+          return
+        end
+        vim.api.nvim_set_option_value("winbar", vim.api.nvim_get_option_value("winbar", {scope = "global"}), {scope = "local", win = popup_id})
+      end, { desc = "Detour"})
+
+      vim.keymap.set('n', '<c-w>.', function()
+        local popup_id = require("detour").DetourCurrentWindow() -- Open a detour popup in current split
+        if not popup_id then
+          return
+        end
+        vim.api.nvim_set_option_value("winbar", vim.api.nvim_get_option_value("winbar", {scope = "global"}), {scope = "local", win = popup_id})
+      end, { desc = "Detour Current Window"})
+
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        callback = function()
+          local win = vim.api.nvim_get_current_win()
+          if vim.tbl_contains(require('detour.internal').list_popups(), win) then
+            vim.wo.winbar = vim.o.winbar
+          end
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        pattern = "*",
+        callback = function(event)
+          local filetype = vim.bo[event.buf].filetype
+          local file_path = event.match
+
+          if file_path:match "/doc/" ~= nil then
+            -- Only run if the filetype is a help file
+            if filetype == "help" or filetype == "markdown" then
+              -- Get the newly opened help window
+              -- and attempt to open a Detour() float
+              local help_win = vim.api.nvim_get_current_win()
+              local ok = require("detour").Detour()
+
+              -- If we successfully create a float of the help file
+              -- Close the split
+              if ok then
+                vim.api.nvim_win_close(help_win, false)
+              end
+            end
+          end
+        end,
+      })
       -- Setup float for helps
       vim.api.nvim_create_autocmd("BufWinEnter", {
         pattern = "*",
