@@ -17,7 +17,9 @@ local plugin_settings = {
       horizontal_split = "<C-s>",
       vertical_split = "<C-v>",
       toggle = "<space>e",
-    }
+    },
+    git_disable_dirs = {},
+    fs_watcher_ignore_dirs = {},
   },
   nvim_lspconfig = {
     mappings = {
