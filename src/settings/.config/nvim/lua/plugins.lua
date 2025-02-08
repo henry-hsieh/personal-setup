@@ -802,7 +802,7 @@ require("lazy").setup({
 
   {
     'famiu/feline.nvim',
-    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       -- Feline statusline definition.
       --
@@ -1017,6 +1017,45 @@ require("lazy").setup({
             end,
             hl = function()
               return base16_hl(2, 1,'None')
+            end,
+          },
+        },
+        file_name = {
+          provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          short_provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          hl = function()
+            return base16_hl(6, 2,'None')
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(2, 0,'None')
+            end,
+          },
+          right_sep = {
+            str = function()
+              if vim.bo.modified then
+                return ""
+              else
+                return "█"
+              end
+            end,
+            hl = function()
+              return base16_hl(2, 0,'None')
             end,
           },
         },
@@ -1305,6 +1344,45 @@ require("lazy").setup({
             end,
           },
         },
+        inactive_file_name = {
+          provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          short_provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          hl = function()
+            return base16_hl(4, 2,'None')
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(2, 0,'None')
+            end,
+          },
+          right_sep = {
+            str = function()
+              if vim.bo.modified then
+                return ""
+              else
+                return "█"
+              end
+            end,
+            hl = function()
+              return base16_hl(2, 0,'None')
+            end,
+          },
+        },
         inactive_file_encoding = {
           provider = function()
             return require("feline.providers.file").file_encoding() .. " "
@@ -1403,19 +1481,6 @@ require("lazy").setup({
       }
 
       local inactive = {
-        {
-          c.inactive,
-          c.inactive_file_info,
-        }, -- left
-        {
-          c.inactive_file_type,
-          c.inactive_file_encoding,
-          c.inactive_position,
-          c.inactive_line_percentage,
-        }, -- right
-      }
-
-      inactive = {
         { -- left
           c.inactive,
           c.git_branch,
@@ -1438,8 +1503,50 @@ require("lazy").setup({
         },
       }
 
+      local winbar_active = {
+        { -- left
+          c.file_name,
+        },
+        {
+        },
+      }
+
+      local winbar_inactive = {
+        { -- left
+          c.inactive_file_name,
+        },
+        {
+        },
+      }
+
       require("feline").setup({
         components = { active = active, inactive = inactive },
+        force_inactive = {
+          filetypes = {
+            "packer",
+            "dap-repl",
+            "dapui_scopes",
+            "dapui_stacks",
+            "dapui_watches",
+            "dapui_repl",
+            "LspTrouble",
+            "qf",
+            "help",
+          },
+          buftypes = { "terminal" },
+          bufnames = {},
+        },
+        disable = {
+          filetypes = {
+            "NvimTree",
+            "dashboard",
+            "startify",
+          },
+        },
+      })
+
+      require("feline").winbar.setup({
+        components = { active = winbar_active, inactive = winbar_inactive },
         force_inactive = {
           filetypes = {
             "packer",
@@ -1559,8 +1666,57 @@ require("lazy").setup({
   {
     "carbon-steel/detour.nvim",
     config = function ()
-      vim.keymap.set('n', '<c-w><enter>', ":Detour<cr>", { desc = "Detour", noremap = true, silent = true })
-      vim.keymap.set('n', '<c-w>.', ":DetourCurrentWindow<cr>", { desc = "Detour Current Window", noremap = true, silent = true })
+      require("detour").setup({
+        title = "none",
+      })
+      vim.keymap.set('n', '<c-w><enter>', function()
+        local popup_id = require("detour").Detour() -- Open a detour popup
+        if not popup_id then
+          return
+        end
+        vim.api.nvim_set_option_value("winbar", vim.api.nvim_get_option_value("winbar", {scope = "global"}), {scope = "local", win = popup_id})
+      end, { desc = "Detour"})
+
+      vim.keymap.set('n', '<c-w>.', function()
+        local popup_id = require("detour").DetourCurrentWindow() -- Open a detour popup in current split
+        if not popup_id then
+          return
+        end
+        vim.api.nvim_set_option_value("winbar", vim.api.nvim_get_option_value("winbar", {scope = "global"}), {scope = "local", win = popup_id})
+      end, { desc = "Detour Current Window"})
+
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        callback = function()
+          local win = vim.api.nvim_get_current_win()
+          if vim.tbl_contains(require('detour.internal').list_popups(), win) then
+            vim.wo.winbar = vim.o.winbar
+          end
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        pattern = "*",
+        callback = function(event)
+          local filetype = vim.bo[event.buf].filetype
+          local file_path = event.match
+
+          if file_path:match "/doc/" ~= nil then
+            -- Only run if the filetype is a help file
+            if filetype == "help" or filetype == "markdown" then
+              -- Get the newly opened help window
+              -- and attempt to open a Detour() float
+              local help_win = vim.api.nvim_get_current_win()
+              local ok = require("detour").Detour()
+
+              -- If we successfully create a float of the help file
+              -- Close the split
+              if ok then
+                vim.api.nvim_win_close(help_win, false)
+              end
+            end
+          end
+        end,
+      })
       -- Setup float for helps
       vim.api.nvim_create_autocmd("BufWinEnter", {
         pattern = "*",
