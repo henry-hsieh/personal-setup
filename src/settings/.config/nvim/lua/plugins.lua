@@ -802,7 +802,7 @@ require("lazy").setup({
 
   {
     'famiu/feline.nvim',
-    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       -- Feline statusline definition.
       --
@@ -1017,6 +1017,45 @@ require("lazy").setup({
             end,
             hl = function()
               return base16_hl(2, 1,'None')
+            end,
+          },
+        },
+        file_name = {
+          provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          short_provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          hl = function()
+            return base16_hl(6, 2,'None')
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(2, 0,'None')
+            end,
+          },
+          right_sep = {
+            str = function()
+              if vim.bo.modified then
+                return ""
+              else
+                return "█"
+              end
+            end,
+            hl = function()
+              return base16_hl(2, 0,'None')
             end,
           },
         },
@@ -1305,6 +1344,45 @@ require("lazy").setup({
             end,
           },
         },
+        inactive_file_name = {
+          provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          short_provider = {
+            name = "file_info",
+            opts = {
+              type = "base-only",
+              file_modified_icon = " ",
+              file_readonly_icon = "󰌾 ",
+            }
+          },
+          hl = function()
+            return base16_hl(4, 2,'None')
+          end,
+          left_sep = {
+            str = "",
+            hl = function()
+              return base16_hl(2, 0,'None')
+            end,
+          },
+          right_sep = {
+            str = function()
+              if vim.bo.modified then
+                return ""
+              else
+                return "█"
+              end
+            end,
+            hl = function()
+              return base16_hl(2, 0,'None')
+            end,
+          },
+        },
         inactive_file_encoding = {
           provider = function()
             return require("feline.providers.file").file_encoding() .. " "
@@ -1403,19 +1481,6 @@ require("lazy").setup({
       }
 
       local inactive = {
-        {
-          c.inactive,
-          c.inactive_file_info,
-        }, -- left
-        {
-          c.inactive_file_type,
-          c.inactive_file_encoding,
-          c.inactive_position,
-          c.inactive_line_percentage,
-        }, -- right
-      }
-
-      inactive = {
         { -- left
           c.inactive,
           c.git_branch,
@@ -1438,8 +1503,50 @@ require("lazy").setup({
         },
       }
 
+      local winbar_active = {
+        { -- left
+          c.file_name,
+        },
+        {
+        },
+      }
+
+      local winbar_inactive = {
+        { -- left
+          c.inactive_file_name,
+        },
+        {
+        },
+      }
+
       require("feline").setup({
         components = { active = active, inactive = inactive },
+        force_inactive = {
+          filetypes = {
+            "packer",
+            "dap-repl",
+            "dapui_scopes",
+            "dapui_stacks",
+            "dapui_watches",
+            "dapui_repl",
+            "LspTrouble",
+            "qf",
+            "help",
+          },
+          buftypes = { "terminal" },
+          bufnames = {},
+        },
+        disable = {
+          filetypes = {
+            "NvimTree",
+            "dashboard",
+            "startify",
+          },
+        },
+      })
+
+      require("feline").winbar.setup({
+        components = { active = winbar_active, inactive = winbar_inactive },
         force_inactive = {
           filetypes = {
             "packer",
