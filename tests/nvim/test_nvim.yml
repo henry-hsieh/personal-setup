@@ -171,8 +171,8 @@
     must_not_contain:
       - "Error detected"
 
-- name: test bufferline.nvim exists
-  command: bash ./tests/nvim/test-lua-package-exist.sh bufferline
+- name: test tabby.nvim exists
+  command: bash ./tests/nvim/test-lua-package-exist.sh tabby
   stdout:
     contains:
       - "Test pass"
