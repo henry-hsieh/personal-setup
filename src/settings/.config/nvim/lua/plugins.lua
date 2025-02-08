@@ -143,8 +143,25 @@ require("lazy").setup({
         vim.keymap.set('n', '?',     api.tree.toggle_help,            opts('Help'))
       end
 
+      local function git_disable_for_dirs(path)
+        for _, p in ipairs(plugin_settings.nvim_tree.git_disable_dirs) do
+          if path:find(p, 1, true) == 1 then
+            return true
+          end
+        end
+        return false
+      end
+
       require'nvim-tree'.setup {
         on_attach = my_on_attach,
+        git = {
+          timeout = 800,
+          show_on_open_dirs = false,
+          disable_for_dirs = git_disable_for_dirs,
+        },
+        filesystem_watchers = {
+          ignore_dirs = plugin_settings.nvim_tree.fs_watcher_ignore_dirs,
+        },
       }
 
       -- map F9 to toogle NvimTree and focus on current file
