@@ -1519,6 +1519,9 @@ require("lazy").setup({
         },
       }
 
+      -- Use global statusline
+      vim.o.laststatus = 3
+
       require("feline").setup({
         components = { active = active, inactive = inactive },
         force_inactive = {
