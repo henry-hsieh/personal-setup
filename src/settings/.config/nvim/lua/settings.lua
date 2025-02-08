@@ -93,7 +93,8 @@ vim.api.nvim_create_autocmd("TermClose", {
 })
 
 -- Tab
-vim.keymap.set("n", "<space><tab>n", "<cmd>tabnew<cr>", { desc = "New Tab" })
+vim.keymap.set("n", "<space><tab>n", "<cmd>tabnew | NvimTreeOpen<cr>", { desc = "New Tab" })
+vim.keymap.set("n", "<space><tab>e", "<cmd>tabe %<cr>", { desc = "New Tab (Current Buffer)" })
 vim.keymap.set("n", "<space><tab>q", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 vim.keymap.set("n", "]<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 vim.keymap.set("n", "[<tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })

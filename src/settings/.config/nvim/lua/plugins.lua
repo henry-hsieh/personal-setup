@@ -1851,16 +1851,44 @@ require("lazy").setup({
   },
 
   {
-    'akinsho/bufferline.nvim',
-    version = "*",
+    'nanozuki/tabby.nvim',
+    event = 'VeryLazy', -- if you want lazy load, see below
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
-      require("bufferline").setup{
-        options = {
-          separator_style = "slant",
-        }
+      local theme = {
+        fill = 'TabLineFill',
+        head = 'TabLine',
+        current_tab = 'TabLineSel',
+        tab = 'TabLine',
+        win = 'TabLine',
+        tail = 'TabLine',
       }
-    end
+      require('tabby').setup({
+        line = function(line)
+          return {
+            {
+              { ' 󰓩 ', hl = theme.head },
+              line.sep('', theme.head, theme.fill),
+            },
+            line.tabs().foreach(function(tab)
+              local hl = tab.is_current() and theme.current_tab or theme.tab
+              return {
+                line.sep('', hl, theme.fill),
+                tab.is_current() and '' or '󰆣',
+                tab.number(),
+                tab.name(),
+                tab.close_btn(''),
+                line.sep('', hl, theme.fill),
+                hl = hl,
+                margin = ' ',
+              }
+            end),
+            hl = theme.fill,
+          }
+        end,
+        -- option = {}, -- setup modules' option,
+      })
+    end,
   },
 
   {
