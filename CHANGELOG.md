@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/henry-hsieh/personal-setup/compare/v1.10.0...v1.11.0) (2025-02-25)
+
+
+### Features
+
+* **lazygit:** bump lazygit version to v0.47.2 ([#236](https://github.com/henry-hsieh/personal-setup/issues/236)) ([b6a5530](https://github.com/henry-hsieh/personal-setup/commit/b6a55303307846f31f45bdfb2b501aaa1b68084e))
+
 ## [1.10.0](https://github.com/henry-hsieh/personal-setup/compare/v1.9.0...v1.10.0) (2025-02-23)
 
 
