@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.11.0](https://github.com/henry-hsieh/personal-setup/compare/v1.10.0...v1.11.0) (2025-04-06)
+
+
+### Features
+
+* **fzf:** bump fzf version to v0.60.3 ([#239](https://github.com/henry-hsieh/personal-setup/issues/239)) ([8a18d97](https://github.com/henry-hsieh/personal-setup/commit/8a18d979cf3b4ba1feefdc1f8f5ce51fb0303259))
+* **fzf:** bump fzf version to v0.61.0 ([#245](https://github.com/henry-hsieh/personal-setup/issues/245)) ([f29e206](https://github.com/henry-hsieh/personal-setup/commit/f29e206bacc0a174475fd90c99ddbec2dfe1088c))
+* **fzf:** bump fzf version to v0.61.1 ([#246](https://github.com/henry-hsieh/personal-setup/issues/246)) ([3b8dbe8](https://github.com/henry-hsieh/personal-setup/commit/3b8dbe86706e9bd64fc6f9bc89b319a9abed19e6))
+* **lazygit:** bump lazygit version to v0.47.2 ([#236](https://github.com/henry-hsieh/personal-setup/issues/236)) ([b6a5530](https://github.com/henry-hsieh/personal-setup/commit/b6a55303307846f31f45bdfb2b501aaa1b68084e))
+* **lazygit:** bump lazygit version to v0.48.0 ([#238](https://github.com/henry-hsieh/personal-setup/issues/238)) ([03485bb](https://github.com/henry-hsieh/personal-setup/commit/03485bb9ce1fee1b3f656b67a44f3d43842d1f10))
+* **nvim:** bump nvim version to v0.11.0 ([#243](https://github.com/henry-hsieh/personal-setup/issues/243)) ([835e10c](https://github.com/henry-hsieh/personal-setup/commit/835e10cb7f6be071fdd2bf6e747dd294f908ab7b))
+* **rustup:** bump rustup version to v1.28.0 ([#240](https://github.com/henry-hsieh/personal-setup/issues/240)) ([3767922](https://github.com/henry-hsieh/personal-setup/commit/3767922bf4adb74d13f4933163204300dfea1567))
+* **rustup:** bump rustup version to v1.28.1 ([#242](https://github.com/henry-hsieh/personal-setup/issues/242)) ([e784211](https://github.com/henry-hsieh/personal-setup/commit/e78421117db54e8d5311dcfe7cc946aafd6084f3))
+* **tinty:** bump tinty version to v0.27.0 ([#244](https://github.com/henry-hsieh/personal-setup/issues/244)) ([6c4afa6](https://github.com/henry-hsieh/personal-setup/commit/6c4afa6de003bb8f4289f93cb01567ef3301abda))
+* **tree-sitter:** bump tree-sitter version to v0.25.3 ([#241](https://github.com/henry-hsieh/personal-setup/issues/241)) ([3c6ed14](https://github.com/henry-hsieh/personal-setup/commit/3c6ed14162565c97013a5af617b9f59a5cef35db))
+
 ## [1.10.0](https://github.com/henry-hsieh/personal-setup/compare/v1.9.0...v1.10.0) (2025-02-23)
 
 
