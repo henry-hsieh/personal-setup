@@ -50,7 +50,16 @@ function untar() {
 }
 
 echo -e "Start installing:"
+rm -rf $INSTALL_DIR/.local/share/nvim/runtime
 untar $SCRIPT_DIR/home.tar.gz
+echo -e "Clean plugins..."
+cd $INSTALL_DIR/.local/share/nvim/lazy
+for d in */ ; do
+  pushd $d > /dev/null
+  git reset --hard HEAD > /dev/null
+  git clean -fdq > /dev/null
+  popd > /dev/null
+done
 
 # Restore origin git name and email
 git config --file $INSTALL_DIR/.config/git/config user.name  "$GIT_NAME"
