@@ -552,21 +552,8 @@ require("lazy").setup({
 
           local m = plugin_settings.gitsigns.mappings
           -- Navigation
-          map('n', m.next_hunk, function()
-            if vim.wo.diff then
-              vim.cmd.normal({']c', bang = true})
-            else
-              gs.nav_hunk('next')
-            end
-          end)
-
-          map('n', m.prev_hunk, function()
-            if vim.wo.diff then
-              vim.cmd.normal({'[c', bang = true})
-            else
-              gs.nav_hunk('prev')
-            end
-          end)
+          map('n', m.next_hunk, function() gs.nav_hunk('next') end, {desc = "Next Hunk"})
+          map('n', m.prev_hunk, function() gs.nav_hunk('prev') end, {desc = "Previous Hunk"})
           map("n", m.last_hunk, function() gs.nav_hunk("last") end, {desc = "Last Hunk"})
           map("n", m.first_hunk, function() gs.nav_hunk("first") end, {desc = "First Hunk"})
 
@@ -1854,8 +1841,6 @@ require("lazy").setup({
         { "<leader>t"   , group = "Toggle"},
         { "<space>w"    , group = "Workspace"},
         { "<space><Tab>", group = "Tab"},
-        { "]c"          , desc  = "Next Hunk" },
-        { "[c"          , desc  = "Previous Hunk" },
       },
     },
     keys = {
