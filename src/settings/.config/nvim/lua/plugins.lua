@@ -338,7 +338,7 @@ require("lazy").setup({
 
   {
     'henry-hsieh/mason.nvim',
-    branch = 'v2.x',
+    branch = 'feat-linker-exec-relative',
     config = function()
       require'mason'.setup{
         -- log_level = vim.log.levels.DEBUG,
@@ -347,7 +347,7 @@ require("lazy").setup({
   },
 
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     dependencies = {
       'folke/neoconf.nvim',
       'henry-hsieh/mason.nvim',
@@ -424,9 +424,8 @@ require("lazy").setup({
 
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    branch = 'mason_2.x_api',
     dependencies = {
-      'williamboman/mason-lspconfig.nvim',
+      'mason-org/mason-lspconfig.nvim',
     },
     config = function()
       require('mason-tool-installer').setup {
@@ -441,7 +440,7 @@ require("lazy").setup({
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      'williamboman/mason-lspconfig.nvim',
+      'mason-org/mason-lspconfig.nvim',
       'folke/neoconf.nvim',
     },
     config = function()
