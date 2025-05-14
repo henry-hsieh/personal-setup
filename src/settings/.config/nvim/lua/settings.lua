@@ -104,5 +104,9 @@ vim.keymap.set("n", "<space>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
 vim.keymap.set("n", "<space>bn", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 vim.keymap.set("n", "<space>bp", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
 
+-- Diff
+vim.keymap.set("n", "]D", "<cmd>lua vim.cmd.normal({']c', bang = true})<cr>", { desc = "Next Diff" })
+vim.keymap.set("n", "[D", "<cmd>lua vim.cmd.normal({'[c', bang = true})<cr>", { desc = "Previous Diff" })
+
 -- Clear search with <esc>
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
