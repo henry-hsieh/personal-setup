@@ -40,13 +40,6 @@ jobs:
         id: run_build
         run: make release
 
-      - name: Upload logs
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-logs
-          path: build/logs
-
       - name: Upload release artifact
         if: steps.run_build.outcome == 'success'
         uses: actions/upload-artifact@v4
@@ -155,7 +148,7 @@ jobs:
 
       - name: Create release
         id: create_release
-        uses: google-github-actions/release-please-action@v4
+        uses: googleapis/release-please-action@v4
         with:
           token: ${{ steps.get_token.outputs.token }}
           release-type: simple
