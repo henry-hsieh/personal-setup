@@ -35,12 +35,9 @@ test:
 	rm -rf $(TEST_HOME)
 	@echo "Installing environment..."
 	$(TEST_DIR)/personal-setup/install.sh $(TEST_HOME) > $(LOG_DIR)/install.log
-	cp -r $(TEST_SRC_DIR) $(TEST_HOME)
+	rm -rf $(TEST_DIR)/personal-setup
 	cd $(TEST_HOME) && \
-	HOME=$(TEST_HOME) bash -i -c "pytest --symlink --kwdof --wt 16 --basetemp $(LOG_DIR)"
-
-build_test_docker:
-	docker build -t pytest-workflow $(TEST_SRC_DIR)
+	HOME=$(TEST_HOME) bash -i -c "make -C $(TEST_SRC_DIR) LOG_DIR=$(LOG_DIR)"
 
 clean:
 	rm -rf $(BUILD_DIR)

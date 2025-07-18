@@ -1,9 +1,0 @@
-- name: test .cshrc syntax error
-  command: bash -c 'HOME=$(pwd) prompt="dummy" tcsh -i -c "echo Test pass"'
-  stdout:
-    contains:
-      - "Test pass"
-  stderr:
-    must_not_contain:
-      - "syntax error"
-      - "Expression Syntax"

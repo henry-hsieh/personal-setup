@@ -54,7 +54,7 @@ jobs:
       matrix:
         include:
           - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:latest'}
-          - { os: ubuntu-latest, manager: 'yum', image: 'centos:7'     }
+          - { os: ubuntu-latest, manager: 'yum', image: 'centos:8'     }
           - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:16.04' }
           - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:18.04' }
     runs-on: ${{ matrix.os }}
@@ -88,13 +88,6 @@ jobs:
             echo "RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*" >> Dockerfile
             echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
           fi
-          echo "RUN mkdir -p ~/miniconda3" >> Dockerfile
-          echo "RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh" >> Dockerfile
-          echo "RUN bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3" >> Dockerfile
-          echo "RUN rm -rf ~/miniconda3/miniconda.sh" >> Dockerfile
-          echo "RUN ln -s ~/miniconda3/bin/python /usr/local/bin/python" >> Dockerfile
-          echo "RUN python -m pip install pytest-workflow" >> Dockerfile
-          echo "RUN ln -s ~/miniconda3/bin/pytest /usr/local/bin/pytest" >> Dockerfile
 
       - name: Cache docker images
         id: cache_image
@@ -105,8 +98,8 @@ jobs:
 
       - name: Build docker image
         run: |
-          if [[ "$(docker images --format '{{.Repository}}:{{.Tag}}' | grep 'pytest-workflow-${{ matrix.image }}')" == "" ]]; then
-            docker build -t pytest-workflow-${{ matrix.image }} .
+          if [[ "$(docker images --format '{{.Repository}}:{{.Tag}}' | grep 'test-${{ matrix.image }}')" == "" ]]; then
+            docker build -t test-${{ matrix.image }} .
           fi
 
       - name: Download release artifact
@@ -118,7 +111,7 @@ jobs:
 
       - name: Run tests
         id: run_test
-        run: docker run --rm -v $(pwd):$(pwd) -w $(pwd) pytest-workflow-${{ matrix.image }} bash -c 'make test'
+        run: docker run -t --rm -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
 
       - name: Create log name
         run: |
