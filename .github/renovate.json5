@@ -1,72 +1,84 @@
 {
     automerge: true,
     digest: {
-      automerge: true
+        automerge: true,
     },
-    extends: ["config:recommended", ":dependencyDashboard"],
+    extends: [
+        'config:recommended',
+        ':dependencyDashboard',
+    ],
     platformAutomerge: true,
-    automergeType: "pr",
-    commitMessagePrefix: "feat({{depName}}):",
-    commitMessageAction: "bump",
-    commitMessageTopic: "{{depName}} version",
+    automergeType: 'pr',
+    commitMessagePrefix: 'feat({{depName}}):',
+    commitMessageAction: 'bump',
+    commitMessageTopic: '{{depName}} version',
     separateMajorMinor: false,
     prHourlyLimit: 0,
     prConcurrentLimit: 0,
     branchConcurrentLimit: 0,
-    rebaseWhen: "behind-base-branch",
+    rebaseWhen: 'behind-base-branch',
     enabledManagers: [
-        "custom.regex",
+        'custom.regex',
     ],
     customManagers: [
         {
-            fileMatch: ["package\\.yaml$"],
-            matchStringsStrategy: "combination",
-            matchStrings: [
-                "name:\\s*(?<depName>.*?)\\n",
-                "version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>github-.*?)\\n",
-                "version:\\s*(?<currentDigest>.*?)\\ndatasource:\\s*(?<datasource>git-refs?)\\n",
-                "branch:\\s*(?<branchName>.*?)\\n",
-                "versioning:\\s*(?<versioning>.*?)\\n",
-                "package:\\s*(?<packageName>.*?)\\n",
+            customType: 'regex',
+            managerFilePatterns: [
+                '/package\\.yaml$/',
             ],
-            datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
-            versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+            matchStringsStrategy: 'combination',
+            matchStrings: [
+                'name:\\s*(?<depName>.*?)\\n',
+                'version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>github-.*?)\\n',
+                'version:\\s*(?<currentDigest>.*?)\\ndatasource:\\s*(?<datasource>git-refs?)\\n',
+                'branch:\\s*(?<branchName>.*?)\\n',
+                'versioning:\\s*(?<versioning>.*?)\\n',
+                'package:\\s*(?<packageName>.*?)\\n',
+            ],
+            datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
+            versioningTemplate: '{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}',
             packageNameTemplate: "{{#if (containsString datasource 'git-refs')}}https://github.com/{{{packageName}}}{{else}}{{{packageName}}}{{/if}}",
             currentValueTemplate: "{{#if (containsString datasource 'git-refs')}}{{{branchName}}}{{else}}{{{currentValue}}}{{/if}}",
         },
         {
-            fileMatch: ["package\\.yaml$"],
-            matchStringsStrategy: "combination",
-            matchStrings: [
-                "name:\\s*(?<depName>.*?)\\n",
-                "version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.jdk_lts?)\\n",
+            customType: 'regex',
+            managerFilePatterns: [
+                '/package\\.yaml$/',
             ],
-            datasourceTemplate: "{{datasource}}",
-            versioningTemplate: "loose",
-            extractVersionTemplate: "^jdk-(?<version>.*)$"
+            matchStringsStrategy: 'combination',
+            matchStrings: [
+                'name:\\s*(?<depName>.*?)\\n',
+                'version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.jdk_lts?)\\n',
+            ],
+            datasourceTemplate: '{{datasource}}',
+            versioningTemplate: 'loose',
+            extractVersionTemplate: '^jdk-(?<version>.*)$',
         },
         {
-            fileMatch: ["package\\.yaml$"],
-            matchStringsStrategy: "combination",
-            matchStrings: [
-                "name:\\s*(?<depName>.*?)\\n",
-                "version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.unofficial_node?)\\n",
+            customType: 'regex',
+            managerFilePatterns: [
+                '/package\\.yaml$/',
             ],
-            datasourceTemplate: "{{datasource}}",
-            versioningTemplate: "semver",
+            matchStringsStrategy: 'combination',
+            matchStrings: [
+                'name:\\s*(?<depName>.*?)\\n',
+                'version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.unofficial_node?)\\n',
+            ],
+            datasourceTemplate: '{{datasource}}',
+            versioningTemplate: 'semver',
         },
     ],
     customDatasources: {
         unofficial_node: {
-            defaultRegistryUrlTemplate: "https://unofficial-builds.nodejs.org/download/release/index.json",
+            defaultRegistryUrlTemplate: 'https://unofficial-builds.nodejs.org/download/release/index.json',
             transformTemplates: [
-                "{ \"releases\": $map($[\"linux-x64-glibc-217\" in files], function($v) { { \"version\": $v.version } }) }"
+                '{ "releases": $map($["linux-x64-glibc-217" in files], function($v) { { "version": $v.version } }) }',
             ],
         },
         jdk_lts: {
-            defaultRegistryUrlTemplate: "https://api.adoptium.net/v3/info/release_names?architecture=x64&heap_size=normal&image_type=jdk&jvm_impl=hotspot&lts=true&os=linux&page=0&page_size=10&project=jdk&release_type=ga&semver=false&sort_method=DEFAULT&sort_order=DESC&vendor=eclipse",
+            defaultRegistryUrlTemplate: 'https://api.adoptium.net/v3/info/release_names?architecture=x64&heap_size=normal&image_type=jdk&jvm_impl=hotspot&lts=true&os=linux&page=0&page_size=10&project=jdk&release_type=ga&semver=false&sort_method=DEFAULT&sort_order=DESC&vendor=eclipse',
             transformTemplates: [
-                "{ \"releases\": $map($.releases, function($v) { { \"version\": $v } }) }"
+                '{ "releases": $map($.releases, function($v) { { "version": $v } }) }',
             ],
         },
     },
