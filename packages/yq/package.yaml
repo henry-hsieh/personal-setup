@@ -1,4 +1,4 @@
 name: yq
-version: 4.46.1
+version: 4.47.1
 datasource: github-releases
 package: mikefarah/yq
