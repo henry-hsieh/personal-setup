@@ -115,6 +115,7 @@ jobs:
         run: docker run -t --rm -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
 
       - name: Create log name
+        if: ${{ always() }}
         run: |
           IMAGE_NAME="${{ matrix.image }}"
           echo "IMAGE_NAME=${IMAGE_NAME/:/_}" >> $GITHUB_ENV
