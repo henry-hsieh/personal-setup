@@ -170,26 +170,6 @@ require("lazy").setup({
   },
 
   {
-    'smoka7/hop.nvim',
-    dependencies = {
-      "carbon-steel/detour.nvim",
-    },
-    config = function()
-      require'hop'.setup {
-        keys = 'asdfghjkl;qwertyuiopzxcvbnm',
-        char2_fallback_key = '<Esc>',
-        multi_windows = true,
-        hl_mode = 'replace',
-        windows_list = function ()
-          return vim.tbl_filter(function(window)
-            return not vim.tbl_contains(require('detour.internal').list_coverable_windows(), window)
-          end, vim.api.nvim_tabpage_list_wins(0))
-        end,
-      }
-    end
-  },
-
-  {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
@@ -1926,5 +1906,96 @@ require("lazy").setup({
         },
       })
     end,
+  },
+  {
+    "henry-hsieh/flash.nvim",
+    branch = 'feat-unique-label-win',
+    ---@type Flash.Config
+    opts = {
+      labels = "asdfghjkl;qwertyuiopzxcvbnm",
+      search = {
+        exclude = {
+          "notify",
+          "cmp_menu",
+          "noice",
+          "flash_prompt",
+          function(win)
+            -- exclude non-focusable windows
+            return not vim.api.nvim_win_get_config(win).focusable
+          end,
+          function(win)
+            -- exclude covered detoured windows
+            if require("lazy.core.config").plugins["detour.nvim"]._.loaded then
+              return vim.tbl_contains(require('detour.internal').list_coverable_windows(), win)
+            end
+            return true
+          end,
+        },
+      },
+      label = {
+        uppercase = false,
+      },
+      modes = {
+        char = {
+          jump_labels = true,
+        },
+      },
+    },
+    -- stylua: ignore
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+      {
+        "<leader>w",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash-settings").jump_regex([[\<]])
+        end,
+        desc = "Jump to word start"
+      },
+      {
+        "<leader>W",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash-settings").jump_regex([[\(^\|\s\+\)\zs\S\ze\S*]])
+        end,
+        desc = "Jump to WORD start"
+      },
+      {
+        "<leader>e",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash-settings").jump_regex([[\w\>]])
+        end,
+        desc = "Jump to word end"
+      },
+      {
+        "<leader>E",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash-settings").jump_regex([[\(^\|\s\+\)\S*\zs\S\ze]])
+        end,
+        desc = "Jump to WORD end"
+      },
+      {
+        "<leader>l",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash-settings").jump_regex([[^\s*\zs\(\S\|$\)\ze]])
+        end,
+        desc = "Jump to line start"
+      },
+      {
+        "<leader>L",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash-settings").jump_regex([[.\=$]])
+        end,
+        desc = "Jump to line end"
+      },
+    },
   },
 })

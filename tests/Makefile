@@ -8,7 +8,7 @@ shellrc: bash tcsh
 
 utils: bat bd fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup tree-sitter java yq
 
-nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua hop.nvim nvim-treesitter mason.nvim neoconf.nvim gitsigns.nvim nvim-cmp feline.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-base16 nvim-notify riscv-asm-vim verilog_systemverilog.vim vim-fugitive
+nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua nvim-treesitter mason.nvim neoconf.nvim gitsigns.nvim nvim-cmp feline.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-base16 nvim-notify flash.nvim riscv-asm-vim verilog_systemverilog.vim vim-fugitive
 
 mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright ltex-ls bash-language-server typescript-language-server vscode-json-language-server
 
@@ -87,9 +87,6 @@ telescope-fzf-native.nvim: | $(LOG_DIR) nvim-fresh-start
 nvim-tree.lua: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test nvim-tree.api tree.open 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
-hop.nvim: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test hop.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
 nvim-treesitter: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test nvim-treesitter.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
@@ -134,6 +131,9 @@ lazydev.nvim: | $(LOG_DIR) nvim-fresh-start
 
 nvim-notify: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test notify notify '{"test",0,{}}' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+flash.nvim: | $(LOG_DIR) nvim-fresh-start
+	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test flash toggle 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test vim plugins
 riscv-asm-vim: | $(LOG_DIR) nvim-fresh-start
