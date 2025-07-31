@@ -740,50 +740,6 @@ require("lazy").setup({
   },
 
   {
-    'RRethy/nvim-base16',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      local default_theme = "base16-default-dark"
-
-      local function get_tinty_theme()
-        local theme_name = vim.fn.system("tinty current &> /dev/null && tinty current")
-
-        if vim.v.shell_error ~= 0 then
-          return default_theme
-        else
-          return theme_name:gsub("\n", "")
-        end
-      end
-
-
-      local function handle_focus_gained()
-        local new_theme_name = get_tinty_theme()
-        local current_theme_name = vim.g.colors_name
-
-        if current_theme_name ~= new_theme_name then
-          vim.cmd("colorscheme " .. new_theme_name)
-        end
-      end
-
-      vim.api.nvim_create_autocmd("FocusGained", {
-        callback = handle_focus_gained,
-        nested = true,
-      })
-
-      vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
-        callback = function ()
-          local base16 = require('base16-colorscheme')
-          base16.highlight.DiagnosticWarn = { guifg = base16.colors.base09, guibg = nil, gui = 'none', guisp = nil, ctermfg = base16.colors.cterm0E, ctermbg = nil }
-        end
-      })
-
-      local current_theme_name = get_tinty_theme()
-      vim.cmd("colorscheme " .. current_theme_name)
-    end,
-  },
-
-  {
     'famiu/feline.nvim',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
@@ -814,14 +770,17 @@ require("lazy").setup({
 
       local function base16_hl(fg, bg, style)
         local hl = {}
-        if fg then
-          hl.fg = vim.g['base16_gui' .. fmt("%02X", fg)] and vim.g['base16_gui' .. fmt("%02X", fg)] or vim.g.terminal_color_foreground
-        end
-        if bg then
-          hl.bg = vim.g['base16_gui' .. fmt("%02X", bg)] and vim.g['base16_gui' .. fmt("%02X", bg)] or vim.g.terminal_color_background
-        end
-        if style then
-          hl.style = style
+        local colors = require("tinted-colorscheme").colors
+        if colors then
+          if fg then
+            hl.fg = colors["base" .. fmt("%02X", fg)]
+          end
+          if bg then
+            hl.bg = colors["base" .. fmt("%02X", bg)]
+          end
+          if style then
+            hl.style = style
+          end
         end
         return hl
       end
@@ -1997,5 +1956,37 @@ require("lazy").setup({
         desc = "Jump to line end"
       },
     },
+  },
+
+  {
+    "tinted-theming/tinted-nvim",
+    lazy = false,    -- load main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    init = function()
+      vim.o.termguicolors = true
+    end,
+    config = function()
+      -- require manual setup because the module name is not conventional
+      local tinted = require('tinted-colorscheme')
+      tinted.setup(nil, {
+        supports = {
+          tinted_shell = true,
+          live_reload = true,
+        },
+      })
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "TintedColorsPost",
+        callback = function()
+          -- Do things whenever the theme changes.
+          local colors = require("tinted-colorscheme").colors
+          if colors then
+            vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = colors.base09, bg = nil,           bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "FlashLabel",     { fg = colors.base06, bg = colors.base08, bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "FlashMatch",     { fg = colors.base06, bg = colors.base0D, bold = false, italic = false })
+          end
+        end,
+      })
+      vim.cmd.doautocmd("User TintedColorsPost")
+    end,
   },
 })
