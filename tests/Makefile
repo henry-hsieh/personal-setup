@@ -8,7 +8,7 @@ shellrc: bash tcsh
 
 utils: bat bd fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup tree-sitter java yq
 
-nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua nvim-treesitter mason.nvim neoconf.nvim gitsigns.nvim nvim-cmp feline.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-base16 nvim-notify flash.nvim riscv-asm-vim verilog_systemverilog.vim vim-fugitive
+nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua nvim-treesitter mason.nvim neoconf.nvim gitsigns.nvim nvim-cmp feline.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-notify flash.nvim tinted-nvim riscv-asm-vim verilog_systemverilog.vim vim-fugitive
 
 mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright ltex-ls bash-language-server typescript-language-server vscode-json-language-server
 
@@ -99,9 +99,6 @@ neoconf.nvim: | $(LOG_DIR) nvim-fresh-start
 gitsigns.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test gitsigns.actions reset_buffer 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
-nvim-base16: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test base16-colorscheme available_colorschemes 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
 nvim-cmp: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test cmp complete 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
@@ -134,6 +131,9 @@ nvim-notify: | $(LOG_DIR) nvim-fresh-start
 
 flash.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test flash toggle 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+tinted-nvim: | $(LOG_DIR) nvim-fresh-start
+	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test tinted-highlighter set_highlights '{require("tinted-colorscheme").colors,"",false,{}}' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test vim plugins
 riscv-asm-vim: | $(LOG_DIR) nvim-fresh-start
