@@ -328,78 +328,14 @@ require("lazy").setup({
 
   {
     'mason-org/mason-lspconfig.nvim',
+    event = 'VeryLazy',
     dependencies = {
       'folke/neoconf.nvim',
-      'henry-hsieh/mason.nvim',
-      'hrsh7th/cmp-nvim-lsp',
+      {'henry-hsieh/mason.nvim', opts = {}},
     },
-    config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      local handlers = {
-        -- The first entry (without a key) will be the default handler
-        -- and will be called for each installed server that doesn't have
-        -- a dedicated handler.
-        function (server_name) -- default handler (optional)
-          require("lspconfig")[server_name].setup {
-            capabilities = capabilities,
-          }
-        end,
-        -- Next, you can provide targeted overrides for specific servers.
-        ["rust_analyzer"] = function ()
-          require("rust-tools").setup {}
-        end,
-        ["lua_ls"] = function ()
-          local lspconfig = require("lspconfig")
-          lspconfig.lua_ls.setup {
-            settings = {
-              Lua = {
-                runtime = {
-                  version = "LuaJIT"
-                },
-                workspace = {
-                  checkThirdParty = false,
-                  library = {
-                    vim.env.VIMRUNTIME
-                  },
-                },
-              },
-            },
-            capabilities = capabilities,
-          }
-        end,
-        ["svlangserver"] = function ()
-          local lspconfig = require("lspconfig")
-          lspconfig.svlangserver.setup {
-            filetypes = {'verilog', 'systemverilog', 'verilog_systemverilog'},
-            capabilities = capabilities,
-          }
-        end,
-        ["verible"] = function ()
-          local lspconfig = require("lspconfig")
-          lspconfig.verible.setup {
-            cmd = {'verible-verilog-ls', '--rules_config_search'},
-            root_dir = lspconfig.util.root_pattern('verible.filelist', '.git'),
-            filetypes = {'verilog', 'systemverilog', 'verilog_systemverilog'},
-            capabilities = capabilities,
-          }
-        end,
-        ["bashls"] = function ()
-          local lspconfig = require("lspconfig")
-          lspconfig.bashls.setup {
-            settings = {
-              bashIde = {
-                globPattern = "" -- Add for avoiding freeze
-              }
-            },
-            capabilities = capabilities,
-          }
-        end,
-      }
-      require'mason-lspconfig'.setup{
-        ensure_installed = ensure_lsp,
-        handlers = handlers,
-      }
-    end
+    opts = {
+      ensure_installed = ensure_lsp,
+    },
   },
 
   {
@@ -420,77 +356,173 @@ require("lazy").setup({
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      'mason-org/mason-lspconfig.nvim',
       'folke/neoconf.nvim',
+      'hrsh7th/cmp-nvim-lsp',
     },
-    config = function()
-      -- Set LSP symbols
-      local function lspSymbol(name, icon)
-        vim.fn.sign_define(
-          'DiagnosticSign' .. name,
-          { text = icon, texthl = 'Diagnostic' .. name }
-        )
-      end
-      lspSymbol('Error', '')
-      lspSymbol('Hint', '')
-      lspSymbol('Info', '')
-      lspSymbol('Warn', '')
-      -- LSP log level
-      --vim.lsp.set_log_level("info")
-
+    event = 'VeryLazy',
+    keys = function()
       -- Global mappings.
-      -- See `:help vim.diagnostic.*` for documentation on any of the below functions
       local md = plugin_settings.nvim_lspconfig.mappings.diagnostic
+      local mb = plugin_settings.nvim_lspconfig.mappings.buffer
 
-      local diagnostic_goto = function(next, severity)
-        local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-        severity = severity and vim.diagnostic.severity[severity] or nil
+      ---@param next boolean
+      ---@param severity? string
+      ---@return function
+      local diagnostic_jump = function(next, severity)
+        local severity_num = severity and vim.diagnostic.severity[severity] or nil
         return function()
-          go({ severity = severity })
+          vim.diagnostic.jump({
+            count = next and 1 or -1,
+            severity = severity_num
+          })
         end
       end
 
-      vim.keymap.set('n', md.open_float, vim.diagnostic.open_float, { desc = "Open Diagnostic Message" })
-      vim.keymap.set('n', md.goto_next, diagnostic_goto(true), { desc = "Next Diagnostic" })
-      vim.keymap.set('n', md.goto_prev, diagnostic_goto(false), { desc = "Prev Diagnostic" })
-      vim.keymap.set('n', md.goto_warn_next, diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
-      vim.keymap.set('n', md.goto_warn_prev, diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-      vim.keymap.set('n', md.goto_err_next, diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
-      vim.keymap.set('n', md.goto_err_prev, diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-      vim.keymap.set('n', md.open_list, vim.diagnostic.setloclist, { desc = "Open Diagnostic List" })
+      return {
+        { md.open_float,          mode = { "n" },      vim.diagnostic.open_float,                           desc = "Open Diagnostic Message" },
+        { md.goto_next,           mode = { "n" },      diagnostic_jump(true),                               desc = "Next Diagnostic" },
+        { md.goto_prev,           mode = { "n" },      diagnostic_jump(false),                              desc = "Prev Diagnostic" },
+        { md.goto_warn_next,      mode = { "n" },      diagnostic_jump(true, "WARN"),                       desc = "Next Warning" },
+        { md.goto_warn_prev,      mode = { "n" },      diagnostic_jump(false, "WARN"),                      desc = "Prev Warning" },
+        { md.goto_err_next,       mode = { "n" },      diagnostic_jump(true, "ERROR"),                      desc = "Next Error" },
+        { md.goto_err_prev,       mode = { "n" },      diagnostic_jump(false, "ERROR"),                     desc = "Prev Error" },
+        { md.open_list,           mode = { "n" },      vim.diagnostic.setloclist,                           desc = "Open Diagnostic List" },
+        { mb.goto_definition,     mode = { 'n' },      vim.lsp.buf.definition,                              desc = "Goto Definition" },
+        { mb.hover,               mode = { 'n' },      vim.lsp.buf.hover,                                   desc = "Hover" },
+        { mb.goto_implementation, mode = { 'n' },      vim.lsp.buf.implementation,                          desc = "Goto Implementation" },
+        { mb.signature_help,      mode = { 'n', 'i' }, vim.lsp.buf.signature_help,                          desc = "Signature Help" },
+        { mb.type_definition,     mode = { 'n' },      vim.lsp.buf.type_definition,                         desc = "Type Definition" },
+        { mb.rename,              mode = { 'n' },      vim.lsp.buf.rename,                                  desc = "Rename" },
+        { mb.code_action,         mode = { 'n', 'v' }, vim.lsp.buf.code_action,                             desc = "Code Action" },
+        { mb.goto_reference,      mode = { 'n' },      vim.lsp.buf.references,                              desc = "Goto Reference" },
+        { mb.format,              mode = { 'n', 'v' }, function() vim.lsp.buf.format({ async = true }) end, desc = "Format" },
+      }
+    end,
+    config = function()
+      -- LSP log level
+      -- vim.lsp.set_log_level("info")
 
-      -- Use LspAttach autocommand to only map the following keys
-      -- after the language server attaches to the current buffer
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      -- Appearance
+      vim.diagnostic.config({
+        virtual_text = true,
+        virtual_lines = { current_line = true },
+        underline = true,
+        update_in_insert = false,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = '',
+            [vim.diagnostic.severity.WARN] = '',
+            [vim.diagnostic.severity.INFO] = '',
+            [vim.diagnostic.severity.HINT] = '',
+          },
+        },
+      })
+
+      --- auto hide virtual text when cursor is on the line
+      vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI', 'DiagnosticChanged' }, {
+        group = vim.api.nvim_create_augroup('diagnostic_virt_text_hide', {}),
         callback = function(ev)
-          -- Enable completion triggered by <c-x><c-o>
-          vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+          local lnum, _ = unpack(vim.api.nvim_win_get_cursor(0))
+          lnum = lnum - 1 -- need 0-based index
 
-          -- Buffer local mappings.
-          -- See `:help vim.lsp.*` for documentation on any of the below functions
-          local function opts(desc)
-            return { desc = desc, buffer = ev.buf, noremap = true, silent = true, nowait = true }
+          local hidden_lnum = vim.b[ev.buf].diagnostic_hidden_lnum
+          if hidden_lnum and hidden_lnum ~= lnum then
+            vim.b[ev.buf].diagnostic_hidden_lnum = nil
+            -- display all the decorations if the current line changed
+            vim.diagnostic.show(nil, ev.buf)
           end
-          local mb = plugin_settings.nvim_lspconfig.mappings.buffer
-          vim.keymap.set('n', mb.goto_declaration, vim.lsp.buf.declaration, opts("Goto Declaration"))
-          vim.keymap.set('n', mb.goto_definition, vim.lsp.buf.definition, opts("Goto Definition"))
-          vim.keymap.set('n', mb.hover, vim.lsp.buf.hover, opts("Hover"))
-          vim.keymap.set('n', mb.goto_implementation, vim.lsp.buf.implementation, opts("Goto Implementation"))
-          vim.keymap.set('n', mb.signature_help, vim.lsp.buf.signature_help, opts("Signature Help"))
-          vim.keymap.set('n', mb.add_workspace_folder, vim.lsp.buf.add_workspace_folder, opts("Add Workspace Folder"))
-          vim.keymap.set('n', mb.remove_workspace_folder, vim.lsp.buf.remove_workspace_folder, opts("Remove Workspace Folder"))
-          vim.keymap.set('n', mb.list_workspace_folder, function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-          end, opts("List Workspace Folder"))
-          vim.keymap.set('n', mb.type_definition, vim.lsp.buf.type_definition, opts("Type Definition"))
-          vim.keymap.set('n', mb.rename, vim.lsp.buf.rename, opts("Rename"))
-          vim.keymap.set({ 'n', 'v' }, mb.code_action, vim.lsp.buf.code_action, opts("Code Action"))
-          vim.keymap.set('n', mb.goto_reference, vim.lsp.buf.references, opts("Goto Reference"))
-          vim.keymap.set({ 'n', 'v' }, mb.format, function()
-            vim.lsp.buf.format { async = true }
-          end, opts("Format"))
+
+          for _, namespace in pairs(vim.diagnostic.get_namespaces()) do
+            local ns_id = namespace.user_data.virt_text_ns
+            if ns_id then
+              local extmarks = vim.api.nvim_buf_get_extmarks(ev.buf, ns_id, { lnum, 0 }, { lnum, -1 }, {})
+              for _, extmark in pairs(extmarks) do
+                local id = extmark[1]
+                vim.api.nvim_buf_del_extmark(ev.buf, ns_id, id)
+              end
+
+              if extmarks and not vim.b[ev.buf].diagnostic_hidden_lnum then
+                vim.b[ev.buf].diagnostic_hidden_lnum = lnum
+              end
+            end
+          end
         end,
+      })
+
+      -- LSP configuration
+
+      -- Extend LSP root_markers with a string or a table of strings
+      ---@param lsp_name string
+      ---@param root_markers string|string[]
+      ---@return string|string[]
+      local function extend_root_markers(lsp_name, root_markers)
+        local defaults = vim.lsp.config[lsp_name].root_markers
+        local result = {}
+
+        if type(defaults) == "string" then
+          result = { defaults }
+        elseif type(defaults) == "table" then
+          result = vim.list_extend({}, defaults) -- shallow copy
+        end
+
+        if type(root_markers) == "string" then
+          table.insert(result, root_markers)
+        elseif type(root_markers) == "table" then
+          vim.list_extend(result, root_markers)
+        end
+
+        return result
+      end
+
+      -- Extend LSP filetypes with a string or a table of strings
+      ---@param lsp_name string
+      ---@param filetypes string|string[]
+      ---@return string[]
+      local function extend_filetypes(lsp_name, filetypes)
+        local result = vim.lsp.config[lsp_name].filetypes or {}
+
+        if type(filetypes) == "string" then
+          table.insert(result, filetypes)
+        elseif type(filetypes) == "table" then
+          vim.list_extend(result, filetypes)
+        end
+
+        return result
+      end
+
+      --- global settings
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+      })
+      --- lua_ls
+      --- rust-analyzer
+      vim.lsp.config("rust_analyzer", {
+        settings = {
+          ['rust-analyzer'] = {
+            diagnostics = {
+              enable = true;
+            },
+            checkOnSave = {
+              command = "clippy",
+            },
+          }
+        }
+      })
+      vim.lsp.enable("rust_analyzer")
+      --- append lazy-lock.json for detecting neovim configuration
+      vim.lsp.config("lua_ls", {
+        root_markers = extend_root_markers("lua_ls", "lazy-lock.json")
+      })
+      --- svlangserver
+      vim.lsp.config("svlangserver", {
+        filetypes = extend_filetypes("svlangserver", "verilog_systemverilog"),
+      })
+      --- verible
+      vim.lsp.config("verible", {
+        cmd = {'verible-verilog-ls', '--rules_config_search'},
+        root_markers = extend_root_markers("verible", 'verible.filelist'),
+        filetypes = extend_filetypes("verible", "verilog_systemverilog"),
       })
     end,
   },
