@@ -158,7 +158,7 @@ popd
 print_process_item "Download rustup"
 download_exe https://static.rust-lang.org/rustup/archive/$RUSTUP_VERSION/x86_64-unknown-linux-gnu/rustup-init $BUILD_DIR/rustup-init-$RUSTUP_VERSION
 CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup $BUILD_DIR/rustup-init-$RUSTUP_VERSION -y
-PATH=$OUT_DIR/.local/cargo/bin/:$PATH CARGO_HOME=$OUT_DIR/.local/cargo RUSTUP_HOME=$OUT_DIR/.local/rustup rustup default stable
+(export PATH=$OUT_DIR/.local/cargo/bin/:$PATH; export CARGO_HOME=$OUT_DIR/.local/cargo; export RUSTUP_HOME=$OUT_DIR/.local/rustup; rustup default stable; rustup component add rust-analyzer rustfmt clippy; rustup completions bash > $OUT_DIR/.local/share/bash-completion/completions/rustup.bash; rustup completion bash cargo > $OUT_DIR/.local/share/bash-completion/completions/cargo.bash)
 
 # ripgrep
 print_process_item "Download ripgrep"
