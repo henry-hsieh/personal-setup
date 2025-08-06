@@ -40,6 +40,9 @@ function M.jump_regex(regex)
             m.label = m.label2         -- use the second label
           end
         end,
+        prompt = {
+          enabled = false,
+        },
       })
     end,
     labeler = function(matches, state)
@@ -50,6 +53,9 @@ function M.jump_regex(regex)
         match.label = match.label1
       end
     end,
+    prompt = {
+      enabled = false,
+    },
   })
 end
 
