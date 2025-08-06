@@ -1903,7 +1903,7 @@ require("lazy").setup({
     branch = 'feat-unique-label-win',
     ---@type Flash.Config
     opts = {
-      labels = "asdfghjkl;qwertyuiopzxcvbnm",
+      labels = "asdfghjklqwertyuiopzxcvbnm",
       search = {
         exclude = {
           "notify",
@@ -1925,11 +1925,6 @@ require("lazy").setup({
       },
       label = {
         uppercase = false,
-      },
-      modes = {
-        char = {
-          jump_labels = true,
-        },
       },
     },
     -- stylua: ignore
