@@ -772,782 +772,187 @@ require("lazy").setup({
   },
 
   {
-    'famiu/feline.nvim',
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function()
-      -- Feline statusline definition.
-      --
-      -- Note: This statusline does not define any colors. Instead the statusline is
-      -- built on custom highlight groups that I define. The colors for these
-      -- highlight groups are pulled from the current colorscheme applied. Check the
-      -- file: `lua/eden/modules/ui/colors.lua` to see how they are defined.
-
-      --local u = require("eden.modules.ui.feline.util")
-      local fmt = string.format
-
-      -- "┃", "█", "", "", "", "", "", "", "●"
-
-      local function tbl_size(tbl)
-        local size = 0
-        for _ in pairs(tbl) do
-          size = size + 1
+    "nvim-lualine/lualine.nvim",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "tinted-theming/tinted-nvim",
+    },
+    event = "VeryLazy",
+    opts = function()
+      -- Helpers
+      local function filename_or_filetype(str)
+        local ft = vim.bo.filetype
+        local special_ft_display = {
+          help = "Help",
+          NvimTree = "NvimTree",
+          lazy = "Lazy",
+          TelescopePrompt = "Telescope",
+          mason = "Mason",
+          noice = "Noice",
+        }
+        if special_ft_display[ft] then
+          return special_ft_display[ft]
         end
-        return size
+        return str -- fallback to original filename
       end
 
-      local get_diag = function(str)
-        local count = tbl_size(vim.diagnostic.get(0, { severity = vim.diagnostic.severity[str] }))
-        return (count > 0) and " " .. count .. " " or ""
+      local function winbar_left()
+        return ""
       end
 
-      local function base16_hl(fg, bg, style)
-        local hl = {}
-        local colors = require("tinted-colorscheme").colors
-        if colors then
-          if fg then
-            hl.fg = colors["base" .. fmt("%02X", fg)]
-          end
-          if bg then
-            hl.bg = colors["base" .. fmt("%02X", bg)]
-          end
-          if style then
-            hl.style = style
-          end
-        end
-        return hl
+      local function winbar_right()
+        return ""
       end
 
-      local vi_mode_colors = {
-        ['NORMAL']    = function() return base16_hl(0,11,'bold') end,
-        ['OP']        = function() return base16_hl(0,11,'bold') end,
-        ['INSERT']    = function() return base16_hl(1,13,'bold') end,
-        ['VISUAL']    = function() return base16_hl(1,14,'bold') end,
-        ['LINES']     = function() return base16_hl(1,14,'bold') end,
-        ['BLOCK']     = function() return base16_hl(1,14,'bold') end,
-        ['REPLACE']   = function() return base16_hl(1, 8,'bold') end,
-        ['V-REPLACE'] = function() return base16_hl(1, 8,'bold') end,
-        ['ENTER']     = function() return base16_hl(1,12,'bold') end,
-        ['MORE']      = function() return base16_hl(1,12,'bold') end,
-        ['SELECT']    = function() return base16_hl(1, 9,'bold') end,
-        ['COMMAND']   = function() return base16_hl(0,11,'bold') end,
-        ['SHELL']     = function() return base16_hl(0,11,'bold') end,
-        ['TERM']      = function() return base16_hl(0,11,'bold') end,
-        ['NONE']      = function() return base16_hl(1,10,'bold') end,
-      }
+      local theme = require('lualine.themes.tinted')
+      local function winbar_sep_color(active)
+        -- Terminal background
+        local normal_hl = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
+        local term_bg = normal_hl.bg and string.format("#%06x", normal_hl.bg) or
+            normal_hl.ctermbg and normal_hl.ctermbg or nil
 
-      local vi_sep_colors = {
-        ['NORMAL']    = function() return base16_hl(11,1,'bold') end,
-        ['OP']        = function() return base16_hl(11,1,'bold') end,
-        ['INSERT']    = function() return base16_hl(13,1,'bold') end,
-        ['VISUAL']    = function() return base16_hl(14,1,'bold') end,
-        ['LINES']     = function() return base16_hl(14,1,'bold') end,
-        ['BLOCK']     = function() return base16_hl(14,1,'bold') end,
-        ['REPLACE']   = function() return base16_hl( 8,1,'bold') end,
-        ['V-REPLACE'] = function() return base16_hl( 8,1,'bold') end,
-        ['ENTER']     = function() return base16_hl(12,1,'bold') end,
-        ['MORE']      = function() return base16_hl(12,1,'bold') end,
-        ['SELECT']    = function() return base16_hl( 9,1,'bold') end,
-        ['COMMAND']   = function() return base16_hl(11,1,'bold') end,
-        ['SHELL']     = function() return base16_hl(11,1,'bold') end,
-        ['TERM']      = function() return base16_hl(11,1,'bold') end,
-        ['NONE']      = function() return base16_hl(10,1,'bold') end,
-      }
+        -- fg = theme bg, bg = terminal bg
+        local theme_bg = active and theme.normal.b.bg or theme.inactive.b.bg
 
-      local function vi_mode_hl()
-        return vi_mode_colors[require("feline.providers.vi_mode").get_vim_mode()]() or vi_mode_colors['NONE']()
+        return {
+          fg = theme_bg,
+          bg = term_bg,
+        }
       end
 
-      local function vi_sep_hl()
-        return vi_sep_colors[require("feline.providers.vi_mode").get_vim_mode()]() or vi_sep_colors['NONE']()
-      end
-
-      local function index(tab, val)
-        for idx, value in ipairs(tab) do
-          if value == val then
-            return idx
-          end
-        end
-        return 0
-      end
-
-      local c = {
-        vi_mode = {
-          provider = function()
-            return fmt(" %s ", require("feline.providers.vi_mode").get_vim_mode())
-          end,
-          hl = function()
-            return vi_mode_hl()
-          end,
-          right_sep = {
-            str = "",
-            hl = function()
-              return vi_sep_hl()
-            end,
-          },
-        },
-        git_branch = {
-          provider = "git_branch",
-          icon = "  ",
-          hl = function()
-            return base16_hl(4, 1,'None')
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(4, 1,'None')
-            end,
-          },
-          enabled = function()
-            return vim.b.gitsigns_status_dict ~= nil
-          end,
-        },
-        git_diff_added = {
-          provider = "git_diff_added",
-          icon = " ",
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'GitSignsAdd', link = false}).fg)
-            return hl
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(4, 1,'None')
-            end,
-          },
-          enabled = function()
-            return vim.b.gitsigns_status_dict ~= nil
-          end,
-        },
-        git_diff_changed = {
-          provider = "git_diff_changed",
-          icon = " ",
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'GitSignsChange', link = false}).fg)
-            return hl
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(4, 1,'None')
-            end,
-          },
-          enabled = function()
-            return vim.b.gitsigns_status_dict ~= nil
-          end,
-        },
-        git_diff_removed = {
-          provider = "git_diff_removed",
-          icon = " ",
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'GitSignsDelete', link = false}).fg)
-            return hl
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(4, 1,'None')
-            end,
-          },
-          enabled = function()
-            return vim.b.gitsigns_status_dict ~= nil
-          end,
-        },
-        file_info = {
-          provider = {
-            name = "file_info",
-            opts = {
-              type = "relative",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          short_provider = {
-            name = "file_info",
-            opts = {
-              type = "relative-short",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          hl = function()
-            return base16_hl(6, 2,'None')
-          end,
-          left_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(1, 2,'None')
-            end,
-          },
-          right_sep = {
-            str = function()
-              if vim.bo.modified then
-                return ""
-              else
-                return "█"
-              end
-            end,
-            hl = function()
-              return base16_hl(2, 1,'None')
-            end,
-          },
-        },
-        file_name = {
-          provider = {
-            name = "file_info",
-            opts = {
-              type = "base-only",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          short_provider = {
-            name = "file_info",
-            opts = {
-              type = "base-only",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          hl = function()
-            return base16_hl(6, 2,'None')
-          end,
-          left_sep = {
-            str = "",
-            hl = function()
-              return base16_hl(2, 0,'None')
-            end,
-          },
-          right_sep = {
-            str = function()
-              if vim.bo.modified then
-                return ""
-              else
-                return "█"
-              end
-            end,
-            hl = function()
-              return base16_hl(2, 0,'None')
-            end,
-          },
-        },
-        file_encoding = {
-          provider = function()
-            return require("feline.providers.file").file_encoding() .. " "
-          end,
-          icon = function()
-            local os = vim.bo.fileformat:upper()
-            local icon
-            if os == 'UNIX' then
-              icon = ' '
-            elseif os == 'MAC' then
-              icon = ' '
-            else
-              icon = ' '
-            end
-            return icon
-          end,
-          hl = function()
-            return base16_hl(6, 2,'None')
-          end,
-          right_sep = {
-            str = "",
-            hl = function()
-              return base16_hl(1, 2,'None')
-            end,
-          },
-        },
-        file_type = {
-          provider = function()
-            return fmt(" %s ", vim.bo.filetype)
-          end,
-          hl = function()
-            return base16_hl(6, 2,'None')
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(6, 2,'None')
-            end,
-          },
-          left_sep = {
-            str = "",
-            hl = function()
-              return base16_hl(2, 10, "None")
-            end,
-          },
-        },
-        warning = {
-          provider = function()
-            local str = ''
-            if vim.fn.getfsize(vim.fn.expand('%:p')) < 10485760 then -- 10MB
-              -- Mixed indent
-              local c_like_langs = {'arduino', 'c', 'cpp', 'cuda', 'go', 'javascript', 'ld', 'php' ,'verilog', 'systemverilog', 'verilog_systemverilog'}
-              local head_space
-              if index(c_like_langs, vim.o.ft) > 0 then
-                head_space = '\\v(^ +\\*@!)'
-              else
-                head_space = '\\v(^ +)'
-              end
-              local indent_tabs = vim.fn.search('\\v(^\\t+)', 'nw', 0 ,150)
-              local indent_spaces = vim.fn.search(head_space, 'nw', 0 ,150)
-              if indent_tabs > 0 and indent_spaces > 0 then
-                str = "  " .. fmt("%d:%d", indent_tabs, indent_spaces) .. str
-              end
-
-              -- Trailing spaces or tabs
-              local trailing = vim.fn.search('\\s$', 'nw', 0 ,150)
-              if trailing > 0 then
-                str = " 󱁐 " .. fmt("%d", trailing) .. str
-              end
-
-              -- Git conflicts
-              if vim.b.gitsigns_status_dict ~= nil then
-                local annotation = '\\%([0-9A-Za-z_.:]\\+\\)\\?'
-                local rst_like_langs = {'rst', 'markdown'}
-                local pattern
-                if index(rst_like_langs, vim.o.ft) > 0 then
-                  pattern = '^\\%(\\%(<\\{7} ' .. annotation .. '\\)\\|\\%(>\\{7\\} ' .. annotation .. '\\)\\)$'
-                else
-                  pattern = '^\\%(\\%(<\\{7} ' .. annotation .. '\\)\\|\\%(=\\{7\\}\\)\\|\\%(>\\{7\\} ' .. annotation .. '\\)\\)$'
-                end
-                local conflicts = vim.fn.search(pattern, "nw", 0, 200)
-                if conflicts > 0 then
-                  str = "  " .. fmt("%d", conflicts) .. str
-                end
-              end
-            end
-            return str
-          end,
-          hl = function()
-            return base16_hl(1, 10,'None')
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(1, 10,'None')
-            end,
-          },
-          --updated = { 'BufWinEnter', 'ModeChanged' },
-        },
-        sep_warning = {
-          left_sep = {
-            str = "",
-            hl = function()
-              if require("feline.providers.lsp").is_lsp_attached() then
-                return base16_hl(10, 12, "None")
-              else
-                return base16_hl(10, 1, "None")
-              end
-            end,
-            always_visible = true
-          },
-        },
-        position = {
-          provider = {
-            name = "position",
-            opts = {
-              format = "{line} {col} ",
+      local function make_winbar(active)
+        return {
+          lualine_a = {},
+          lualine_b = {
+            {
+              winbar_left,
+              separator = "",
+              padding = 0,
+              color = function () return winbar_sep_color(active) end,
+            },
+            {
+              'filetype',
+              icon_only = true,
+              separator = "",
+              padding = 0,
+            },
+            {
+              'filename',
+              symbols = {
+                modified = ' ',
+                readonly = '󰌾 ',
+              },
+              fmt = filename_or_filetype,
+              separator = "",
+              padding = 0,
+            },
+            {
+              winbar_right,
+              separator = "",
+              padding = 0,
+              color = function () return winbar_sep_color(active) end,
             },
           },
-          hl = function()
-            return vi_mode_hl()
-          end,
-          left_sep = {
-            str = "█",
-            hl = function()
-              return vi_sep_hl()
-            end,
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = {}
+        }
+      end
+
+      local function location()
+        local line = vim.fn.line('.')
+        local col = vim.fn.charcol('.')
+        return string.format('%-4d%-3d', line, col)
+      end
+
+      local function progress_render(str)
+        return ' ' .. str
+      end
+
+      -- main configs
+      local opts = {
+        options = {
+          theme = 'tinted',
+          globalstatus = true,
+          disabled_filetypes = {
+            winbar = { 'NvimTree' },
+          },
+          events = {
+            'WinEnter',
+            'BufEnter',
+            'BufWritePost',
+            'SessionLoadPost',
+            'FileChangedShellPost',
+            'VimResized',
+            'Filetype',
+            'CursorMoved',
+            'CursorMovedI',
+            'ModeChanged',
+            'TintedColorsPost',
           },
         },
-        line_percentage = {
-          provider = function()
-            return "%p%% "
-          end,
-          icon = " ",
-          hl = function()
-            return vi_mode_hl()
-          end,
-        },
-        lsp_error = {
-          provider = function()
-            return get_diag("ERROR")
-          end,
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticError', link = false}).fg)
-            return hl
-          end,
-          left_sep = {
-            str = "",
-            hl = function()
-              local hl = base16_hl(1, 1,'None')
-              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticError', link = false}).fg)
-              return hl
-            end,
-            always_visible = true
-          },
-          enabled = function()
-            return require("feline.providers.lsp").is_lsp_attached()
-          end,
-        },
-        lsp_warn = {
-          provider = function()
-            return get_diag("WARN")
-          end,
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticWarn', link = false}).fg)
-            return hl
-          end,
-          left_sep = {
-            str = "",
-            hl = function()
-              local hl = {}
-              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticWarn', link = false}).fg)
-              hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticError', link = false}).fg)
-              return hl
-            end,
-            always_visible = true
-          },
-          enabled = function()
-            return require("feline.providers.lsp").is_lsp_attached()
-          end,
-        },
-        lsp_info = {
-          provider = function()
-            return get_diag("INFO")
-          end,
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticInfo', link = false}).fg)
-            return hl
-          end,
-          left_sep = {
-            str = "",
-            hl = function()
-              local hl = {}
-              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticInfo', link = false}).fg)
-              hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticWarn', link = false}).fg)
-              return hl
-            end,
-            always_visible = true
-          },
-          enabled = function()
-            return require("feline.providers.lsp").is_lsp_attached()
-          end,
-        },
-        lsp_hint = {
-          provider = function()
-            return get_diag("HINT")
-          end,
-          hl = function()
-            local hl = base16_hl(1, 1,'None')
-            hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticHint', link = false}).fg)
-            return hl
-          end,
-          left_sep = {
-            str = "",
-            hl = function()
-              local hl = {}
-              hl.fg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticHint', link = false}).fg)
-              hl.bg = string.format("#%06x", vim.api.nvim_get_hl(0, {name = 'DiagnosticInfo', link = false}).fg)
-              return hl
-            end,
-            always_visible = true
-          },
-          enabled = function()
-            return require("feline.providers.lsp").is_lsp_attached()
-          end,
-        },
-        inactive = {
-          provider = function()
-            return " INACTIVE"
-          end,
-          short_provider = function()
-            return "  "
-          end,
-          hl = function()
-            return base16_hl(4, 1, "None")
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(4, 1, "None")
-            end,
-          },
-        },
-        inactive_file_info = {
-          provider = {
-            name = "file_info",
-            opts = {
-              type = "relative",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          short_provider = {
-            name = "file_info",
-            opts = {
-              type = "relative-short",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          hl = function()
-            return base16_hl(4, 2,'None')
-          end,
-          left_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(1, 2,'None')
-            end,
-          },
-          right_sep = {
-            str = function()
-              if vim.bo.modified then
-                return ""
-              else
-                return "█"
-              end
-            end,
-            hl = function()
-              return base16_hl(2, 1,'None')
-            end,
-          },
-        },
-        inactive_file_name = {
-          provider = {
-            name = "file_info",
-            opts = {
-              type = "base-only",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          short_provider = {
-            name = "file_info",
-            opts = {
-              type = "base-only",
-              file_modified_icon = " ",
-              file_readonly_icon = "󰌾 ",
-            }
-          },
-          hl = function()
-            return base16_hl(4, 2,'None')
-          end,
-          left_sep = {
-            str = "",
-            hl = function()
-              return base16_hl(2, 0,'None')
-            end,
-          },
-          right_sep = {
-            str = function()
-              if vim.bo.modified then
-                return ""
-              else
-                return "█"
-              end
-            end,
-            hl = function()
-              return base16_hl(2, 0,'None')
-            end,
-          },
-        },
-        inactive_file_encoding = {
-          provider = function()
-            return require("feline.providers.file").file_encoding() .. " "
-          end,
-          icon = function()
-            local os = vim.bo.fileformat:upper()
-            local icon
-            if os == 'UNIX' then
-              icon = ' '
-            elseif os == 'MAC' then
-              icon = ' '
-            else
-              icon = ' '
-            end
-            return icon
-          end,
-          hl = function()
-            return base16_hl(4, 2,'None')
-          end,
-          right_sep = {
-            str = "",
-            hl = function()
-              return base16_hl(1, 2,'None')
-            end,
-          },
-        },
-        inactive_file_type = {
-          provider = function()
-            return fmt(" %s ", vim.bo.filetype)
-          end,
-          hl = function()
-            return base16_hl(4, 2,'None')
-          end,
-          right_sep = {
-            str = " ",
-            hl = function()
-              return base16_hl(4, 2,'None')
-            end,
-          },
-          left_sep = {
-            str = "",
-            hl = function()
-              return base16_hl(2, 1, "None")
-            end,
-          },
-        },
-        inactive_position = {
-          provider = {
-            name = "position",
-            opts = {
-              format = "{line} {col} ",
+        sections = {
+          lualine_a = { { 'mode' } },
+          lualine_b = {
+            { 'branch', icon = '', separator = '' },
+            {
+              'diff',
+              symbols = { added = ' ', modified = ' ', removed = ' ' },
+              source = function()
+                local git_status = vim.b.gitsigns_status_dict
+                if git_status then
+                  return {
+                    added = git_status.added,
+                    modified = git_status.changed,
+                    removed = git_status.removed
+                  }
+                end
+                return nil
+              end,
             },
           },
-          hl = function()
-            return base16_hl(4, 1, "None")
-          end,
-          left_sep = {
-            str = "  ",
-            hl = function()
-              return base16_hl(4, 1, "None")
-            end,
+          lualine_c = {
+            {
+              'filename',
+              path = 1,
+              symbols = {
+                modified = ' ',
+                readonly = '󰌾 ',
+              },
+              fmt = filename_or_filetype,
+            },
+          },
+          lualine_x = {
+            'encoding', 'fileformat', 'filetype'
+          },
+          lualine_y = {
+            {
+              'diagnostics',
+              sources = { 'nvim_diagnostic' },
+            },
+            {
+              'diagnostics',
+              sources = { 'nvim_diagnostic' },
+            },
+          },
+          lualine_z = {
+            {
+              location,
+              separator = "",
+              padding = 0,
+            },
+            {
+              "progress",
+              fmt = progress_render,
+            },
           },
         },
-        inactive_line_percentage = {
-          provider = function()
-            return "%p%% "
-          end,
-          icon = " ",
-          hl = function()
-            return base16_hl(4, 1, "None")
-          end,
-        },
+        winbar = make_winbar(true),
+        inactive_winbar = make_winbar(false),
       }
-
-      local active = {
-        { -- left
-          c.vi_mode,
-          c.git_branch,
-          c.git_diff_added,
-          c.git_diff_changed,
-          c.git_diff_removed,
-          c.file_info,
-        },
-        { -- right
-          c.lsp_error,
-          c.lsp_warn,
-          c.lsp_info,
-          c.lsp_hint,
-          c.sep_warning,
-          c.warning,
-          c.file_type,
-          c.file_encoding,
-          c.position,
-          c.line_percentage,
-        },
-      }
-
-      local inactive = {
-        { -- left
-          c.inactive,
-          c.git_branch,
-          c.git_diff_added,
-          c.git_diff_changed,
-          c.git_diff_removed,
-          c.file_info,
-        },
-        { -- right
-          c.lsp_error,
-          c.lsp_warn,
-          c.lsp_info,
-          c.lsp_hint,
-          c.sep_warning,
-          c.warning,
-          c.file_type,
-          c.file_encoding,
-          c.position,
-          c.line_percentage,
-        },
-      }
-
-      local winbar_active = {
-        { -- left
-          c.file_name,
-        },
-        {
-        },
-      }
-
-      local winbar_inactive = {
-        { -- left
-          c.inactive_file_name,
-        },
-        {
-        },
-      }
-
-      -- Use global statusline
-      vim.o.laststatus = 3
-
-      require("feline").setup({
-        components = { active = active, inactive = inactive },
-        force_inactive = {
-          filetypes = {
-            "packer",
-            "dap-repl",
-            "dapui_scopes",
-            "dapui_stacks",
-            "dapui_watches",
-            "dapui_repl",
-            "LspTrouble",
-            "qf",
-            "help",
-          },
-          buftypes = { "terminal" },
-          bufnames = {},
-        },
-        disable = {
-          filetypes = {
-            "NvimTree",
-            "dashboard",
-            "startify",
-          },
-        },
-      })
-
-      require("feline").winbar.setup({
-        components = { active = winbar_active, inactive = winbar_inactive },
-        force_inactive = {
-          filetypes = {
-            "packer",
-            "dap-repl",
-            "dapui_scopes",
-            "dapui_stacks",
-            "dapui_watches",
-            "dapui_repl",
-            "LspTrouble",
-            "qf",
-            "help",
-          },
-          buftypes = { "terminal" },
-          bufnames = {},
-        },
-        disable = {
-          filetypes = {
-            "NvimTree",
-            "dashboard",
-            "startify",
-          },
-        },
-      })
-    end,
+      return opts
+    end
   },
 
   {
