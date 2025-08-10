@@ -931,10 +931,6 @@ require("lazy").setup({
               'diagnostics',
               sources = { 'nvim_diagnostic' },
             },
-            {
-              'diagnostics',
-              sources = { 'nvim_diagnostic' },
-            },
           },
           lualine_z = {
             {
