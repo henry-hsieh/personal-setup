@@ -789,9 +789,13 @@ require("lazy").setup({
           TelescopePrompt = "Telescope",
           mason = "Mason",
           noice = "Noice",
+          qf = "Quickfix",
         }
         if special_ft_display[ft] then
           return special_ft_display[ft]
+        end
+        if vim.bo.buftype == 'terminal' then
+          return str:gsub("term://", " "):gsub("/%d+:", " |  "):gsub("󰌾 ", "")
         end
         return str -- fallback to original filename
       end
@@ -820,6 +824,14 @@ require("lazy").setup({
         }
       end
 
+      local function load_winbar()
+        return vim.bo.buftype ~= 'terminal'
+      end
+
+      local function load_statusline()
+        return vim.bo.buftype ~= 'terminal'
+      end
+
       local function make_winbar(active)
         return {
           lualine_a = {},
@@ -828,13 +840,15 @@ require("lazy").setup({
               winbar_left,
               separator = "",
               padding = 0,
-              color = function () return winbar_sep_color(active) end,
+              color = function() return winbar_sep_color(active) end,
+              cond = load_winbar,
             },
             {
               'filetype',
               icon_only = true,
               separator = "",
               padding = 0,
+              cond = load_winbar,
             },
             {
               'filename',
@@ -845,12 +859,14 @@ require("lazy").setup({
               fmt = filename_or_filetype,
               separator = "",
               padding = 0,
+              cond = load_winbar,
             },
             {
               winbar_right,
               separator = "",
               padding = 0,
-              color = function () return winbar_sep_color(active) end,
+              color = function() return winbar_sep_color(active) end,
+              cond = load_winbar,
             },
           },
           lualine_c = {},
@@ -895,7 +911,7 @@ require("lazy").setup({
         sections = {
           lualine_a = { { 'mode' } },
           lualine_b = {
-            { 'branch', icon = '', separator = '' },
+            { 'branch', icon = '', separator = '', cond = load_statusline, },
             {
               'diff',
               symbols = { added = ' ', modified = ' ', removed = ' ' },
@@ -924,7 +940,7 @@ require("lazy").setup({
             },
           },
           lualine_x = {
-            'encoding', 'fileformat', 'filetype'
+            'encoding', { 'fileformat', cond = load_statusline, }, 'filetype'
           },
           lualine_y = {
             {
@@ -937,10 +953,12 @@ require("lazy").setup({
               location,
               separator = "",
               padding = 0,
+              cond = load_statusline,
             },
             {
               "progress",
               fmt = progress_render,
+              cond = load_statusline,
             },
           },
         },
