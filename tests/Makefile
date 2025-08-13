@@ -2,7 +2,7 @@ SHELL := /bin/bash
 LOG_DIR ?= logs
 .PHONY: all shellrc utils nvim-plugins mason-packages nvim-fresh-start
 
-all: shellrc utils nvim-plugins mason-packages
+all: shellrc utils nvim-plugins mason-packages ts-parsers
 
 shellrc: bash tcsh
 
@@ -184,3 +184,7 @@ typescript-language-server: | $(LOG_DIR)
 
 vscode-json-language-server: | $(LOG_DIR)
 	@{ ./test-lsp-stdio.ts $(HOME)/.local/share/nvim/mason/bin/"$@" 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log && echo "Test $@ pass" >> $(LOG_DIR)/$@.log
+
+# Test tree-sitter parsers
+ts-parsers: | $(LOG_DIR) nvim-fresh-start
+	@{ nvim --headless -c 'lua dofile("test-ts-parsers.lua")' +qa! 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
