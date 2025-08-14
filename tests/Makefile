@@ -8,7 +8,7 @@ shellrc: bash tcsh
 
 utils: bat bd fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java yq
 
-nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua nvim-treesitter mason.nvim neoconf.nvim gitsigns.nvim nvim-cmp lualine.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-notify flash.nvim tinted-nvim riscv-asm-vim verilog_systemverilog.vim vim-fugitive
+nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua nvim-treesitter nvim-ufo mason.nvim neoconf.nvim gitsigns.nvim nvim-cmp lualine.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-notify flash.nvim tinted-nvim riscv-asm-vim verilog_systemverilog.vim vim-fugitive
 
 mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright ltex-ls bash-language-server typescript-language-server vscode-json-language-server
 
@@ -98,6 +98,9 @@ nvim-tree.lua: | $(LOG_DIR) nvim-fresh-start
 
 nvim-treesitter: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test nvim-treesitter.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+nvim-ufo: | $(LOG_DIR) nvim-fresh-start
+	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test ufo closeAllFolds 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 mason.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test mason.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log

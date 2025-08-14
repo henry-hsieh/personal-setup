@@ -180,6 +180,86 @@ require("lazy").setup({
   },
 
   {
+    'kevinhwang91/nvim-ufo',
+    dependencies = {
+      'kevinhwang91/promise-async',
+      'nvim-treesitter/nvim-treesitter',
+      {
+        "luukvbaal/statuscol.nvim",
+        opts = function()
+          local builtin = require("statuscol.builtin")
+          return {
+            relculright = true,
+            segments = {
+              { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
+              { text = { "%s" },                  click = "v:lua.ScSa" },
+              { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" }
+            }
+          }
+        end,
+      }
+    },
+    event = 'BufReadPost',
+    init = function()
+      vim.o.foldenable = true
+      vim.o.foldcolumn = '1'
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+      vim.o.fillchars = 'eob: ,fold: ,foldopen:,foldsep: ,foldclose:'
+    end,
+    opts = function()
+      local handler = function(virtText, lnum, endLnum, width, truncate)
+        local newVirtText = {}
+        local suffix = (' 󰁂 %d'):format(endLnum - lnum)
+        local sufWidth = vim.fn.strdisplaywidth(suffix)
+        local targetWidth = width - sufWidth
+        local curWidth = 0
+        for _, chunk in ipairs(virtText) do
+          local chunkText = chunk[1]
+          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+          if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+          else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            local hlGroup = chunk[2]
+            table.insert(newVirtText, { chunkText, hlGroup })
+            chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            -- str width returned from truncate() may less than 2nd argument, need padding
+            if curWidth + chunkWidth < targetWidth then
+              suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+            end
+            break
+          end
+          curWidth = curWidth + chunkWidth
+        end
+        table.insert(newVirtText, { suffix, 'MoreMsg' })
+        return newVirtText
+      end
+      return {
+        provider_selector = function()
+          return { 'treesitter', 'indent' }
+        end,
+        fold_virt_text_handler = handler,
+      }
+    end,
+    keys = {
+      { "zR", mode = { "n" }, function() require('ufo').openAllFolds() end,  desc = "Open all folds" },
+      { "zM", mode = { "n" }, function() require('ufo').closeAllFolds() end, desc = "Close all folds" },
+      {
+        "K",
+        mode = { 'n' },
+        function()
+          local winid = require('ufo').peekFoldedLinesUnderCursor()
+          if not winid then
+            vim.lsp.buf.hover()
+          end
+        end,
+        desc = "Hover"
+      },
+    },
+  },
+
+  {
     'henry-hsieh/mason.nvim',
     branch = 'feat-linker-exec-relative',
     config = function()
@@ -251,7 +331,6 @@ require("lazy").setup({
         { md.goto_err_prev,       mode = { "n" },      diagnostic_jump(false, "ERROR"),                     desc = "Prev Error" },
         { md.open_list,           mode = { "n" },      vim.diagnostic.setloclist,                           desc = "Open Diagnostic List" },
         { mb.goto_definition,     mode = { 'n' },      vim.lsp.buf.definition,                              desc = "Goto Definition" },
-        { mb.hover,               mode = { 'n' },      vim.lsp.buf.hover,                                   desc = "Hover" },
         { mb.goto_implementation, mode = { 'n' },      vim.lsp.buf.implementation,                          desc = "Goto Implementation" },
         { mb.signature_help,      mode = { 'n', 'i' }, vim.lsp.buf.signature_help,                          desc = "Signature Help" },
         { mb.type_definition,     mode = { 'n' },      vim.lsp.buf.type_definition,                         desc = "Type Definition" },
@@ -1292,6 +1371,10 @@ require("lazy").setup({
             vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = colors.base09, bg = nil,           bold = false, italic = false })
             vim.api.nvim_set_hl(0, "FlashLabel",     { fg = colors.base06, bg = colors.base08, bold = false, italic = false })
             vim.api.nvim_set_hl(0, "FlashMatch",     { fg = colors.base06, bg = colors.base0D, bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "Folded",
+              { fg = nil, bg = colors.base01, bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "FoldColumn",
+              { fg = colors.base03, bg = nil, bold = false, italic = false })
           end
         end,
       })
