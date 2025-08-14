@@ -27,4 +27,4 @@ nvim --headless -c "MasonToolsUpdateSync" +qa
 
 # Ensure nvim-treesitter parsers are installed
 print_process_item "Install/update Neovim tree-sitter parsers"
-nvim --headless -c "TSUpdateSync" +qa
+(export CFLAGS="$CFLAGS -std=c11"; cd $ROOT_DIR/src; nvim --headless -c 'lua dofile("install-ts-parser.lua")' +qa!)
