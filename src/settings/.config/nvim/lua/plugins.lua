@@ -536,184 +536,69 @@ require("lazy").setup({
   },
 
   {
-    'hrsh7th/nvim-cmp',
+    'saghen/blink.cmp',
     dependencies = {
-      -- Completion and snippets
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-cmdline',
-      -- For vsnip users.
-      -- 'hrsh7th/cmp-vsnip',
-      -- 'hrsh7th/vim-vsnip',
-      -- For luasnip users.
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-      --
-      -- For ultisnips users.
-      -- 'SirVer/ultisnips',
-      -- 'quangnguyen30192/cmp-nvim-ultisnips',
-      --
-      -- For snippy users.
-      -- 'dcampos/nvim-snippy',
-      -- 'dcampos/cmp-snippy',
+      'rafamadriz/friendly-snippets',
+      {
+        "mikavilpas/blink-ripgrep.nvim",
+        version = "*",
+      },
+      "moyiz/blink-emoji.nvim",
+      "folke/lazydev.nvim",
     },
-    opts = function(_, opts)
-      opts.sources = opts.sources or {}
-      table.insert(opts.sources, {
-        name = "lazydev",
-        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-      })
-    end,
-    config = function()
-      local has_words_before = function()
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
-
-      local feedkey = function(key, mode)
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-      end
-
-      local kind_icons = {
-        Text = "",
-        Method = "󰆧",
-        Function = "󰊕",
-        Constructor = "",
-        Field = "󰇽",
-        Variable = "󰂡",
-        Class = "󰠱",
-        Interface = "",
-        Module = "",
-        Property = "󰜢",
-        Unit = "",
-        Value = "󰎠",
-        Enum = "",
-        Keyword = "󰌋",
-        Snippet = "",
-        Color = "󰏘",
-        File = "󰈙",
-        Reference = "",
-        Folder = "󰉋",
-        EnumMember = "",
-        Constant = "󰏿",
-        Struct = "",
-        Event = "",
-        Operator = "󰆕",
-        TypeParameter = "󰅲",
-      }
-
-      local cmp = require "cmp"
-      local luasnip = require "luasnip"
-      local m = plugin_settings.nvim_cmp.mappings
-
-      -- Map Shift-Tab to unindent a tab
-      vim.api.nvim_set_keymap('i', '<S-Tab>', '<C-D>', { noremap = true, silent = true })
-
-      cmp.setup{
-        snippet = {
-          -- REQUIRED - you must specify a snippet engine
-          expand = function(args)
-            -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-          end,
+    version = '*',
+    event = 'VeryLazy',
+    opts = {
+      keymap = {
+        preset = "enter",
+        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+      },
+      completion = {
+        list = { selection = { preselect = true, auto_insert = true } },
+        documentation = { auto_show = true },
+      },
+      sources = {
+        default = { "lazydev", "lsp", "path", "snippets", "buffer", "emoji", "ripgrep" },
+        providers = {
+          lazydev = {
+            module = "lazydev.integrations.blink",
+            name = "LazyDev",
+            score_offset = 100,
+          },
+          ripgrep = {
+            module = "blink-ripgrep",
+            name = "Ripgrep",
+            opts = {
+              backend = {
+                use = "gitgrep-or-ripgrep",
+              },
+            },
+          },
+          emoji = {
+            module = "blink-emoji",
+            name = "Emoji",
+            score_offset = 15,
+            opts = {
+              insert = true,
+              ---@type string|table|fun():table
+              trigger = function()
+                return { ":" }
+              end,
+            },
+            should_show_items = function()
+              return vim.tbl_contains(
+                -- Enable emoji completion only for git commits and markdown.
+                -- By default, enabled for all file-types.
+                { "gitcommit", "markdown" },
+                vim.o.filetype
+              )
+            end,
+          },
         },
-        window = {
-          -- completion = cmp.config.window.bordered(),
-          -- documentation = cmp.config.window.bordered(),
-        },
-        mapping = cmp.mapping.preset.insert({
-          [m.next_item] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-
-          [m.prev_item] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-          [m.scroll_up] = cmp.mapping.scroll_docs(-4),
-          [m.scroll_down] = cmp.mapping.scroll_docs(4),
-          [m.abort] = cmp.mapping.abort(),
-          [m.confirm] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        }),
-
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp' },
-          -- { name = 'vsnip' }, -- For vsnip users.
-          { name = 'luasnip' }, -- For luasnip users.
-          -- { name = 'ultisnips' }, -- For ultisnips users.
-          -- { name = 'snippy' }, -- For snippy users.
-        }, {
-          {
-            name = 'buffer',
-            option = {
-              get_bufnrs = function()
-                local bufs = {}
-                for _, win in ipairs(vim.api.nvim_list_wins()) do
-                  bufs[vim.api.nvim_win_get_buf(win)] = true
-                end
-                return vim.tbl_keys(bufs)
-              end
-            }
-          }
-        }),
-        view = {
-          entries = {
-            name = "custom",
-            selection_order = 'near_cursor'
-          }
-        },
-        formatting = {
-          format = function(entry, vim_item)
-            -- Kind icons
-            vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-            -- Source
-            vim_item.menu = ({
-              --buffer = "[Buffer]",
-              --nvim_lsp = "[LSP]",
-              --luasnip = "[LuaSnip]",
-              --nvim_lua = "[Lua]",
-              --latex_symbols = "[LaTeX]",
-            })[entry.source.name]
-            return vim_item
-          end
-        },
-      }
-      -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-      cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = 'buffer' }
-        }
-      })
-
-      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-      cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = 'path' }
-        }, {
-          { name = 'cmdline' }
-        })
-      })
-
-      require("luasnip").config.setup({store_selection_keys="s"})
-    end
+      },
+    },
+    opts_extend = { "sources.default" }
   },
 
   {
