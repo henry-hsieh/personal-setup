@@ -1,5 +1,87 @@
 # Changelog
 
+## [2.0.0](https://github.com/henry-hsieh/personal-setup/compare/v1.10.0...v2.0.0) (2025-08-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **nvim:** migrate from nvim-cmp to blink.cmp ([#303](https://github.com/henry-hsieh/personal-setup/issues/303))
+* **nvim:** upgrade nvim-treesitter to new main branch ([#300](https://github.com/henry-hsieh/personal-setup/issues/300))
+* **nvim:** migrate from feline.nvim to lualine.nvim ([#296](https://github.com/henry-hsieh/personal-setup/issues/296))
+* **nvim:** update nvim-lspconfig to Nvim 0.11+ settings ([#290](https://github.com/henry-hsieh/personal-setup/issues/290))
+* **nvim:** migrate from nvim-base16 to tinted-nvim ([#289](https://github.com/henry-hsieh/personal-setup/issues/289))
+* **nvim:** migrate from hop.nvim to flash.nvim ([#286](https://github.com/henry-hsieh/personal-setup/issues/286))
+
+### Features
+
+* **fzf:** bump fzf version to v0.60.3 ([#239](https://github.com/henry-hsieh/personal-setup/issues/239)) ([8a18d97](https://github.com/henry-hsieh/personal-setup/commit/8a18d979cf3b4ba1feefdc1f8f5ce51fb0303259))
+* **fzf:** bump fzf version to v0.61.0 ([#245](https://github.com/henry-hsieh/personal-setup/issues/245)) ([f29e206](https://github.com/henry-hsieh/personal-setup/commit/f29e206bacc0a174475fd90c99ddbec2dfe1088c))
+* **fzf:** bump fzf version to v0.61.1 ([#246](https://github.com/henry-hsieh/personal-setup/issues/246)) ([3b8dbe8](https://github.com/henry-hsieh/personal-setup/commit/3b8dbe86706e9bd64fc6f9bc89b319a9abed19e6))
+* **fzf:** bump fzf version to v0.61.2 ([#250](https://github.com/henry-hsieh/personal-setup/issues/250)) ([7406a7c](https://github.com/henry-hsieh/personal-setup/commit/7406a7cb4feef74448b16272940a3b16a21bfad8))
+* **fzf:** bump fzf version to v0.61.3 ([#251](https://github.com/henry-hsieh/personal-setup/issues/251)) ([2eeae49](https://github.com/henry-hsieh/personal-setup/commit/2eeae4949521e7c02429d1cefc7bec9c6479b043))
+* **fzf:** bump fzf version to v0.62.0 ([#255](https://github.com/henry-hsieh/personal-setup/issues/255)) ([c8e878e](https://github.com/henry-hsieh/personal-setup/commit/c8e878ef852529bccd8620ac673d6977598b7960))
+* **fzf:** bump fzf version to v0.63.0 ([#270](https://github.com/henry-hsieh/personal-setup/issues/270)) ([713cc9e](https://github.com/henry-hsieh/personal-setup/commit/713cc9ebcb4137735e5071aa32c32e2980b1151d))
+* **fzf:** bump fzf version to v0.64.0 ([#272](https://github.com/henry-hsieh/personal-setup/issues/272)) ([9b22ce8](https://github.com/henry-hsieh/personal-setup/commit/9b22ce8da488b89195d8f112aaef5dde075d88dc))
+* **fzf:** bump fzf version to v0.65.0 ([#285](https://github.com/henry-hsieh/personal-setup/issues/285)) ([bde9a21](https://github.com/henry-hsieh/personal-setup/commit/bde9a21bd8737e2614e2be5e9ed65b15b03d223d))
+* **fzf:** bump fzf version to v0.65.1 ([#292](https://github.com/henry-hsieh/personal-setup/issues/292)) ([7b3811f](https://github.com/henry-hsieh/personal-setup/commit/7b3811f3c04d451246591bc013d25bef1c17cd0d))
+* **git-extras:** bump git-extras version to v7.4.0 ([#269](https://github.com/henry-hsieh/personal-setup/issues/269)) ([f6dcff1](https://github.com/henry-hsieh/personal-setup/commit/f6dcff1b790dd4ec0eb9f2a801a49fb1520414e3))
+* **jdk:** bump jdk version to v21.0.7+6 ([#249](https://github.com/henry-hsieh/personal-setup/issues/249)) ([6c10a1c](https://github.com/henry-hsieh/personal-setup/commit/6c10a1c6fcaa7e773bf078333d7db0c482de326b))
+* **jdk:** bump jdk version to v21.0.8+9 ([#277](https://github.com/henry-hsieh/personal-setup/issues/277)) ([c333e94](https://github.com/henry-hsieh/personal-setup/commit/c333e94da7899a259699683db1c3247a92a6d71f))
+* **lazygit:** bump lazygit version to v0.47.2 ([#236](https://github.com/henry-hsieh/personal-setup/issues/236)) ([b6a5530](https://github.com/henry-hsieh/personal-setup/commit/b6a55303307846f31f45bdfb2b501aaa1b68084e))
+* **lazygit:** bump lazygit version to v0.48.0 ([#238](https://github.com/henry-hsieh/personal-setup/issues/238)) ([03485bb](https://github.com/henry-hsieh/personal-setup/commit/03485bb9ce1fee1b3f656b67a44f3d43842d1f10))
+* **lazygit:** bump lazygit version to v0.49.0 ([#247](https://github.com/henry-hsieh/personal-setup/issues/247)) ([59c41e7](https://github.com/henry-hsieh/personal-setup/commit/59c41e7df51ef40e7b8307e3204be8b2254528ad))
+* **lazygit:** bump lazygit version to v0.50.0 ([#253](https://github.com/henry-hsieh/personal-setup/issues/253)) ([8093bd0](https://github.com/henry-hsieh/personal-setup/commit/8093bd083afcc3b3ec1b3192bd1e1b779bac774d))
+* **lazygit:** bump lazygit version to v0.51.1 ([#262](https://github.com/henry-hsieh/personal-setup/issues/262)) ([b8818f1](https://github.com/henry-hsieh/personal-setup/commit/b8818f1799835f72d5aea2ca38fc3263a900132d))
+* **lazygit:** bump lazygit version to v0.52.0 ([#268](https://github.com/henry-hsieh/personal-setup/issues/268)) ([0d39f31](https://github.com/henry-hsieh/personal-setup/commit/0d39f313324e3fd045c2c7fa8cca75dd8ab9d0d5))
+* **lazygit:** bump lazygit version to v0.53.0 ([#271](https://github.com/henry-hsieh/personal-setup/issues/271)) ([a9a7e15](https://github.com/henry-hsieh/personal-setup/commit/a9a7e1589e673329eaaa02d3c7d0371339fb9da0))
+* **lazygit:** bump lazygit version to v0.54.0 ([#291](https://github.com/henry-hsieh/personal-setup/issues/291)) ([f3c525c](https://github.com/henry-hsieh/personal-setup/commit/f3c525c29b8cb7e59777fd1de6410b2b1b1d5c6a))
+* **lazygit:** bump lazygit version to v0.54.1 ([#293](https://github.com/henry-hsieh/personal-setup/issues/293)) ([6c9d6f3](https://github.com/henry-hsieh/personal-setup/commit/6c9d6f334414396e6c0370ed989d882af83e3d37))
+* **lazygit:** bump lazygit version to v0.54.2 ([#299](https://github.com/henry-hsieh/personal-setup/issues/299)) ([c168bf8](https://github.com/henry-hsieh/personal-setup/commit/c168bf85f8c8b7df2ac62f24933dffc98e5d4d7c))
+* **nvim:** add nvim-ufo for pretty fold ([#301](https://github.com/henry-hsieh/personal-setup/issues/301)) ([e54c97b](https://github.com/henry-hsieh/personal-setup/commit/e54c97b3afb1cad2d4a98fcaba7ab843b15f7e0f))
+* **nvim:** bump nvim version to v0.11.0 ([#243](https://github.com/henry-hsieh/personal-setup/issues/243)) ([835e10c](https://github.com/henry-hsieh/personal-setup/commit/835e10cb7f6be071fdd2bf6e747dd294f908ab7b))
+* **nvim:** bump nvim version to v0.11.1 ([#252](https://github.com/henry-hsieh/personal-setup/issues/252)) ([adf4080](https://github.com/henry-hsieh/personal-setup/commit/adf4080758d7ab823fc5cb614e685c7add4efd3a))
+* **nvim:** bump nvim version to v0.11.2 ([#267](https://github.com/henry-hsieh/personal-setup/issues/267)) ([a200e42](https://github.com/henry-hsieh/personal-setup/commit/a200e425b157699fc8cb45543deaec4f43fb814c))
+* **nvim:** bump nvim version to v0.11.3 ([#279](https://github.com/henry-hsieh/personal-setup/issues/279)) ([0196989](https://github.com/henry-hsieh/personal-setup/commit/01969890d10d53bf1a844b21c42aeffd47aae443))
+* **nvim:** enhance lualine appearance ([#298](https://github.com/henry-hsieh/personal-setup/issues/298)) ([ab66472](https://github.com/henry-hsieh/personal-setup/commit/ab664724af2ea515f6fef1d0cd73f3d445d4f441))
+* **nvim:** migrate from feline.nvim to lualine.nvim ([#296](https://github.com/henry-hsieh/personal-setup/issues/296)) ([8d31430](https://github.com/henry-hsieh/personal-setup/commit/8d3143036d009969ca3d6ee99e66149f2922e758))
+* **nvim:** migrate from hop.nvim to flash.nvim ([#286](https://github.com/henry-hsieh/personal-setup/issues/286)) ([0cbef8b](https://github.com/henry-hsieh/personal-setup/commit/0cbef8b139b1d098c388dfd3c5d211f1343ef589))
+* **nvim:** migrate from nvim-base16 to tinted-nvim ([#289](https://github.com/henry-hsieh/personal-setup/issues/289)) ([407d7bb](https://github.com/henry-hsieh/personal-setup/commit/407d7bb4b9561ff8cc34e3c45ccfc91a3ad5ac8a))
+* **nvim:** migrate from nvim-cmp to blink.cmp ([#303](https://github.com/henry-hsieh/personal-setup/issues/303)) ([7a95c56](https://github.com/henry-hsieh/personal-setup/commit/7a95c566eaca229469bf6f6fb723f8db9d20305a))
+* **nvim:** upgrade nvim-treesitter to new main branch ([#300](https://github.com/henry-hsieh/personal-setup/issues/300)) ([cacddc7](https://github.com/henry-hsieh/personal-setup/commit/cacddc7aedf22e28e7de7f2f4bc8a01f780acaee))
+* **rustup:** add rust-analyzer, rustfmt and clippy ([#294](https://github.com/henry-hsieh/personal-setup/issues/294)) ([6a1b31b](https://github.com/henry-hsieh/personal-setup/commit/6a1b31b93e8230fdb6e0c3a8de7c2f086cb7e1cd))
+* **rustup:** bump rustup version to v1.28.0 ([#240](https://github.com/henry-hsieh/personal-setup/issues/240)) ([3767922](https://github.com/henry-hsieh/personal-setup/commit/3767922bf4adb74d13f4933163204300dfea1567))
+* **rustup:** bump rustup version to v1.28.1 ([#242](https://github.com/henry-hsieh/personal-setup/issues/242)) ([e784211](https://github.com/henry-hsieh/personal-setup/commit/e78421117db54e8d5311dcfe7cc946aafd6084f3))
+* **rustup:** bump rustup version to v1.28.2 ([#256](https://github.com/henry-hsieh/personal-setup/issues/256)) ([60cfe87](https://github.com/henry-hsieh/personal-setup/commit/60cfe879895238c6e6930767853f81db86d5e54b))
+* **tinty:** bump tinty version to v0.27.0 ([#244](https://github.com/henry-hsieh/personal-setup/issues/244)) ([6c4afa6](https://github.com/henry-hsieh/personal-setup/commit/6c4afa6de003bb8f4289f93cb01567ef3301abda))
+* **tinty:** bump tinty version to v0.28.0 ([#276](https://github.com/henry-hsieh/personal-setup/issues/276)) ([351e416](https://github.com/henry-hsieh/personal-setup/commit/351e416972e06403c25591c605265b929cc95891))
+* **tinty:** bump tinty version to v0.29.0 ([#288](https://github.com/henry-hsieh/personal-setup/issues/288)) ([d7d24d5](https://github.com/henry-hsieh/personal-setup/commit/d7d24d5c89a6c35fba287df0945eaed9caa34d63))
+* **tree-sitter:** bump tree-sitter version to v0.25.3 ([#241](https://github.com/henry-hsieh/personal-setup/issues/241)) ([3c6ed14](https://github.com/henry-hsieh/personal-setup/commit/3c6ed14162565c97013a5af617b9f59a5cef35db))
+* **tree-sitter:** bump tree-sitter version to v0.25.4 ([#260](https://github.com/henry-hsieh/personal-setup/issues/260)) ([f580b1a](https://github.com/henry-hsieh/personal-setup/commit/f580b1a4e51f2f1e5f8c20e1344c5f02832e808e))
+* **tree-sitter:** bump tree-sitter version to v0.25.5 ([#265](https://github.com/henry-hsieh/personal-setup/issues/265)) ([2efcd0d](https://github.com/henry-hsieh/personal-setup/commit/2efcd0d56de006674cfe3f21af48b828716e6e78))
+* **tree-sitter:** bump tree-sitter version to v0.25.6 ([#266](https://github.com/henry-hsieh/personal-setup/issues/266)) ([556f0f0](https://github.com/henry-hsieh/personal-setup/commit/556f0f0f85615f978103842e28326b4cee9ea75b))
+* **tree-sitter:** bump tree-sitter version to v0.25.7 ([#274](https://github.com/henry-hsieh/personal-setup/issues/274)) ([ba3f1fb](https://github.com/henry-hsieh/personal-setup/commit/ba3f1fb5ebfe39fc94069018f6d77e9adccf160a))
+* **tree-sitter:** bump tree-sitter version to v0.25.8 ([#275](https://github.com/henry-hsieh/personal-setup/issues/275)) ([6ebf6f1](https://github.com/henry-hsieh/personal-setup/commit/6ebf6f14eed25ae896f3ff0355b52030b478259e))
+* **yq:** bump yq version to v4.45.2 ([#254](https://github.com/henry-hsieh/personal-setup/issues/254)) ([41275c1](https://github.com/henry-hsieh/personal-setup/commit/41275c143cbcf6a90428dbb41336bbfd7ca11dcf))
+* **yq:** bump yq version to v4.45.3 ([#257](https://github.com/henry-hsieh/personal-setup/issues/257)) ([fbd260b](https://github.com/henry-hsieh/personal-setup/commit/fbd260bdfbe62fcd3ef26696759c002a8e6a7a6b))
+* **yq:** bump yq version to v4.45.4 ([#259](https://github.com/henry-hsieh/personal-setup/issues/259)) ([02badf4](https://github.com/henry-hsieh/personal-setup/commit/02badf40c130b93b7ea11cb3169960815b926624))
+* **yq:** bump yq version to v4.46.1 ([#273](https://github.com/henry-hsieh/personal-setup/issues/273)) ([16e951f](https://github.com/henry-hsieh/personal-setup/commit/16e951f3b543ad9b43a29739a487f4facc9888e6))
+* **yq:** bump yq version to v4.47.1 ([#283](https://github.com/henry-hsieh/personal-setup/issues/283)) ([40424bc](https://github.com/henry-hsieh/personal-setup/commit/40424bc747f713cc6d13e84bef37dfc53e03485f))
+
+
+### Bug Fixes
+
+* **nvim:** improve appearance ([#302](https://github.com/henry-hsieh/personal-setup/issues/302)) ([0663209](https://github.com/henry-hsieh/personal-setup/commit/0663209249fbcb646bbbb0dfcab8dd7a8a73618e))
+* **nvim:** mason upgrade error ([#261](https://github.com/henry-hsieh/personal-setup/issues/261)) ([3c33370](https://github.com/henry-hsieh/personal-setup/commit/3c33370c2e7a76a7abde83a11698a2684fa8a0e6))
+* **nvim:** navigation in diff mode ([#258](https://github.com/henry-hsieh/personal-setup/issues/258)) ([a0b37b2](https://github.com/henry-hsieh/personal-setup/commit/a0b37b2c11a139aa3561d4cc2b7f072833d175a1))
+* **nvim:** remove redundant diagnostic component of lualine ([#297](https://github.com/henry-hsieh/personal-setup/issues/297)) ([e7efa52](https://github.com/henry-hsieh/personal-setup/commit/e7efa52d1831c65c9f4a579ad120518bee0a526e))
+* **nvim:** stop loading removed module ([#287](https://github.com/henry-hsieh/personal-setup/issues/287)) ([0e2e971](https://github.com/henry-hsieh/personal-setup/commit/0e2e97163b592ed5718a65199563fdc463566798))
+* **nvim:** update flash settings for better control ([#295](https://github.com/henry-hsieh/personal-setup/issues/295)) ([d8dd67f](https://github.com/henry-hsieh/personal-setup/commit/d8dd67fcb0ffd32a8fd8bf02d84cf220c8011079))
+
+
+### Code Refactoring
+
+* **nvim:** update nvim-lspconfig to Nvim 0.11+ settings ([#290](https://github.com/henry-hsieh/personal-setup/issues/290)) ([683adbe](https://github.com/henry-hsieh/personal-setup/commit/683adbe4eba02e35a30056a809e7d3f279daf404))
+
 ## [1.10.0](https://github.com/henry-hsieh/personal-setup/compare/v1.9.0...v1.10.0) (2025-02-23)
 
 
