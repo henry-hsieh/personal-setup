@@ -154,6 +154,7 @@ require("lazy").setup({
     build = ':TSUpdate',
     config = function()
       local opts = require("config.treesitter")
+      local ts_query = vim.treesitter.query
       vim.api.nvim_create_autocmd('FileType', {
         pattern = { '*' },
         callback = function(args)
@@ -169,7 +170,7 @@ require("lazy").setup({
                 vim.wo.foldmethod = 'expr'
                 vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
               end
-              if opts[lang].indent then
+              if opts[lang].indent and ts_query.get(lang, 'indents') then
                 vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
               end
             end
