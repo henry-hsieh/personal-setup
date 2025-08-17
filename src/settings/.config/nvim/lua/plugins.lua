@@ -301,7 +301,6 @@ require("lazy").setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       'folke/neoconf.nvim',
-      'hrsh7th/cmp-nvim-lsp',
     },
     event = 'VeryLazy',
     keys = function()
@@ -436,11 +435,6 @@ require("lazy").setup({
         return result
       end
 
-      --- global settings
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      vim.lsp.config('*', {
-        capabilities = capabilities,
-      })
       --- lua_ls
       --- rust-analyzer
       vim.lsp.config("rust_analyzer", {
@@ -1135,7 +1129,7 @@ require("lazy").setup({
           override = {
             ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
             ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+            ["cmp.entry.get_documentation"] = false,
           },
         },
         -- you can enable a preset for easier configuration
