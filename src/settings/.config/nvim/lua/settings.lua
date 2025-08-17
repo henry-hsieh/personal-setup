@@ -20,26 +20,8 @@ vim.o.shiftwidth = 2
 vim.o.expandtab = true
 vim.o.shiftround = true
 
--- Toggle between tab stops of 2 and 4
-function ToggleTabstop()
-  if vim.bo.tabstop == 2 then
-    vim.bo.tabstop = 4
-    vim.bo.softtabstop = 4
-    vim.bo.shiftwidth = 4
-    print("Tabstop set to 4 spaces")
-  else
-    vim.bo.tabstop = 2
-    vim.bo.softtabstop = 2
-    vim.bo.shiftwidth = 2
-    print("Tabstop set to 2 spaces")
-  end
-end
-
--- Map the ToggleTabstop to a key
-vim.api.nvim_set_keymap('n', '<leader>t<Tab>', [[:lua ToggleTabstop()<CR>]], { desc = "Toggle Tabstop Width", noremap = true, silent = true })
-
--- Map the Toggle Wrap to a key
-vim.api.nvim_set_keymap('n', '<leader>tw', [[:set wrap!<CR>]], { desc = "Toggle Wrap", noremap = true, silent = true })
+-- Wrap
+vim.o.wrap = false
 
 -- Mouse
 vim.o.mouse = "a"
@@ -75,22 +57,9 @@ vim.o.updatetime = 200
 
 -- Autoread
 vim.o.autoread = true
-local function reload_all_buffers_in_tab()
-    local tab_buffers = vim.fn.tabpagebuflist(vim.fn.tabpagenr())  -- Get buf list of current tab
-    for _, buf in ipairs(tab_buffers) do
-        if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" then
-            vim.api.nvim_buf_call(buf, function()
-                vim.cmd("checktime")
-            end)
-        end
-    end
-    vim.cmd("redraw!")
-end
 
-vim.api.nvim_create_autocmd("TermClose", {
-    pattern = "*",
-    callback = reload_all_buffers_in_tab,
-})
+-- Autowrite
+vim.o.autowrite = true
 
 -- Tab
 vim.keymap.set("n", "<space><tab>n", "<cmd>tabnew | NvimTreeOpen<cr>", { desc = "New Tab" })
@@ -100,7 +69,7 @@ vim.keymap.set("n", "]<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 vim.keymap.set("n", "[<tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
 -- Buffer
-vim.keymap.set("n", "<space>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
+vim.keymap.set("n", "<space>bD", "<cmd>bdelete<cr>", { desc = "Delete Buffer and Window" })
 vim.keymap.set("n", "<space>bn", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 vim.keymap.set("n", "<space>bp", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
 

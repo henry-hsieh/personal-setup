@@ -32,122 +32,6 @@ local plugin_settings = require("plugin-settings")
 
 require("lazy").setup({
   {
-    'nvim-telescope/telescope.nvim',
-    version = '*',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope-fzf-native.nvim',
-    },
-    config = function()
-      local m = plugin_settings.telescope.mappings
-      require('telescope').setup{
-        defaults = {
-          mappings = {
-            i = {
-              [m.close           ] = false,
-              [m.horizontal_split] = require('telescope.actions').select_horizontal,
-              [m.vertical_split  ] = require('telescope.actions').select_vertical,
-
-              [m.scroll_up       ] = require('telescope.actions').results_scrolling_up,
-              [m.scroll_down     ] = require('telescope.actions').results_scrolling_down,
-
-              [m.move_up         ] = require('telescope.actions').move_selection_previous,
-              [m.move_down       ] = require('telescope.actions').move_selection_next,
-
-              [m.preview_up      ] = require('telescope.actions').preview_scrolling_up,
-              [m.preview_down    ] = require('telescope.actions').preview_scrolling_down,
-            },
-
-            n = {
-              [m.close           ] = false,
-              [m.horizontal_split] = require('telescope.actions').select_horizontal,
-              [m.vertical_split  ] = require('telescope.actions').select_vertical,
-
-              [m.scroll_up       ] = require('telescope.actions').results_scrolling_up,
-              [m.scroll_down     ] = require('telescope.actions').results_scrolling_down,
-
-              [m.move_up         ] = require('telescope.actions').move_selection_previous,
-              [m.move_down       ] = require('telescope.actions').move_selection_next,
-
-              [m.preview_up      ] = require('telescope.actions').preview_scrolling_up,
-              [m.preview_down    ] = require('telescope.actions').preview_scrolling_down,
-            },
-          },
-          pickers = {
-            find_files = {
-              find_command = { "fd", "--type", "f", "--strip-cwd-prefix" }
-            },
-          },
-        }
-      }
-
-      -- Load fzf extension
-      require('telescope').load_extension('fzf')
-    end
-  },
-
-  {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = function(plugin)
-      if vim.env.CC == 'musl-gcc' then
-        require('utils').exec_shell_cmd('CFLAGS=-static make -C ' .. plugin.dir)
-      else
-        require('utils').exec_shell_cmd('make -C ' .. plugin.dir)
-      end
-    end,
-  },
-
-  {
-    'nvim-tree/nvim-tree.lua',
-    version = '*',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons', -- optional, for file icon
-    },
-    config = function()
-      local m = plugin_settings.nvim_tree.mappings
-      local function my_on_attach(bufnr)
-        local api = require "nvim-tree.api"
-
-        local function opts(desc)
-          return { desc = "Explorer " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-        end
-
-        -- default mappings
-        api.config.mappings.default_on_attach(bufnr)
-
-        -- custom mappings
-        vim.keymap.set('n', m.horizontal_split, api.node.open.horizontal,        opts('Open: Horizontal Split'))
-        vim.keymap.set('n', m.vertical_split, api.node.open.vertical,        opts('Open: Vertical Split'))
-        vim.keymap.set('n', '?',     api.tree.toggle_help,            opts('Help'))
-      end
-
-      local function git_disable_for_dirs(path)
-        for _, p in ipairs(plugin_settings.nvim_tree.git_disable_dirs) do
-          if path:find(p, 1, true) == 1 then
-            return true
-          end
-        end
-        return false
-      end
-
-      require'nvim-tree'.setup {
-        on_attach = my_on_attach,
-        git = {
-          timeout = 800,
-          show_on_open_dirs = false,
-          disable_for_dirs = git_disable_for_dirs,
-        },
-        filesystem_watchers = {
-          ignore_dirs = plugin_settings.nvim_tree.fs_watcher_ignore_dirs,
-        },
-      }
-
-      -- map F9 to toogle NvimTree and focus on current file
-      vim.api.nvim_set_keymap('n', m.toggle, '<cmd>NvimTreeFindFileToggle!<CR>', { desc = "Toggle Explorer", noremap = true, silent = true })
-    end
-  },
-
-  {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
     lazy = false,
@@ -330,13 +214,9 @@ require("lazy").setup({
         { md.goto_err_next,       mode = { "n" },      diagnostic_jump(true, "ERROR"),                      desc = "Next Error" },
         { md.goto_err_prev,       mode = { "n" },      diagnostic_jump(false, "ERROR"),                     desc = "Prev Error" },
         { md.open_list,           mode = { "n" },      vim.diagnostic.setloclist,                           desc = "Open Diagnostic List" },
-        { mb.goto_definition,     mode = { 'n' },      vim.lsp.buf.definition,                              desc = "Goto Definition" },
-        { mb.goto_implementation, mode = { 'n' },      vim.lsp.buf.implementation,                          desc = "Goto Implementation" },
         { mb.signature_help,      mode = { 'n', 'i' }, vim.lsp.buf.signature_help,                          desc = "Signature Help" },
-        { mb.type_definition,     mode = { 'n' },      vim.lsp.buf.type_definition,                         desc = "Type Definition" },
         { mb.rename,              mode = { 'n' },      vim.lsp.buf.rename,                                  desc = "Rename" },
         { mb.code_action,         mode = { 'n', 'v' }, vim.lsp.buf.code_action,                             desc = "Code Action" },
-        { mb.goto_reference,      mode = { 'n' },      vim.lsp.buf.references,                              desc = "Goto Reference" },
         { mb.format,              mode = { 'n', 'v' }, function() vim.lsp.buf.format({ async = true }) end, desc = "Format" },
       }
     end,
@@ -475,6 +355,7 @@ require("lazy").setup({
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = "luvit-meta/library", words = { "vim%.uv" } },
+        { path = "snacks.nvim",        words = { "Snacks"  } },
       },
     },
   },
@@ -604,19 +485,28 @@ require("lazy").setup({
     },
     event = "VeryLazy",
     opts = function()
+      local special_ft_display = {
+        help = "Help",
+        NvimTree = "NvimTree",
+        lazy = "Lazy",
+        TelescopePrompt = "Telescope",
+        mason = "Mason",
+        noice = "Noice",
+        qf = "Quickfix",
+        checkhealth = "Checkhealth",
+        snacks_dashboard = "Dashboard",
+        snacks_picker_input = "Picker Input",
+        snacks_picker_list = "Picker List",
+        snacks_layout_box = "",
+        snacks_input = "Input",
+        snacks_notif = "Notification",
+        snacks_notif_history = "Notification History",
+        snacks_terminal = "Terminal",
+      }
+
       -- Helpers
       local function filename_or_filetype(str)
         local ft = vim.bo.filetype
-        local special_ft_display = {
-          help = "Help",
-          NvimTree = "NvimTree",
-          lazy = "Lazy",
-          TelescopePrompt = "Telescope",
-          mason = "Mason",
-          noice = "Noice",
-          qf = "Quickfix",
-          checkhealth = "Checkhealth",
-        }
         if special_ft_display[ft] then
           return special_ft_display[ft]
         end
@@ -651,7 +541,7 @@ require("lazy").setup({
       end
 
       local function load_winbar()
-        return vim.bo.buftype ~= 'terminal'
+        return vim.bo.buftype ~= 'terminal' and not special_ft_display[vim.bo.filetype]
       end
 
       local function load_statusline()
@@ -796,23 +686,155 @@ require("lazy").setup({
   },
 
   {
-    "Pocco81/TrueZen.nvim",
-    config = function()
-      local true_zen = require("true-zen")
-
-      true_zen.setup {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = function()
+      Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+      Snacks.toggle.option("relativenumber", { name = "Relative Line Number" }):map("<leader>tr")
+      Snacks.toggle.line_number():map("<leader>tl")
+      Snacks.toggle.diagnostics():map("<leader>tD")
+      Snacks.toggle.indent():map("<leader>tg")
+      Snacks.toggle.inlay_hints():map("<leader>th")
+      Snacks.toggle.new({
+        id = "tabstop_4",
+        name = "Tabstop 4",
+        get = function()
+          return vim.bo.tabstop == 4
+        end,
+        set = function(state)
+          if state then
+            vim.bo.tabstop = 4
+            vim.bo.softtabstop = 4
+            vim.bo.shiftwidth = 4
+          else
+            vim.bo.tabstop = 2
+            vim.bo.softtabstop = 2
+            vim.bo.shiftwidth = 2
+          end
+        end,
+      }):map("<leader>t<Tab>")
+      ---@type snacks.Config
+      return {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+        bigfile = { enabled = true },
+        dashboard = {
+          enabled = true,
+        },
+        explorer = {
+          enabled = true,
+          replace_netrw = true,
+        },
+        indent = { priority = 1, enabled = true },
+        input = { enabled = true },
+        picker = {
+          enabled = true,
+          hidden = true,
+          matcher = {
+            frecency = true,
+          },
+          sources = {
+            files = {
+              hidden = true,
+            },
+          },
+        },
+        notifier = { enabled = true },
+        quickfile = { enabled = true },
+        scope = { enabled = true },
+        toggle = { enabled = true, },
+        scroll = { enabled = true },
+        words = { enabled = true },
+        zen = { enabled = true, toggles = { diagnostics = false }, },
+        styles = { zen = { backdrop = { transparent = false }}},
       }
-      local m = plugin_settings.truezen.mappings
-      -- map <C-w>a to toogle Ataraxis Mode
-      vim.api.nvim_set_keymap('', m.ataraxis, '<cmd>TZAtaraxis<CR>', { desc = "Toggle Ataraxis Mode", noremap = true, silent = true })
-      vim.api.nvim_set_keymap('i', m.ataraxis, '<cmd>TZAtaraxis<CR>', { desc = "Toggle Ataraxis Mode", noremap = true, silent = true })
-      -- map <C-w>z to toogle Focus Mode
-      vim.api.nvim_set_keymap('', m.focus, '<cmd>TZFocus<CR>', { desc = "Toggle Focus Mode", noremap = true, silent = true })
-      vim.api.nvim_set_keymap('i', m.focus, '<cmd>TZFocus<CR>', { desc = "Toggle Focus Mode", noremap = true, silent = true })
-      -- map <C-w>m to toogle Minimalist Mode
-      vim.api.nvim_set_keymap('', m.minimalist, '<cmd>TZMinimalist<CR>', { desc = "Toggle Minimalist Mode", noremap = true, silent = true })
-      vim.api.nvim_set_keymap('i', m.minimalist, '<cmd>TZMinimalist<CR>', { desc = "Toggle Minimalist Mode", noremap = true, silent = true })
     end,
+    keys = {
+      -- Top Pickers & Explorer
+      { "<leader><space>", function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
+      { "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
+      { "<leader>/",       function() Snacks.picker.grep() end,                                    desc = "Grep" },
+      { "<leader>:",       function() Snacks.picker.command_history() end,                         desc = "Command History" },
+      { "<leader>n",       function() Snacks.picker.notifications() end,                           desc = "Notification History" },
+      {
+        "<space>e",
+        function()
+          local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ":p")
+          local abs = vim.fn.fnamemodify(vim.fn.expand("%"), ":p:h")
+          if abs:sub(1, #cwd) ~= cwd then
+            cwd = abs
+          end
+          Snacks.explorer({ cwd = cwd })
+        end,
+        desc = "File Explorer"
+      },
+      -- find
+      { "<leader>fb",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
+      { "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+      { "<leader>ff",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
+      { "<leader>fg",      function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
+      { "<leader>fp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
+      { "<leader>fr",      function() Snacks.picker.recent() end,                                  desc = "Recent" },
+      -- git
+      { "<leader>gb",      function() Snacks.picker.git_branches() end,                            desc = "Git Branches" },
+      { "<leader>gl",      function() Snacks.picker.git_log() end,                                 desc = "Git Log" },
+      { "<leader>gL",      function() Snacks.picker.git_log_line() end,                            desc = "Git Log Line" },
+      { "<leader>gs",      function() Snacks.picker.git_status() end,                              desc = "Git Status" },
+      { "<leader>gS",      function() Snacks.picker.git_stash() end,                               desc = "Git Stash" },
+      { "<leader>gd",      function() Snacks.picker.git_diff() end,                                desc = "Git Diff (Hunks)" },
+      { "<leader>gf",      function() Snacks.picker.git_log_file() end,                            desc = "Git Log File" },
+      -- Grep
+      { "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
+      { "<leader>sB",      function() Snacks.picker.grep_buffers() end,                            desc = "Grep Open Buffers" },
+      { "<leader>sg",      function() Snacks.picker.grep() end,                                    desc = "Grep" },
+      { "<leader>sw",      function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+      -- search
+      { '<leader>s/',      function() Snacks.picker.search_history() end,                          desc = "Search History" },
+      { "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
+      { "<leader>sC",      function() Snacks.picker.commands() end,                                desc = "Commands" },
+      { "<leader>sd",      function() Snacks.picker.diagnostics() end,                             desc = "Diagnostics" },
+      { "<leader>sD",      function() Snacks.picker.diagnostics_buffer() end,                      desc = "Buffer Diagnostics" },
+      { "<leader>sh",      function() Snacks.picker.help() end,                                    desc = "Help Pages" },
+      { "<leader>sH",      function() Snacks.picker.highlights() end,                              desc = "Highlights" },
+      { "<leader>si",      function() Snacks.picker.icons() end,                                   desc = "Icons" },
+      { "<leader>sj",      function() Snacks.picker.jumps() end,                                   desc = "Jumps" },
+      { "<leader>sk",      function() Snacks.picker.keymaps() end,                                 desc = "Keymaps" },
+      { "<leader>sl",      function() Snacks.picker.loclist() end,                                 desc = "Location List" },
+      { "<leader>sm",      function() Snacks.picker.marks() end,                                   desc = "Marks" },
+      { "<leader>sM",      function() Snacks.picker.man() end,                                     desc = "Man Pages" },
+      { "<leader>sp",      function() Snacks.picker.lazy() end,                                    desc = "Search for Plugin Spec" },
+      { "<leader>sq",      function() Snacks.picker.qflist() end,                                  desc = "Quickfix List" },
+      { "<leader>sR",      function() Snacks.picker.resume() end,                                  desc = "Resume" },
+      { "<leader>su",      function() Snacks.picker.undo() end,                                    desc = "Undo History" },
+      { "<leader>uC",      function() Snacks.picker.colorschemes() end,                            desc = "Colorschemes" },
+      -- LSP
+      { "gd",              function() Snacks.picker.lsp_definitions() end,                         desc = "Goto Definition" },
+      { "gD",              function() Snacks.picker.lsp_declarations() end,                        desc = "Goto Declaration" },
+      { "gr",              function() Snacks.picker.lsp_references() end,                          nowait = true,                     desc = "References" },
+      { "gI",              function() Snacks.picker.lsp_implementations() end,                     desc = "Goto Implementation" },
+      { "gy",              function() Snacks.picker.lsp_type_definitions() end,                    desc = "Goto T[y]pe Definition" },
+      { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
+      { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
+      -- Lazygit
+      { "<space>g",        function() Snacks.lazygit() end,                                        desc = "Lazygit" },
+      -- Git browse
+      { "gB",              function() Snacks.gitbrowse() end,                                      desc = "Open in Git Browser" },
+      -- Scratch Buffer
+      { "<leader>.",       function() Snacks.scratch() end,                                        desc = "Toggle Scratch Buffer" },
+      { "<leader>S",       function() Snacks.scratch.select() end,                                 desc = "Select Scratch Buffer" },
+      -- Terminal
+      { "<space>t",        function() Snacks.terminal() end,                                       desc = "Terminal" },
+      -- Words
+      { "gw",              function() Snacks.words.jump(1, true) end,                              desc = "Next Reference" },
+      -- Zoom
+      { "<C-w>z",          function() Snacks.zen.zoom() end,                                       desc = "Zoom" },
+      { "<C-w>f",          function() Snacks.zen.zen() end,                                        desc = "Zen" },
+      -- Bufdelete
+      { "<space>bd",       function() Snacks.bufdelete() end,                                      desc = "Delete Buffer" },
+      { "<space>bo",       function() Snacks.bufdelete.other() end,                                desc = "Delete Other Buffers" },
+    },
   },
 
   {
@@ -829,8 +851,6 @@ require("lazy").setup({
       end
     end,
   },
-
-  {"tpope/vim-fugitive"},
 
   {
     "vhda/verilog_systemverilog.vim",
@@ -885,170 +905,7 @@ require("lazy").setup({
     end,
   },
 
-  {
-    "carbon-steel/detour.nvim",
-    config = function ()
-      require("detour").setup({
-        title = "none",
-      })
-      vim.keymap.set('n', '<c-w><enter>', function()
-        local popup_id = require("detour").Detour() -- Open a detour popup
-        if not popup_id then
-          return
-        end
-        vim.api.nvim_set_option_value("winbar", vim.api.nvim_get_option_value("winbar", {scope = "global"}), {scope = "local", win = popup_id})
-      end, { desc = "Detour"})
-
-      vim.keymap.set('n', '<c-w>.', function()
-        local popup_id = require("detour").DetourCurrentWindow() -- Open a detour popup in current split
-        if not popup_id then
-          return
-        end
-        vim.api.nvim_set_option_value("winbar", vim.api.nvim_get_option_value("winbar", {scope = "global"}), {scope = "local", win = popup_id})
-      end, { desc = "Detour Current Window"})
-
-      vim.api.nvim_create_autocmd("BufWinEnter", {
-        callback = function()
-          local win = vim.api.nvim_get_current_win()
-          if vim.tbl_contains(require('detour.internal').list_popups(), win) then
-            vim.wo.winbar = vim.o.winbar
-          end
-        end,
-      })
-
-      vim.api.nvim_create_autocmd("BufWinEnter", {
-        pattern = "*",
-        callback = function(event)
-          local filetype = vim.bo[event.buf].filetype
-          local file_path = event.match
-
-          if file_path:match "/doc/" ~= nil then
-            -- Only run if the filetype is a help file
-            if filetype == "help" or filetype == "markdown" then
-              -- Get the newly opened help window
-              -- and attempt to open a Detour() float
-              local help_win = vim.api.nvim_get_current_win()
-              local ok = require("detour").Detour()
-
-              -- If we successfully create a float of the help file
-              -- Close the split
-              if ok then
-                vim.api.nvim_win_close(help_win, false)
-              end
-            end
-          end
-        end,
-      })
-      -- Setup float for helps
-      vim.api.nvim_create_autocmd("BufWinEnter", {
-        pattern = "*",
-        callback = function(event)
-          local filetype = vim.bo[event.buf].filetype
-          local file_path = event.match
-
-          if file_path:match "/doc/" ~= nil then
-            -- Only run if the filetype is a help file
-            if filetype == "help" or filetype == "markdown" then
-              -- Get the newly opened help window
-              -- and attempt to open a Detour() float
-              local help_win = vim.api.nvim_get_current_win()
-              local ok = require("detour").Detour()
-
-              -- If we successfully create a float of the help file
-              -- Close the split
-              if ok then
-                vim.api.nvim_win_close(help_win, false)
-              end
-            end
-          end
-        end,
-      })
-
-      vim.api.nvim_set_keymap('', '<C-w>h', "<cmd>lua require('detour.movements').DetourWinCmdH()<CR>", { desc = "Goto Left Window", noremap = true, silent = true })
-      vim.api.nvim_set_keymap('', '<C-w>l', "<cmd>lua require('detour.movements').DetourWinCmdL()<CR>", { desc = "Goto Right Window", noremap = true, silent = true })
-      vim.api.nvim_set_keymap('', '<C-w>j', "<cmd>lua require('detour.movements').DetourWinCmdJ()<CR>", { desc = "Go Down Window", noremap = true, silent = true })
-      vim.api.nvim_set_keymap('', '<C-w>k', "<cmd>lua require('detour.movements').DetourWinCmdK()<CR>", { desc = "Go Up Window", noremap = true, silent = true })
-
-      vim.keymap.set('n', '<space>t', function()
-        local terminal_buffer_found = false
-        -- Check if we there are any existing terminal buffers.
-        for _, buf in ipairs(vim.api.nvim_list_bufs()) do -- iterate through all buffers
-          if vim.api.nvim_buf_is_loaded(buf) then       -- only check loaded buffers
-            if vim.api.nvim_get_option_value("buftype", { buf = buf }) == "terminal" then
-              terminal_buffer_found = true
-            end
-          end
-        end
-
-        require('detour').Detour()                      -- Open a detour popup
-        if terminal_buffer_found then
-          require('telescope.builtin').buffers({})    -- Open telescope prompt
-          vim.api.nvim_feedkeys("term://", "n", true) -- populate prompt with "term://"
-        else
-          vim.wo.signcolumn = "no"
-          vim.cmd.lcd(vim.fn.expand("%:p:h"))
-          vim.cmd.terminal()
-          vim.cmd.startinsert()
-        end
-
-        vim.api.nvim_create_autocmd({"TermClose"}, {
-          buffer = vim.api.nvim_get_current_buf(),
-          callback = function ()
-            -- This automated keypress skips for you the "[Process exited 0]" message
-            -- that the embedded terminal shows.
-            vim.api.nvim_feedkeys('i', 'n', false)
-          end
-        })
-      end, { desc = "Open Terminal"})
-
-      vim.keymap.set("n", '<space>p', function ()
-        local ok = require('detour').Detour()  -- open a detour popup
-        if not ok then
-          return
-        end
-
-        vim.wo.signcolumn = "no"
-        vim.cmd.terminal('htop')     -- open a terminal buffer
-        vim.bo.bufhidden = 'delete' -- close the terminal when window closes
-
-        vim.cmd.startinsert() -- go into insert mode
-
-        vim.api.nvim_create_autocmd({"TermClose"}, {
-          buffer = vim.api.nvim_get_current_buf(),
-          callback = function ()
-            -- This automated keypress skips for you the "[Process exited 0]" message
-            -- that the embedded terminal shows.
-            vim.api.nvim_feedkeys('i', 'n', false)
-          end
-        })
-      end, { desc = "Open Htop"})
-
-      vim.keymap.set("n", '<space>g', function ()
-        local ok = require('detour').Detour()  -- open a detour popup
-        if not ok then
-          return
-        end
-
-        vim.wo.signcolumn = "no"
-        vim.cmd.lcd(vim.fn.expand("%:p:h"))
-        vim.cmd.terminal('lazygit')     -- open a terminal buffer
-        vim.bo.bufhidden = 'delete' -- close the terminal when window closes
-
-        vim.cmd.startinsert() -- go into insert mode
-
-        vim.api.nvim_create_autocmd({"TermClose"}, {
-          buffer = vim.api.nvim_get_current_buf(),
-          callback = function ()
-            -- This automated keypress skips for you the "[Process exited 0]" message
-            -- that the embedded terminal shows.
-            vim.api.nvim_feedkeys('i', 'n', false)
-          end
-        })
-      end, { desc = "Open LazyGit"})
-    end
-  },
-
-  {
+    {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
@@ -1119,7 +976,7 @@ require("lazy").setup({
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      "folke/snacks.nvim",
       "stevearc/dressing.nvim",
     },
     config = function()
@@ -1141,10 +998,50 @@ require("lazy").setup({
           lsp_doc_border = true, -- add a border to hover docs and signature help
         },
       })
+      Snacks.input.enable()
+      vim.ui.select = Snacks.picker.select
     end,
   },
+
   {
     "henry-hsieh/flash.nvim",
+    dependencies = {
+      {
+        "folke/snacks.nvim",
+        opts = {
+          picker = {
+            win = {
+              input = {
+                keys = {
+                  ["<a-s>"] = { "flash", mode = { "n", "i" } },
+                  ["s"] = { "flash" },
+                },
+              },
+            },
+            actions = {
+              flash = function(picker)
+                require("flash").jump({
+                  pattern = "^",
+                  label = { after = { 0, 0 } },
+                  search = {
+                    mode = "search",
+                    exclude = {
+                      function(win)
+                        return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= "snacks_picker_list"
+                      end,
+                    },
+                  },
+                  action = function(match)
+                    local idx = picker.list:row2idx(match.pos[1])
+                    picker.list:_move(idx, true, true)
+                  end,
+                })
+              end,
+            },
+          },
+        },
+      },
+    },
     branch = 'feat-unique-label-win',
     ---@type Flash.Config
     opts = {
@@ -1158,13 +1055,6 @@ require("lazy").setup({
           function(win)
             -- exclude non-focusable windows
             return not vim.api.nvim_win_get_config(win).focusable
-          end,
-          function(win)
-            -- exclude covered detoured windows
-            if require("lazy.core.config").plugins["detour.nvim"]._.loaded then
-              return vim.tbl_contains(require('detour.internal').list_coverable_windows(), win)
-            end
-            return true
           end,
         },
       },
@@ -1252,13 +1142,16 @@ require("lazy").setup({
           -- Do things whenever the theme changes.
           local colors = require("tinted-colorscheme").colors
           if colors then
-            vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = colors.base09, bg = nil,           bold = false, italic = false })
             vim.api.nvim_set_hl(0, "FlashLabel",     { fg = colors.base06, bg = colors.base08, bold = false, italic = false })
             vim.api.nvim_set_hl(0, "FlashMatch",     { fg = colors.base06, bg = colors.base0D, bold = false, italic = false })
             vim.api.nvim_set_hl(0, "Folded",
               { fg = nil, bg = colors.base01, bold = false, italic = false })
             vim.api.nvim_set_hl(0, "FoldColumn",
               { fg = colors.base03, bg = nil, bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "SnacksIndent",
+              { fg = colors.base02, bg = nil, bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "SnacksIndentScope",
+              { fg = colors.base0C, bg = nil, bold = false, italic = false })
           end
         end,
       })

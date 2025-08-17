@@ -1,26 +1,4 @@
 local plugin_settings = {
-  telescope = {
-    mappings = {
-      close = "<C-x>",
-      horizontal_split = "<C-s>",
-      vertical_split = "<C-v>",
-      scroll_up = "<C-b>",
-      scroll_down = "<C-f>",
-      move_up = "<C-k>",
-      move_down = "<C-j>",
-      preview_up = "<C-Up>",
-      preview_down = "<C-Down>",
-    },
-  },
-  nvim_tree = {
-    mappings = {
-      horizontal_split = "<C-s>",
-      vertical_split = "<C-v>",
-      toggle = "<space>e",
-    },
-    git_disable_dirs = {},
-    fs_watcher_ignore_dirs = {},
-  },
   nvim_lspconfig = {
     mappings = {
       diagnostic = {
@@ -34,11 +12,6 @@ local plugin_settings = {
         open_list = "<space>q",
       },
       buffer = {
-        goto_declaration = "gD",
-        goto_definition = "gd",
-        goto_implementation = "gi",
-        goto_reference = "gr",
-        hover = "K",
         signature_help = "<C-k>",
         add_workspace_folder = "<space>wa",
         remove_workspace_folder = "<space>wr",
@@ -66,23 +39,6 @@ local plugin_settings = {
       toggle_blame = "<leader>tb",
       diff_hunk = "<leader>hd",
       toggle_deleted = "<leader>td",
-    },
-  },
-  nvim_cmp = {
-    mappings = {
-      next_item = "<Tab>",
-      prev_item = "<S-Tab>",
-      scroll_up = "<C-b>",
-      scroll_down = "<C-f>",
-      abort = "<C-e>",
-      confirm = "<CR>",
-    },
-  },
-  truezen = {
-    mappings = {
-      ataraxis = "<C-w>a",
-      focus = "<C-w>z",
-      minimalist = "<C-w>m",
     },
   },
   riscv_asm_vim = {
