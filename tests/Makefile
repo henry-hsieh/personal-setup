@@ -8,7 +8,7 @@ shellrc: bash tcsh
 
 utils: bat bd fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java yq
 
-nvim-plugins: lazy.nvim telescope.nvim nvim-tree.lua nvim-treesitter nvim-ufo mason.nvim neoconf.nvim gitsigns.nvim blink.cmp lualine.nvim TrueZen.nvim Comment.nvim detour.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim telescope-fzf-native.nvim nvim-notify flash.nvim tinted-nvim riscv-asm-vim verilog_systemverilog.vim vim-fugitive
+nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim neoconf.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim riscv-asm-vim verilog_systemverilog.vim
 
 mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright ltex-ls bash-language-server typescript-language-server vscode-json-language-server
 
@@ -87,15 +87,6 @@ yq: | $(LOG_DIR)
 lazy.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test lazy.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
-telescope.nvim: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test telescope.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
-telescope-fzf-native.nvim: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test telescope load_extension '{"fzf"}' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
-nvim-tree.lua: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test nvim-tree.api tree.open 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
 nvim-treesitter: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test nvim-treesitter.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
@@ -117,14 +108,8 @@ blink.cmp: | $(LOG_DIR) nvim-fresh-start
 lualine.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test lualine refresh 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
-TrueZen.nvim: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test true-zen minimalist 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
 Comment.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test Comment.api call "{'toggle.linewise', 'g@'}" 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
-detour.nvim: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test detour Detour 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 which-key.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test which-key.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
@@ -138,11 +123,11 @@ noice.nvim: | $(LOG_DIR) nvim-fresh-start
 lazydev.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.lua lazydev find_workspace lua 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
-nvim-notify: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test notify notify '{"test",0,{}}' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
 flash.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test flash toggle 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+snacks.nvim: | $(LOG_DIR) nvim-fresh-start
+	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test snacks.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 tinted-nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test tinted-highlighter set_highlights '{require("tinted-colorscheme").colors,"",false,{}}' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
@@ -153,9 +138,6 @@ riscv-asm-vim: | $(LOG_DIR) nvim-fresh-start
 
 verilog_systemverilog.vim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-vim-plugin.lua")' +qa! -- $@.v '*GetVerilogSystemVerilogIndent' ':let dummy=GetVerilogSystemVerilogIndent()' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
-vim-fugitive: | $(LOG_DIR) nvim-fresh-start
-	@{ nvim --headless -c 'lua dofile("test-vim-plugin.lua")' +qa! -- $@.v '*FugitiveGitDir' ':let dummy=FugitiveGitDir()' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test mason packages
 lua-language-server: | $(LOG_DIR)
