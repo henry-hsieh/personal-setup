@@ -4,4 +4,3 @@ if require('utils').file_exists(vim.fn.stdpath('config') .. '/lua/custom-setting
 end
 require('settings')
 require('plugins')
-require('telescope-settings')
