@@ -28,6 +28,17 @@ nvim --headless -c "MasonToolsUpdateSync" +qa
 # Ensure nvim-treesitter parsers are installed
 print_process_item "Install/update Neovim tree-sitter parsers"
 (export CFLAGS="$CFLAGS -std=c11"; cd $ROOT_DIR/src; nvim --headless -c 'lua dofile("install-ts-parser.lua")' +qa!)
+# Relink with relative paths
+pushd $HOME/.local/share/nvim/site/queries > /dev/null
+for link in *; do
+  if [ -L "$link" ]; then
+    target=$(readlink "$link")
+    if [[ "$target" = /* ]]; then
+      ln -snrfT "$target" "$link"
+    fi
+  fi
+done
+popd > /dev/null
 
 # Download blink.cmp fuzzy prebuilt binaries
 print_process_item "Install Neovim blink.cmp prebuilt binaries"
