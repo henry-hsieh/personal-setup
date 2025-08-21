@@ -158,7 +158,6 @@ require("lazy").setup({
     'mason-org/mason-lspconfig.nvim',
     event = 'VeryLazy',
     dependencies = {
-      'folke/neoconf.nvim',
       {'henry-hsieh/mason.nvim', opts = {}},
     },
     opts = {
@@ -183,9 +182,6 @@ require("lazy").setup({
 
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      'folke/neoconf.nvim',
-    },
     event = 'VeryLazy',
     keys = function()
       -- Global mappings.
@@ -361,14 +357,6 @@ require("lazy").setup({
   },
 
   { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
-
-  {
-    'folke/neoconf.nvim',
-    config = function()
-      require("neoconf").setup({
-      })
-    end
-  },
 
   {
     'lewis6991/gitsigns.nvim',
