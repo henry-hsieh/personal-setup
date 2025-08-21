@@ -686,7 +686,8 @@ require("lazy").setup({
   },
 
   {
-    "folke/snacks.nvim",
+    "henry-hsieh/snacks.nvim",
+    branch = 'feat-git-submodule-detect',
     priority = 1000,
     lazy = false,
     opts = function()
@@ -818,7 +819,7 @@ require("lazy").setup({
       { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
       { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
       -- Lazygit
-      { "<space>g",        function() Snacks.lazygit() end,                                        desc = "Lazygit" },
+      { "<space>g",        function() Snacks.lazygit.open({cwd = Snacks.git.get_root()})() end,    desc = "Lazygit" },
       -- Git browse
       { "gB",              function() Snacks.gitbrowse() end,                                      desc = "Open in Git Browser" },
       -- Scratch Buffer
@@ -976,7 +977,7 @@ require("lazy").setup({
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "folke/snacks.nvim",
+      "henry-hsieh/snacks.nvim",
       "stevearc/dressing.nvim",
     },
     config = function()
@@ -1007,7 +1008,7 @@ require("lazy").setup({
     "henry-hsieh/flash.nvim",
     dependencies = {
       {
-        "folke/snacks.nvim",
+        "henry-hsieh/snacks.nvim",
         opts = {
           picker = {
             win = {
