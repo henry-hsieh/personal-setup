@@ -1,5 +1,0 @@
-name: bd
-version: 1.03
-datasource: github-tags
-versioning: loose
-package: vigneshwaranr/bd
