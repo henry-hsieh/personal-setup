@@ -6,7 +6,7 @@ all: shellrc utils nvim-plugins mason-packages ts-parsers
 
 shellrc: bash tcsh
 
-utils: bat bd fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java yq
+utils: bat fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java yq zoxide
 
 nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim riscv-asm-vim verilog_systemverilog.vim
 
@@ -28,9 +28,6 @@ tcsh: | $(LOG_DIR)
 # Test utils
 bat: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
-bd: | $(LOG_DIR)
-	@{ "$@" -? 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 fd: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
@@ -81,6 +78,9 @@ java: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 yq: | $(LOG_DIR)
+	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+zoxide: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test neovim lua plugins

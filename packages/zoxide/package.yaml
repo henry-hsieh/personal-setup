@@ -1,0 +1,4 @@
+name: zoxide
+version: 0.9.8
+datasource: github-releases
+package: ajeetdsouza/zoxide

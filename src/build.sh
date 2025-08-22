@@ -23,8 +23,7 @@ TREE_SITTER_VERSION=$(cat ${PKG_DIR}/tree-sitter/package.yaml | grep version: | 
 TINTY_VERSION=$(cat ${PKG_DIR}/tinty/package.yaml | grep version: | sed 's/.\+:\s//g')
 TMUX_VERSION=$(cat ${PKG_DIR}/tmux/package.yaml | grep version: | sed 's/.\+:\s//g')
 HTOP_VERSION=$(cat ${PKG_DIR}/htop/package.yaml | grep version: | sed 's/.\+:\s//g')
-BD_VERSION=$(cat ${PKG_DIR}/bd/package.yaml | grep version: | sed 's/.\+:\s//g')
-GOTO_VERSION=$(cat ${PKG_DIR}/goto/package.yaml | grep version: | sed 's/.\+:\s//g')
+ZOXIDE_VERSION=$(cat ${PKG_DIR}/zoxide/package.yaml | grep version: | sed 's/.\+:\s//g')
 RUSTUP_VERSION=$(cat ${PKG_DIR}/rustup/package.yaml | grep version: | sed 's/.\+:\s//g')
 YQ_VERSION=$(cat ${PKG_DIR}/yq/package.yaml | grep version: | sed 's/.\+:\s//g')
 TPM_VERSION=$(cat ${PKG_DIR}/tpm/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -198,14 +197,16 @@ mv Htop-x86_64.AppImage htop
 rsync -a htop $OUT_DIR/.local/bin/
 popd
 
-# bd
-print_process_item "Download bd"
-download_exe https://raw.githubusercontent.com/vigneshwaranr/bd/v$BD_VERSION/bd $OUT_DIR/.local/bin/bd
-download_exe https://raw.githubusercontent.com/vigneshwaranr/bd/v$BD_VERSION/bash_completion.d/bd $OUT_DIR/.local/share/bash-completion/completions/bd
-
-# goto
-print_process_item "Download goto"
-download_exe https://raw.githubusercontent.com/iridakos/goto/v$GOTO_VERSION/goto.sh $OUT_DIR/.local/share/scripts/goto.sh
+# zoxide
+print_process_item "Download zoxide"
+download_file https://github.com/ajeetdsouza/zoxide/releases/download/v${ZOXIDE_VERSION}/zoxide-${ZOXIDE_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/zoxide-v${ZOXIDE_VERSION}-x86_64-unknown-linux-musl.tar.gz
+mkdir -p $BUILD_DIR/zoxide
+tar -axf $BUILD_DIR/zoxide-v${ZOXIDE_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR/zoxide
+pushd $BUILD_DIR/zoxide
+rsync -a zoxide $OUT_DIR/.local/bin/
+rsync -a man $OUT_DIR/.local/
+rsync -a completions/zoxide.bash $OUT_DIR/.local/share/bash-completion/completions/
+popd
 
 # tmux
 print_process_item "Download tmux"
