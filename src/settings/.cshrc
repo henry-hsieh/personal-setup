@@ -32,7 +32,6 @@ set history=1000
 set histdup=erase
 set histfile = ~/.tcsh_history
 set savehist=(1000 merge lock)
-alias precmd "if($? == 0) history -S; history -c; history -M; source ~/.local/share/scripts/git-prompt.csh"
 
 alias mv 'mv -i'
 alias cp 'cp -i'
@@ -57,7 +56,9 @@ alias l  'ls -CF'
 
 alias h 'history'
 alias vim 'nvim'
-alias bd 'set __bd_cmd=`echo \!! | sed -n "s/bd/bd -si/p"`; set __bd_dir="`/usr/bin/env $__bd_cmd`"; if ( "$__bd_dir" == "No such occurrence." ) echo "$__bd_dir"; if ( "$__bd_dir" != "No such occurrence." ) cd "$__bd_dir"; unset __bd_cmd __bd_dir'
+
+# zoxide
+source ~/.local/share/scripts/zoxide.csh
 
 # Set display if the host is WSL
 if ( "`uname -a`" =~ *WSL* ) then
@@ -68,3 +69,6 @@ endif
 if ( -f ~/.cshrc.post ) then
     source ~/.cshrc.post
 endif
+
+# Set precmd
+alias precmd 'history -S; history -c; history -M; source ~/.local/share/scripts/git-prompt.csh; __zoxide_hook'

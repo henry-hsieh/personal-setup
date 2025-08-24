@@ -197,7 +197,6 @@ alias la='ls -A'
 alias l='ls -CF'
 
 alias vim='nvim'
-alias bd=". bd -si"
 alias bat="bat --theme='base16-256'"
 
 # Source post-setup script if exist
@@ -205,3 +204,4 @@ if [ -f ~/.bashrc.post ]; then
     . ~/.bashrc.post
 fi
 
+eval "$(zoxide init bash)"
