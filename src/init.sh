@@ -51,5 +51,5 @@ mkdir -p $HOME/.local/share/nvim/lazy/blink.cmp/target/release/
 pushd $HOME/.local/share/nvim/lazy/blink.cmp/target/release/ > /dev/null
 download_exe  https://github.com/Saghen/blink.cmp/releases/download/$blink_version/x86_64-unknown-linux-gnu.so libblink_cmp_fuzzy.so
 download_file https://github.com/Saghen/blink.cmp/releases/download/$blink_version/x86_64-unknown-linux-gnu.so.sha256 libblink_cmp_fuzzy.so.sha256
-echo $blink_version > version
+printf "$blink_version" > version
 popd > /dev/null
