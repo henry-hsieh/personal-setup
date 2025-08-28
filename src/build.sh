@@ -26,6 +26,7 @@ HTOP_VERSION=$(cat ${PKG_DIR}/htop/package.yaml | grep version: | sed 's/.\+:\s/
 ZOXIDE_VERSION=$(cat ${PKG_DIR}/zoxide/package.yaml | grep version: | sed 's/.\+:\s//g')
 RUSTUP_VERSION=$(cat ${PKG_DIR}/rustup/package.yaml | grep version: | sed 's/.\+:\s//g')
 YQ_VERSION=$(cat ${PKG_DIR}/yq/package.yaml | grep version: | sed 's/.\+:\s//g')
+YAZI_VERSION=$(cat ${PKG_DIR}/yazi/package.yaml | grep version: | sed 's/.\+:\s//g')
 TPM_VERSION=$(cat ${PKG_DIR}/tpm/package.yaml | grep version: | sed 's/.\+:\s//g')
 
 # Command detection
@@ -228,6 +229,17 @@ mv yq_linux_amd64 yq
 rsync -a yq $OUT_DIR/.local/bin/
 rsync -a yq.1 $OUT_DIR/.local/man/man1/
 ./yq shell-completion bash > $OUT_DIR/.local/share/bash-completion/completions/yq.bash
+popd
+
+# yazi
+print_process_item "Download yazi"
+download_file https://github.com/sxyazi/yazi/releases/download/v${YAZI_VERSION}/yazi-x86_64-unknown-linux-musl.zip $BUILD_DIR/yazi-x86_64-unknown-linux-musl.zip
+unzip $BUILD_DIR/yazi-x86_64-unknown-linux-musl.zip -d $BUILD_DIR
+pushd $BUILD_DIR/yazi-x86_64-unknown-linux-musl
+rsync -a yazi $OUT_DIR/.local/bin/
+rsync -a ya $OUT_DIR/.local/bin/
+rsync -a completions/yazi.bash $OUT_DIR/.local/share/bash-completion/completions/
+rsync -a completions/ya.bash $OUT_DIR/.local/share/bash-completion/completions/
 popd
 
 # tpm
