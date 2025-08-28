@@ -1,0 +1,4 @@
+name: yazi
+version: 25.5.31
+datasource: github-releases
+package: sxyazi/yazi
