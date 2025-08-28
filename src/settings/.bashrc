@@ -49,17 +49,10 @@ fi
 # User specific aliases and functions
 export KERN_DIR=/usr/src/kernels/$(uname -r)
 
-# Set display if the host is WSL
-case "$(uname -a)" in
-    *WSL*)
-        export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
-        ;;
-    *)
-        if [ -z "$DISPLAY" ]; then # Not from SSH
-            export DISPLAY=:0
-        fi
-        ;;
-esac
+# Set display if it's empty
+if [ -z "$DISPLAY" ]; then
+    export DISPLAY=:0
+fi
 
 tinty_source_shell_theme() {
   tinty $@
