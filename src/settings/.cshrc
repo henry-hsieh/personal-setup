@@ -61,8 +61,8 @@ alias vim 'nvim'
 source ~/.local/share/scripts/zoxide.csh
 
 # Set display if the host is WSL
-if ( "`uname -a`" =~ *WSL* ) then
-    setenv DISPLAY `cat /etc/resolv.conf | grep nameserver | awk '{print $2}'`:0
+if ( ! $?DISPLAY ) then
+    setenv DISPLAY ":0"
 endif
 
 # Source post-setup script if exist
