@@ -192,6 +192,15 @@ alias l='ls -CF'
 alias vim='nvim'
 alias bat="bat --theme='base16-256'"
 
+# yazi
+function y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+  /usr/bin/env rm -f -- "$tmp"
+}
+
 # Source post-setup script if exist
 if [ -f ~/.bashrc.post ]; then
     . ~/.bashrc.post
