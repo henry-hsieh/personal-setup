@@ -190,7 +190,10 @@ alias la='ls -A'
 alias l='ls -CF'
 
 alias vim='nvim'
+alias vi='nvim'
+alias v='nvim'
 alias bat="bat --theme='base16-256'"
+export EDITOR='nvim'
 
 # yazi
 function y() {
