@@ -65,6 +65,13 @@ if ( ! $?DISPLAY ) then
     setenv DISPLAY ":0"
 endif
 
+# yazi
+alias y 'set tmp=`mktemp -t yazi-cwd.XXXXXX`; \
+        yazi \!* --cwd-file="$tmp"; \
+        set cwd="`tr -d '\''\0'\'' < $tmp`"; \
+        if ("$cwd" != "") cd "$cwd"; \
+        /usr/bin/rm -f "$tmp"'
+
 # Source post-setup script if exist
 if ( -f ~/.cshrc.post ) then
     source ~/.cshrc.post
