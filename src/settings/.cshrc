@@ -31,6 +31,9 @@ set noding
 set history=1000
 set histdup=erase
 set histfile = ~/.tcsh_history
+if ( -e "$histfile.lock" ) then
+    rm -rf $histfile.lock
+endif
 set savehist=(1000 merge lock)
 
 alias mv 'mv -i'
@@ -56,11 +59,15 @@ alias l  'ls -CF'
 
 alias h 'history'
 alias vim 'nvim'
+alias vi  'nvim'
+alias v   'nvim'
+alias bat "bat --theme='base16-256'"
+setenv EDITOR 'nvim'
 
 # zoxide
 source ~/.local/share/scripts/zoxide.csh
 
-# Set display if the host is WSL
+# Set display if it's empty
 if ( ! $?DISPLAY ) then
     setenv DISPLAY ":0"
 endif
