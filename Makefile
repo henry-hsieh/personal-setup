@@ -6,7 +6,7 @@ TEST_DIR = $(BUILD_DIR)/test
 TEST_HOME = $(TEST_DIR)/home
 TEST_JOBS ?= 1
 OUT = $(BUILD_DIR)/personal-setup.tar.gz
-EXCLUDES += .cache .npm .bash_history .tcsh_history nvim/telescope_history .local/state tinty/current_scheme rustup/downloads rustup/tmp cargo/git cargo/credentials
+EXCLUDES += .cache .npm .bash_history .tcsh_history .local/state tinty/current_scheme
 TAR_EXCLUDES := $(addprefix --exclude=',$(addsuffix ', $(EXCLUDES)))
 
 .PHONY: all build release test clean
@@ -16,8 +16,8 @@ all: release
 build: $(CURDIR)/build/personal-setup/build_home
 
 $(CURDIR)/build/personal-setup/build_home:
-	docker run -t --user $(shell id -u):$(shell id -g) -v $(CURDIR):$(CURDIR) -w $(CURDIR) personal-setup ./src/build.sh
-	docker run -t --user $(shell id -u):$(shell id -g) -v $(CURDIR):$(CURDIR) -w $(CURDIR) -e HOME=$(CURDIR)/build/personal-setup/build_home personal-setup bash -i -c './src/init.sh'
+	docker run -t --user $(shell id -un):$(shell id -gn) -v $(CURDIR):$(CURDIR) -v /etc/passwd:/etc/passwd -w $(CURDIR) personal-setup ./src/build.sh
+	docker run -t --user $(shell id -un):$(shell id -gn) -v $(CURDIR):$(CURDIR) -v /etc/passwd:/etc/passwd -w $(CURDIR) -e HOME=$(CURDIR)/build/personal-setup/build_home personal-setup bash -i -c './src/init.sh'
 
 build_docker:
 	docker build -t personal-setup $(SRC_DIR)
