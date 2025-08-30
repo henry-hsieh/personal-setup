@@ -6,7 +6,7 @@ TEST_DIR = $(BUILD_DIR)/test
 TEST_HOME = $(TEST_DIR)/home
 TEST_JOBS ?= 1
 OUT = $(BUILD_DIR)/personal-setup.tar.gz
-EXCLUDES += .cache .npm .bash_history .tcsh_history nvim/telescope_history .local/state tinty/current_scheme rustup/downloads rustup/tmp cargo/git cargo/credentials
+EXCLUDES += .cache .npm .bash_history .tcsh_history .local/state tinty/current_scheme
 TAR_EXCLUDES := $(addprefix --exclude=',$(addsuffix ', $(EXCLUDES)))
 
 .PHONY: all build release test clean
