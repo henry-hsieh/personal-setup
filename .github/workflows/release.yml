@@ -55,9 +55,9 @@ jobs:
       matrix:
         include:
           - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:latest'}
-          - { os: ubuntu-latest, manager: 'yum', image: 'centos:8'     }
-          - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:16.04' }
+          - { os: ubuntu-latest, manager: 'yum', image: 'oraclelinux:8'}
           - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:18.04' }
+          - { os: ubuntu-latest, manager: 'apt', image: 'ubuntu:20.04' }
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -85,8 +85,6 @@ jobs:
             echo "RUN apt install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*" >> Dockerfile
-            echo "RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*" >> Dockerfile
             echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
           fi
 
@@ -112,7 +110,7 @@ jobs:
 
       - name: Run tests
         id: run_test
-        run: docker run -t --rm -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
+        run: docker run -t -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
 
       - name: Create log name
         if: ${{ always() }}
