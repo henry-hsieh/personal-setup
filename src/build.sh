@@ -25,6 +25,7 @@ TMUX_VERSION=$(cat ${PKG_DIR}/tmux/package.yaml | grep version: | sed 's/.\+:\s/
 HTOP_VERSION=$(cat ${PKG_DIR}/htop/package.yaml | grep version: | sed 's/.\+:\s//g')
 ZOXIDE_VERSION=$(cat ${PKG_DIR}/zoxide/package.yaml | grep version: | sed 's/.\+:\s//g')
 RUSTUP_VERSION=$(cat ${PKG_DIR}/rustup/package.yaml | grep version: | sed 's/.\+:\s//g')
+WEZTERM_VERSION=$(cat ${PKG_DIR}/wezterm/package.yaml | grep version: | sed 's/.\+:\s//g')
 YQ_VERSION=$(cat ${PKG_DIR}/yq/package.yaml | grep version: | sed 's/.\+:\s//g')
 YAZI_VERSION=$(cat ${PKG_DIR}/yazi/package.yaml | grep version: | sed 's/.\+:\s//g')
 TPM_VERSION=$(cat ${PKG_DIR}/tpm/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -217,6 +218,15 @@ download_file https://github.com/henry-hsieh/tmux.appimage/releases/download/v${
 pushd $BUILD_DIR/tmux
 mv Tmux-x86_64.AppImage tmux
 rsync -a tmux $OUT_DIR/.local/bin/
+popd
+
+# wezterm
+print_process_item "Download wezterm"
+mkdir -p $BUILD_DIR/wezterm
+download_exe https://github.com/henry-hsieh/wezterm.appimage/releases/download/${WEZTERM_VERSION}/WezTerm-${WEZTERM_VERSION}-Ubuntu18.04.AppImage $BUILD_DIR/wezterm/WezTerm-${WEZTERM_VERSION}-Ubuntu18.04.AppImage
+pushd $BUILD_DIR/wezterm
+mv WezTerm-${WEZTERM_VERSION}-Ubuntu18.04.AppImage wezterm
+rsync -a wezterm $OUT_DIR/.local/bin/
 popd
 
 # yq

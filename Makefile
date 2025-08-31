@@ -16,8 +16,25 @@ all: release
 build: $(CURDIR)/build/personal-setup/build_home
 
 $(CURDIR)/build/personal-setup/build_home:
-	docker run -t --user $(shell id -u):$(shell id -g) -v $(CURDIR):$(CURDIR) -w $(CURDIR) personal-setup ./src/build.sh
-	docker run -t --user $(shell id -u):$(shell id -g) -v $(CURDIR):$(CURDIR) -w $(CURDIR) -e HOME=$(CURDIR)/build/personal-setup/build_home personal-setup bash -i -c './src/init.sh'
+	docker run -t \
+		--privileged \
+		-e TARGET_UID=$(shell id -u) \
+		-e TARGET_GID=$(shell id -g) \
+		-e TARGET_USER=$(shell id -un) \
+		-v $(CURDIR):$(CURDIR) \
+		-w $(CURDIR) \
+		personal-setup \
+		./src/build.sh
+	docker run -t \
+		--privileged \
+		-e TARGET_UID=$(shell id -u) \
+		-e TARGET_GID=$(shell id -g) \
+		-e TARGET_USER=$(shell id -un) \
+		-e TARGET_HOME=$(CURDIR)/build/personal-setup/build_home \
+	  -v $(CURDIR):$(CURDIR) \
+		-w $(CURDIR) \
+		personal-setup \
+		bash -i -c './src/init.sh'
 
 build_docker:
 	docker build -t personal-setup $(SRC_DIR)
