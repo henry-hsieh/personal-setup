@@ -82,10 +82,10 @@ jobs:
           if [[ "${{ matrix.manager }}" == "apt" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
             echo "RUN apt update" >> Dockerfile
-            echo "RUN apt install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
+            echo "RUN apt install -y tcsh wget tar gzip make git ca-certificates fuse" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates" >> Dockerfile
+            echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates fuse-libs" >> Dockerfile
           fi
 
       - name: Cache docker images
@@ -110,7 +110,7 @@ jobs:
 
       - name: Run tests
         id: run_test
-        run: docker run -t -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
+        run: docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
 
       - name: Create log name
         if: ${{ always() }}

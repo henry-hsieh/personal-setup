@@ -1,0 +1,4 @@
+name: wezterm
+version: 20250730-195751-6a493f88
+datasource: github-releases
+package: henry-hsieh/wezterm.appimage
