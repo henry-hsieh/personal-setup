@@ -8,7 +8,7 @@ shellrc: bash tcsh
 
 utils: bat fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java wezterm yq yazi zoxide
 
-nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim trouble.nvim riscv-asm-vim verilog_systemverilog.vim
+nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim trouble.nvim yazi.nvim riscv-asm-vim verilog_systemverilog.vim
 
 mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright ltex-ls bash-language-server typescript-language-server vscode-json-language-server
 
@@ -137,6 +137,9 @@ tinted-nvim: | $(LOG_DIR) nvim-fresh-start
 
 trouble.nvim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test trouble.api open '{"qflist"}' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+yazi.nvim: | $(LOG_DIR) nvim-fresh-start
+	@{ nvim --headless -c 'lua dofile("test-lua-plugin.lua")' +qa! -- $@.test yazi.health check 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test vim plugins
 riscv-asm-vim: | $(LOG_DIR) nvim-fresh-start
