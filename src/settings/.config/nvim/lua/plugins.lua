@@ -728,7 +728,7 @@ require("lazy").setup({
         },
         explorer = {
           enabled = true,
-          replace_netrw = true,
+          replace_netrw = false,
         },
         indent = { priority = 1, enabled = true },
         input = { enabled = true },
@@ -1232,6 +1232,53 @@ require("lazy").setup({
       },
     },
   },
+
+  {
+    "mikavilpas/yazi.nvim",
+    version = "*",
+    event = "VeryLazy",
+    dependencies = {
+      { "nvim-lua/plenary.nvim", lazy = true },
+    },
+    keys = {
+      {
+        "<leader>yf",
+        mode = { "n", "v" },
+        "<cmd>Yazi<cr>",
+        desc = "Open yazi at the current file",
+      },
+      {
+        "<leader>yw",
+        "<cmd>Yazi cwd<cr>",
+        desc = "Open yazi in current working directory",
+      },
+      {
+        "<leader>yt",
+        "<cmd>Yazi toggle<cr>",
+        desc = "Toggle yazi session",
+      },
+    },
+    ---@type YaziConfig | {}
+    opts = {
+      open_for_directories = true,
+      keymaps = {
+        show_help = "?",
+        open_file_in_vertical_split = "<c-v>",
+        open_file_in_horizontal_split = "<c-s>",
+        open_file_in_tab = "<c-t>",
+        grep_in_directory = "<c-g>",
+        replace_in_directory = "<c-r>",
+        cycle_open_buffers = "<tab>",
+        copy_relative_path_to_selected_files = "<c-y>",
+        send_to_quickfix_list = "<c-q>",
+        change_working_directory = "<c-\\>",
+        open_and_pick_window = "<c-o>",
+      },
+    },
+    init = function()
+      vim.g.loaded_netrwPlugin = 1
+    end,
+  }
 },
 {
   defaults = {
