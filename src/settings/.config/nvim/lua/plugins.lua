@@ -742,6 +742,33 @@ require("lazy").setup({
             files = {
               hidden = true,
             },
+            explorer = {
+              win = {
+                list = {
+                  keys = {
+                    ["<CR>"] = { {"pick_win_file", "confirm"}, mode = { "n", "i" } },
+                    ["<S-CR>"] = { "confirm", mode = { "n", "i" } },
+                  },
+                },
+              },
+              actions = {
+                pick_win_file = function(picker, item)
+                  if item.dir then
+                    picker:action('confirm')
+                  else
+                    picker:action('pick_win')
+                  end
+                end,
+              },
+            },
+          },
+          win = {
+            input = {
+              keys = {
+                ["<CR>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
+                ["<S-CR>"] = { "confirm", mode = { "n", "i" } },
+              },
+            },
           },
         },
         notifier = { enabled = true },
