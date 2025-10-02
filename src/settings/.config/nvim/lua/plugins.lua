@@ -848,7 +848,7 @@ require("lazy").setup({
       { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
       { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
       -- Lazygit
-      { "<space>g",        function() Snacks.lazygit.open({cwd = Snacks.git.get_root()})() end,    desc = "Lazygit" },
+      { "<space>g",        function() Snacks.lazygit.open({cwd = Snacks.git.get_root()})   end,    desc = "Lazygit" },
       -- Git browse
       { "gB",              function() Snacks.gitbrowse() end,                                      desc = "Open in Git Browser" },
       -- Scratch Buffer
