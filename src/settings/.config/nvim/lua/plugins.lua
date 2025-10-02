@@ -22,7 +22,7 @@ local ensure_lsp = {
   "verible",
   "vimls",
   "pyright",
-  "ltex",
+  "harper_ls",
   "bashls",
   "ts_ls",
   "jsonls",
