@@ -10,7 +10,7 @@ utils: bat fd fzf git-extras lazygit node htop nvim rg tinty tmux rustup rust-an
 
 nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim trouble.nvim yazi.nvim riscv-asm-vim verilog_systemverilog.vim
 
-mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright ltex-ls bash-language-server typescript-language-server vscode-json-language-server
+mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright harper-ls bash-language-server typescript-language-server vscode-json-language-server
 
 $(LOG_DIR):
 	@mkdir -p $(LOG_DIR)
@@ -167,7 +167,7 @@ vim-language-server: | $(LOG_DIR)
 pyright: | $(LOG_DIR)
 	@{ $(HOME)/.local/share/nvim/mason/bin/"$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
-ltex-ls: | $(LOG_DIR)
+harper-ls: | $(LOG_DIR)
 	@{ $(HOME)/.local/share/nvim/mason/bin/"$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 bash-language-server: | $(LOG_DIR)
