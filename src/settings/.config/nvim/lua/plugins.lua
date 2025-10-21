@@ -60,7 +60,17 @@ require("lazy").setup({
           end
         end,
       })
-    end
+    end,
+    keys = {
+      { "<c-space>", mode = {"n", "x", "o"}, function()
+        require("flash").treesitter({
+          actions = {
+            ["<c-space>"] = "next",
+            ["<BS>"] = "prev"
+          }
+        })
+      end, desc = "Treesitter incremental selection" },
+    },
   },
 
   {
