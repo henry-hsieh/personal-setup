@@ -688,8 +688,7 @@ require("lazy").setup({
   },
 
   {
-    "henry-hsieh/snacks.nvim",
-    branch = 'feat-git-submodule-detect',
+    "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
     opts = function()
