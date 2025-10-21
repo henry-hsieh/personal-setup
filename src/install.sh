@@ -19,6 +19,9 @@ mkdir -p $INSTALL_DIR
 GIT_NAME=$(git config --global --get user.name)
 GIT_EMAIL=$(git config --global --get user.email)
 
+# Backup installation path permission
+PERMISSION=$(stat -c '%a' $INSTALL_DIR)
+
 # Backup personal settings
 function backup() {
     file=$1
@@ -64,6 +67,9 @@ done
 # Restore origin git name and email
 git config --file $INSTALL_DIR/.config/git/config user.name  "$GIT_NAME"
 git config --file $INSTALL_DIR/.config/git/config user.email "$GIT_EMAIL"
+
+# Restore installation path permission
+chmod $PERMISSION $INSTALL_DIR
 
 echo -e "===================================================================="
 echo -e "Installation completed!\n"
