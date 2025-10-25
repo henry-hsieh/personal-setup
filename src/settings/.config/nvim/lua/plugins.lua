@@ -14,6 +14,12 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- LazyFile
+local Event = require("lazy.core.handler.event")
+
+Event.mappings.LazyFile = { id = "LazyFile", event = { "BufReadPost", "BufNewFile", "BufWritePre" } }
+Event.mappings["User LazyFile"] = Event.mappings.LazyFile
+
 -- LSP list
 local ensure_lsp = {
   "lua_ls",
@@ -93,7 +99,7 @@ require("lazy").setup({
         end,
       }
     },
-    event = 'BufReadPost',
+    event = 'LazyFile',
     init = function()
       vim.o.foldenable = true
       vim.o.foldcolumn = '1'
@@ -366,7 +372,7 @@ require("lazy").setup({
 
   {
     'lewis6991/gitsigns.nvim',
-    event = 'BufReadPost',
+    event = 'LazyFile',
     opts = {
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
