@@ -1,0 +1,4 @@
+name: genlint
+version: 0.2.1
+datasource: github-releases
+package: henry-hsieh/genlint
