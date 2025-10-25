@@ -16,6 +16,7 @@ BAT_VERSION=$(cat ${PKG_DIR}/bat/package.yaml | grep version: | sed 's/.\+:\s//g
 FD_VERSION=$(cat ${PKG_DIR}/fd/package.yaml | grep version: | sed 's/.\+:\s//g')
 FZF_VERSION=$(cat ${PKG_DIR}/fzf/package.yaml | grep version: | sed 's/.\+:\s//g')
 FZF_TAB_COMP_VERSION=$(cat ${PKG_DIR}/fzf-tab-comp/package.yaml | grep version: | sed 's/.\+:\s//g')
+GENLINT_VERSION=$(cat ${PKG_DIR}/genlint/package.yaml | grep version: | sed 's/.\+:\s//g')
 NODE_VERSION=$(cat ${PKG_DIR}/node/package.yaml | grep version: | sed 's/.\+:\s//g')
 JDK_VERSION=$(cat ${PKG_DIR}/jdk/package.yaml | grep version: | sed 's/.\+:\s//g')
 RG_VERSION=$(cat ${PKG_DIR}/rg/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -131,6 +132,18 @@ download_exe https://raw.githubusercontent.com/junegunn/fzf/$FZF_VERSION/shell/k
 # fzf-tab-completion
 print_process_item "Download fzf-tab-completion"
 download_exe https://raw.githubusercontent.com/lincheney/fzf-tab-completion/$FZF_TAB_COMP_VERSION/bash/fzf-bash-completion.sh $OUT_DIR/.local/share/scripts/fzf-bash-completion.sh
+
+# genlint
+print_process_item "Download genlint"
+mkdir -p $BUILD_DIR/genlint
+download_exe https://github.com/henry-hsieh/genlint/releases/download/v${GENLINT_VERSION}/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl.tar.gz
+tar -axf $BUILD_DIR/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
+pushd $BUILD_DIR/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl
+mkdir -p $OUT_DIR/.local/man/man1/
+rsync -a genlint $OUT_DIR/.local/bin/
+rsync -a genlint.1 $OUT_DIR/.local/man/man1/
+cp -f genlint.bash $OUT_DIR/.local/share/bash-completion/completions/
+popd
 
 # node (use unofficial builds)
 print_process_item "Download node"
