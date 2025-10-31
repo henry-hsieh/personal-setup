@@ -1397,6 +1397,7 @@ require("lazy").setup({
         snacks_terminal = true,
         trouble = true,
         bigfile = true,
+        yazi = true,
       }
 
       function M.lint()
