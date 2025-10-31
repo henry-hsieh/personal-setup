@@ -903,6 +903,7 @@ require("lazy").setup({
     config = function()
       local s = plugin_settings.verilog_systemverilog.settings
       vim.g.verilog_disable_indent_lst = s.disable_indent
+      vim.treesitter.language.register("systemverilog", "verilog_systemverilog")
     end,
   },
 
