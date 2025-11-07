@@ -1040,7 +1040,7 @@ require("lazy").setup({
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "henry-hsieh/snacks.nvim",
+      "folke/snacks.nvim",
       "stevearc/dressing.nvim",
     },
     config = function()
@@ -1071,7 +1071,7 @@ require("lazy").setup({
     "henry-hsieh/flash.nvim",
     dependencies = {
       {
-        "henry-hsieh/snacks.nvim",
+        "folke/snacks.nvim",
         opts = {
           picker = {
             win = {
