@@ -761,8 +761,7 @@ require("lazy").setup({
               win = {
                 list = {
                   keys = {
-                    ["<CR>"] = { {"pick_win_file", "confirm"}, mode = { "n", "i" } },
-                    ["<S-CR>"] = { "confirm", mode = { "n", "i" } },
+                    ["<C-O>"] = { {"pick_win", "jump"}, mode = { "n", "i" } },
                   },
                 },
               },
@@ -771,19 +770,9 @@ require("lazy").setup({
           win = {
             input = {
               keys = {
-                ["<CR>"] = { { "pick_win_file", "confirm" }, mode = { "n", "i" } },
-                ["<S-CR>"] = { "confirm", mode = { "n", "i" } },
+                ["<C-O>"] = { {"pick_win", "jump"}, mode = { "n", "i" } },
               },
             },
-          },
-          actions = {
-            pick_win_file = function(picker, item)
-              if item.dir then
-                picker:action('confirm')
-              else
-                picker:action('pick_win')
-              end
-            end,
           },
         },
         notifier = { enabled = true },
