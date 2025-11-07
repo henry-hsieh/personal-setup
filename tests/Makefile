@@ -6,7 +6,7 @@ all: shellrc utils nvim-plugins mason-packages ts-parsers
 
 shellrc: bash tcsh
 
-utils: bat fd fzf git-extras lazygit genlint node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java wezterm yq yazi zoxide
+utils: bat fd fzf git-extras lazygit genlint gh node htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java wezterm yq yazi zoxide
 
 nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim trouble.nvim yazi.nvim nvim-lint riscv-asm-vim verilog_systemverilog.vim
 
@@ -42,6 +42,9 @@ lazygit: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 genlint: | $(LOG_DIR)
+	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+gh: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 node: | $(LOG_DIR)

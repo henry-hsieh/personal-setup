@@ -17,6 +17,7 @@ FD_VERSION=$(cat ${PKG_DIR}/fd/package.yaml | grep version: | sed 's/.\+:\s//g')
 FZF_VERSION=$(cat ${PKG_DIR}/fzf/package.yaml | grep version: | sed 's/.\+:\s//g')
 FZF_TAB_COMP_VERSION=$(cat ${PKG_DIR}/fzf-tab-comp/package.yaml | grep version: | sed 's/.\+:\s//g')
 GENLINT_VERSION=$(cat ${PKG_DIR}/genlint/package.yaml | grep version: | sed 's/.\+:\s//g')
+GH_VERSION=$(cat ${PKG_DIR}/gh/package.yaml | grep version: | sed 's/.\+:\s//g')
 NODE_VERSION=$(cat ${PKG_DIR}/node/package.yaml | grep version: | sed 's/.\+:\s//g')
 JDK_VERSION=$(cat ${PKG_DIR}/jdk/package.yaml | grep version: | sed 's/.\+:\s//g')
 RG_VERSION=$(cat ${PKG_DIR}/rg/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -135,7 +136,6 @@ download_exe https://raw.githubusercontent.com/lincheney/fzf-tab-completion/$FZF
 
 # genlint
 print_process_item "Download genlint"
-mkdir -p $BUILD_DIR/genlint
 download_exe https://github.com/henry-hsieh/genlint/releases/download/v${GENLINT_VERSION}/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl.tar.gz $BUILD_DIR/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl.tar.gz
 tar -axf $BUILD_DIR/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/genlint-v${GENLINT_VERSION}-x86_64-unknown-linux-musl
@@ -143,6 +143,15 @@ mkdir -p $OUT_DIR/.local/man/man1/
 rsync -a genlint $OUT_DIR/.local/bin/
 rsync -a genlint.1 $OUT_DIR/.local/man/man1/
 cp -f genlint.bash $OUT_DIR/.local/share/bash-completion/completions/
+popd
+
+# gh
+print_process_item "Download gh"
+download_exe https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz $BUILD_DIR/gh_${GH_VERSION}_linux_amd64.tar.gz
+tar -axf $BUILD_DIR/gh_${GH_VERSION}_linux_amd64.tar.gz -C $BUILD_DIR
+pushd $BUILD_DIR/gh_${GH_VERSION}_linux_amd64
+rsync -a bin $OUT_DIR/.local/
+rsync -a share $OUT_DIR/.local/
 popd
 
 # node (use unofficial builds)
