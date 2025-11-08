@@ -693,7 +693,6 @@ require("lazy").setup({
         -- The following line is needed to fix the background color
         hl_group = "lualine_c_normal",
       })
-      vim.api.nvim_set_hl(0, "StatusLine", { link = "lualine_c_normal" })
       table.insert(opts.sections.lualine_c, {
         symbols.get,
         cond = symbols.has,
@@ -1205,6 +1204,7 @@ require("lazy").setup({
               { fg = colors.base02, bg = nil, bold = false, italic = false })
             vim.api.nvim_set_hl(0, "SnacksIndentScope",
               { fg = colors.base0C, bg = nil, bold = false, italic = false })
+            vim.api.nvim_set_hl(0, "StatusLine", { link = "lualine_c_normal" })
           end
         end,
       })
