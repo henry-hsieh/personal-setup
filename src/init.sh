@@ -53,3 +53,13 @@ download_exe  https://github.com/Saghen/blink.cmp/releases/download/$blink_versi
 download_file https://github.com/Saghen/blink.cmp/releases/download/$blink_version/x86_64-unknown-linux-gnu.so.sha256 libblink_cmp_fuzzy.so.sha256
 printf "$blink_version" > version
 popd > /dev/null
+
+# Install Copilot CLI
+npm install -g @github/copilot
+# Rebuild node-pty
+pushd /tmp > /dev/null
+npm install @devm33/node-pty
+rm -rf node_modules/\@devm33/node-pty/prebuilds
+PYTHON=/usr/bin/python3.8 npm rebuild @devm33/node-pty --target=v18.20.8
+cp -f node_modules/\@devm33/node-pty/build/Release/pty.node $HOME/.local/lib/node_modules/\@github/copilot/prebuilds/linux-x64/
+popd
