@@ -1,5 +1,5 @@
 name: wezterm
-version: 20251025-070338-b6e75fd7
+version: 20251111-071056-118802c2
 datasource: github-releases
 package: henry-hsieh/wezterm.appimage
 versioning: loose
