@@ -1,4 +1,4 @@
 name: gh
-version: 2.83.0
+version: 2.83.1
 datasource: github-releases
 package: cli/cli
