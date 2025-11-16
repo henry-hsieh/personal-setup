@@ -615,7 +615,7 @@ require("lazy").setup({
           theme = 'tinted',
           globalstatus = true,
           disabled_filetypes = {
-            winbar = { 'NvimTree' },
+            winbar = { "blink-cmp-menu", "blink-cmp-signature", "blink-cmp-documentation" },
           },
           events = {
             'WinEnter',
@@ -1407,6 +1407,9 @@ require("lazy").setup({
         snacks_notif_history = true,
         snacks_terminal = true,
         sidekick_terminal = true,
+        ["blink-cmp-menu"] = true,
+        ["blink-cmp-signature"] = true,
+        ["blink-cmp-documentation"] = true,
         trouble = true,
         bigfile = true,
         yazi = true,
