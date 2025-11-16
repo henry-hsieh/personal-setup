@@ -1325,7 +1325,14 @@ require("lazy").setup({
         genlint = {
           cmd = 'genlint',
           stdin = true,
-          args = { '-s', '-f', 'json' },
+          args = (function()
+            local base_args = { '-s', '-f', 'json' }
+            local disable_rules = plugin_settings.nvim_lint.settings.genlint.disable_rules
+            if disable_rules ~= '' then
+              return vim.fn.extend(base_args, { '-d', disable_rules })
+            end
+            return base_args
+          end)(),
           stream = 'both',
           parser = function(output, bufnr)
             local decoded = vim.json.decode(output) or {}

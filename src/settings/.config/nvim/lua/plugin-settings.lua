@@ -69,6 +69,13 @@ local plugin_settings = {
       copilot = true,
     },
   },
+  nvim_lint = {
+    settings = {
+      genlint = {
+        disable_rules = 'long-line,consecutive-blank,final-newline',
+      },
+    },
+  },
 }
 
 return plugin_settings
