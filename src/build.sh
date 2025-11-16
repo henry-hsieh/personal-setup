@@ -18,6 +18,7 @@ FZF_VERSION=$(cat ${PKG_DIR}/fzf/package.yaml | grep version: | sed 's/.\+:\s//g
 FZF_TAB_COMP_VERSION=$(cat ${PKG_DIR}/fzf-tab-comp/package.yaml | grep version: | sed 's/.\+:\s//g')
 GENLINT_VERSION=$(cat ${PKG_DIR}/genlint/package.yaml | grep version: | sed 's/.\+:\s//g')
 GH_VERSION=$(cat ${PKG_DIR}/gh/package.yaml | grep version: | sed 's/.\+:\s//g')
+CRUSH_VERSION=$(cat ${PKG_DIR}/crush/package.yaml | grep version: | sed 's/.\+:\s//g')
 NODE_VERSION=$(cat ${PKG_DIR}/node/package.yaml | grep version: | sed 's/.\+:\s//g')
 JDK_VERSION=$(cat ${PKG_DIR}/jdk/package.yaml | grep version: | sed 's/.\+:\s//g')
 RG_VERSION=$(cat ${PKG_DIR}/rg/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -152,6 +153,16 @@ tar -axf $BUILD_DIR/gh_${GH_VERSION}_linux_amd64.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/gh_${GH_VERSION}_linux_amd64
 rsync -a bin $OUT_DIR/.local/
 rsync -a share $OUT_DIR/.local/
+popd
+
+# crush
+print_process_item "Download crush"
+download_file https://github.com/charmbracelet/crush/releases/download/v${CRUSH_VERSION}/crush_${CRUSH_VERSION}_Linux_x86_64.tar.gz $BUILD_DIR/crush_${CRUSH_VERSION}_Linux_x86_64.tar.gz
+tar -axf $BUILD_DIR/crush_${CRUSH_VERSION}_Linux_x86_64.tar.gz -C $BUILD_DIR
+pushd $BUILD_DIR/crush_${CRUSH_VERSION}_Linux_x86_64
+rsync -a crush $OUT_DIR/.local/bin/
+rsync -a manpage/crush.1.gz $OUT_DIR/.local/man/man1/
+rsync -a completions/crush.bash $OUT_DIR/.local/share/bash-completion/completions/
 popd
 
 # node (use unofficial builds)

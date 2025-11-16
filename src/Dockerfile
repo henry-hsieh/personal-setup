@@ -4,8 +4,11 @@ FROM ubuntu:18.04
 
 # Install necessary packages
 RUN apt update && \
-    apt install -y build-essential && \
-    apt install -y sudo gzip xz-utils bsdmainutils unzip git curl rsync fuse
+    apt install -y build-essential software-properties-common && \
+    apt install -y sudo gzip xz-utils bsdmainutils unzip git curl rsync fuse && \
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt update && \
+    apt install -y python3.8
 
 # Rustup and Cargo
 ENV PATH=/tmp/.cargo/bin:$PATH

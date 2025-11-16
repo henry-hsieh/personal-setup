@@ -64,6 +64,11 @@ local plugin_settings = {
       add_eol = "gcA",
     },
   },
+  sidekick = {
+    settings = {
+      copilot = true,
+    },
+  },
 }
 
 return plugin_settings

@@ -32,6 +32,7 @@ local ensure_lsp = {
   "bashls",
   "ts_ls",
   "jsonls",
+  "copilot",
 }
 
 local plugin_settings = require("plugin-settings")
@@ -426,7 +427,12 @@ require("lazy").setup({
     opts = {
       keymap = {
         preset = "default",
-        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        ["<Tab>"] = { "select_next",
+                      "snippet_forward",
+                      function()
+                        return require("sidekick").nes_jump_or_apply()
+                      end,
+                      "fallback" },
         ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       },
       completion = {
@@ -501,6 +507,7 @@ require("lazy").setup({
         snacks_notif = "Notification",
         snacks_notif_history = "Notification History",
         snacks_terminal = "Terminal",
+        sidekick_terminal = "Terminal",
         trouble = "Trouble",
       }
 
@@ -959,6 +966,7 @@ require("lazy").setup({
         { "<leader>h"   , group = "Hunk"},
         { "<leader>t"   , group = "Toggle"},
         { "<leader>c"   , group = "Location", icon = { icon = "", color = "cyan" } },
+        { "<leader>a"   , group = "AI", icon = "🤖"},
         { "<leader>f"   , group = "Find"},
         { "<leader>g"   , group = "Git"},
         { "<leader>s"   , group = "Search"},
@@ -1390,6 +1398,7 @@ require("lazy").setup({
         snacks_notif = true,
         snacks_notif_history = true,
         snacks_terminal = true,
+        sidekick_terminal = true,
         trouble = true,
         bigfile = true,
         yazi = true,
@@ -1440,6 +1449,128 @@ require("lazy").setup({
         callback = M.debounce(100, M.lint),
       })
     end,
+  },
+
+  {
+    "folke/sidekick.nvim",
+    init = function ()
+      vim.g.sidekick_nes = plugin_settings.sidekick.settings.copilot
+    end,
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+      },
+      {
+        "nvim-lualine/lualine.nvim",
+        opts = function(_, opts)
+          opts.sections = opts.sections or {}
+          opts.sections.lualine_x = opts.sections.lualine_x or {}
+
+          -- Copilot status
+          table.insert(opts.sections.lualine_x, 1, {
+            function()
+              return " "
+            end,
+            color = function()
+              local status = require("sidekick.status").get()
+              if status then
+                return status.kind == "Error" and "DiagnosticError" or status.busy and "DiagnosticWarn" or "DiagnosticHint"
+              end
+            end,
+            cond = function()
+              local status = require("sidekick.status")
+              return status.get() ~= nil
+            end,
+          })
+
+          -- CLI session status
+          table.insert(opts.sections.lualine_x, 1, {
+            function()
+              local status = require("sidekick.status").cli()
+              return " " .. (#status > 1 and " " .. #status or "")
+            end,
+            color = function()
+              return "DiagnosticHint"
+            end,
+            cond = function()
+              return #require("sidekick.status").cli() > 0
+            end,
+          })
+        end,
+      }
+    },
+    opts = {
+      -- add any options here
+      cli = {
+        mux = {
+          backend = "tmux",
+          enabled = true,
+        },
+      },
+      copilot = {
+        status = {
+          enabled = plugin_settings.sidekick.settings.copilot,
+        },
+      },
+    },
+    keys = {
+      {
+        "<tab>",
+        function()
+          -- if there is a next edit, jump to it, otherwise apply it if any
+          if not require("sidekick").nes_jump_or_apply() then
+            return "<Tab>" -- fallback to normal tab
+          end
+        end,
+        expr = true,
+        desc = "Goto/Apply Next Edit Suggestion",
+      },
+      {
+        "<c-.>",
+        function() require("sidekick.cli").toggle() end,
+        desc = "Sidekick Toggle",
+        mode = { "n", "t", "i", "x" },
+      },
+      {
+        "<leader>aa",
+        function() require("sidekick.cli").toggle() end,
+        desc = "Sidekick Toggle CLI",
+      },
+      {
+        "<leader>as",
+        function() require("sidekick.cli").select({ filter = { installed = true } }) end,
+        desc = "Select Installed CLI",
+      },
+      {
+        "<leader>ad",
+        function() require("sidekick.cli").close() end,
+        desc = "Detach a CLI Session",
+      },
+      {
+        "<leader>at",
+        function() require("sidekick.cli").send({ msg = "{this}" }) end,
+        mode = { "x", "n" },
+        desc = "Send This",
+      },
+      {
+        "<leader>af",
+        function() require("sidekick.cli").send({ msg = "{file}" }) end,
+        desc = "Send File",
+      },
+      {
+        "<leader>av",
+        function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+        mode = { "x" },
+        desc = "Send Visual Selection",
+      },
+      {
+        "<leader>ap",
+        function() require("sidekick.cli").prompt() end,
+        mode = { "n", "x" },
+        desc = "Sidekick Select Prompt",
+      },
+    },
   },
 },
 {
