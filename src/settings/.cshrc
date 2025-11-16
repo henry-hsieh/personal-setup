@@ -62,6 +62,7 @@ alias vim 'nvim'
 alias vi  'nvim'
 alias v   'nvim'
 alias bat "bat --theme='base16-256'"
+alias jq  'yq'
 setenv EDITOR 'nvim'
 
 # zoxide
