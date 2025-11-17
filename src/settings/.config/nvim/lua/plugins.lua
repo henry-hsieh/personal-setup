@@ -615,7 +615,7 @@ require("lazy").setup({
           theme = 'tinted',
           globalstatus = true,
           disabled_filetypes = {
-            winbar = { 'NvimTree' },
+            winbar = { "blink-cmp-menu", "blink-cmp-signature", "blink-cmp-documentation" },
           },
           events = {
             'WinEnter',
@@ -786,6 +786,7 @@ require("lazy").setup({
         scope = { enabled = true },
         toggle = { enabled = true, },
         scroll = { enabled = true },
+        terminal = { win = { wo = { winbar = "" } } },
         words = { enabled = true },
         zen = { enabled = true, toggles = { diagnostics = false }, },
         styles = { zen = { backdrop = { transparent = false }}},
@@ -1324,7 +1325,14 @@ require("lazy").setup({
         genlint = {
           cmd = 'genlint',
           stdin = true,
-          args = { '-s', '-f', 'json' },
+          args = (function()
+            local base_args = { '-s', '-f', 'json' }
+            local disable_rules = plugin_settings.nvim_lint.settings.genlint.disable_rules
+            if disable_rules ~= '' then
+              return vim.fn.extend(base_args, { '-d', disable_rules })
+            end
+            return base_args
+          end)(),
           stream = 'both',
           parser = function(output, bufnr)
             local decoded = vim.json.decode(output) or {}
@@ -1399,6 +1407,9 @@ require("lazy").setup({
         snacks_notif_history = true,
         snacks_terminal = true,
         sidekick_terminal = true,
+        ["blink-cmp-menu"] = true,
+        ["blink-cmp-signature"] = true,
+        ["blink-cmp-documentation"] = true,
         trouble = true,
         bigfile = true,
         yazi = true,
