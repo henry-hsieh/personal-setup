@@ -63,3 +63,6 @@ rm -rf node_modules/\@devm33/node-pty/prebuilds
 PYTHON=/usr/bin/python3.8 npm rebuild @devm33/node-pty --target=v18.20.8
 cp -f node_modules/\@devm33/node-pty/build/Release/pty.node $HOME/.local/lib/node_modules/\@github/copilot/prebuilds/linux-x64/
 popd
+
+# Install latest svlangserver
+npm install --prefix=$HOME/.local/share/nvim/mason/packages/svlangserver/ github:imc-trading/svlangserver
