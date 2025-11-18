@@ -349,7 +349,7 @@ require("lazy").setup({
       })
       --- verible
       vim.lsp.config("verible", {
-        cmd = {'verible-verilog-ls', '--rules_config_search'},
+        cmd = {'verible-verilog-ls', '--rules_config_search', '--push_diagnostic_notifications=false'},
         root_markers = extend_root_markers("verible", 'verible.filelist'),
         filetypes = extend_filetypes("verible", "verilog_systemverilog"),
       })
