@@ -66,3 +66,6 @@ popd
 
 # Install latest svlangserver
 npm install --prefix=$HOME/.local/share/nvim/mason/packages/svlangserver/ github:imc-trading/svlangserver
+
+# Install SDK for opencode
+npm install -g @ai-sdk/openai-compatible
