@@ -20,6 +20,7 @@ GENLINT_VERSION=$(cat ${PKG_DIR}/genlint/package.yaml | grep version: | sed 's/.
 GH_VERSION=$(cat ${PKG_DIR}/gh/package.yaml | grep version: | sed 's/.\+:\s//g')
 CRUSH_VERSION=$(cat ${PKG_DIR}/crush/package.yaml | grep version: | sed 's/.\+:\s//g')
 NODE_VERSION=$(cat ${PKG_DIR}/node/package.yaml | grep version: | sed 's/.\+:\s//g')
+OPENCODE_VERSION=$(cat ${PKG_DIR}/opencode/package.yaml | grep version: | sed 's/.\+:\s//g')
 JDK_VERSION=$(cat ${PKG_DIR}/jdk/package.yaml | grep version: | sed 's/.\+:\s//g')
 RG_VERSION=$(cat ${PKG_DIR}/rg/package.yaml | grep version: | sed 's/.\+:\s//g')
 TREE_SITTER_VERSION=$(cat ${PKG_DIR}/tree-sitter/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -174,6 +175,17 @@ rsync -a bin $OUT_DIR/.local/
 rsync -a include $OUT_DIR/.local/
 rsync -a lib $OUT_DIR/.local/
 rsync -a share $OUT_DIR/.local/
+popd
+
+# opencode
+print_process_item "Download opencode"
+download_file https://github.com/sst/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-x64.zip $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
+mkdir -p $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64
+pushd $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64
+unzip $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
+rsync -a opencode $OUT_DIR/.local/bin/
+mkdir -p $OUT_DIR/.config/opencode
+download_file https://opencode.ai/config.json $OUT_DIR/.config/opencode/schema.json
 popd
 
 # jdk
