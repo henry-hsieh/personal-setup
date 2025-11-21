@@ -6,16 +6,18 @@ TEST_DIR = $(BUILD_DIR)/test
 TEST_HOME = $(TEST_DIR)/home
 TEST_JOBS ?= 1
 OUT = $(BUILD_DIR)/personal-setup.tar.gz
-EXCLUDES += .cache .npm .bash_history .tcsh_history .local/state tinty/current_scheme
+CACHE_INCLUDES := opencode
+EXCLUDES += .bun .npm .bash_history .tcsh_history .local/state tinty/current_scheme
 TAR_EXCLUDES := $(addprefix --exclude=',$(addsuffix ', $(EXCLUDES)))
+CLEAN_CACHE_CMD := find build_home/.cache -mindepth 1 -maxdepth 1 $(foreach item,$(CACHE_INCLUDES), ! -name $(item)) -exec rm -rf {} +
 
 .PHONY: all build release test clean
 
 all: release
 
-build: $(CURDIR)/build/personal-setup/build_home
+build: $(BUILD_DIR)/personal-setup/build_home
 
-$(CURDIR)/build/personal-setup/build_home:
+$(BUILD_DIR)/personal-setup/build_home:
 	docker run -t \
 		--privileged \
 		-e TARGET_UID=$(shell id -u) \
@@ -39,8 +41,9 @@ $(CURDIR)/build/personal-setup/build_home:
 build_docker:
 	docker build -t personal-setup $(SRC_DIR)
 
-$(OUT): $(CURDIR)/build/personal-setup/build_home
+$(OUT): $(BUILD_DIR)/personal-setup/build_home
 	cd $(BUILD_DIR)/personal-setup && \
+	$(CLEAN_CACHE_CMD) && \
 	tar -czf home.tar.gz $(TAR_EXCLUDES) build_home --transform='s/build_home/./'
 	cd $(BUILD_DIR) && \
 	tar -czf $(notdir $@) --exclude='build_home' personal-setup

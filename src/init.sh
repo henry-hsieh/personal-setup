@@ -67,5 +67,36 @@ popd
 # Install latest svlangserver
 npm install --prefix=$HOME/.local/share/nvim/mason/packages/svlangserver/ github:imc-trading/svlangserver
 
-# Install SDK for opencode
-npm install -g @ai-sdk/openai-compatible
+# Force install AI SDK dependencies for opencode
+TEMP_CONFIG="/tmp/opencode-temp.json"
+cat > "$TEMP_CONFIG" <<EOF
+{
+  "provider": {
+    "fake-openai": {"npm": "@ai-sdk/openai", "options": {"baseURL": "http://fake"}, "models": {"gpt-4": {}}},
+    "fake-anthropic": {"npm": "@ai-sdk/anthropic", "options": {"baseURL": "http://fake"}, "models": {"claude-3": {}}},
+    "fake-groq": {"npm": "@ai-sdk/groq", "options": {"baseURL": "http://fake"}, "models": {"llama3": {}}},
+    "fake-together": {"npm": "@ai-sdk/togetherai", "options": {"baseURL": "http://fake"}, "models": {"llama3": {}}},
+    "fake-fireworks": {"npm": "@ai-sdk/fireworks", "options": {"baseURL": "http://fake"}, "models": {"llama3": {}}},
+    "fake-deepseek": {"npm": "@ai-sdk/deepseek", "options": {"baseURL": "http://fake"}, "models": {"deepseek-chat": {}}},
+    "fake-cerebras": {"npm": "@ai-sdk/cerebras", "options": {"baseURL": "http://fake"}, "models": {"llama3": {}}},
+    "fake-xai": {"npm": "@ai-sdk/xai", "options": {"baseURL": "http://fake"}, "models": {"grok": {}}},
+    "fake-google-vertex": {"npm": "@ai-sdk/google-vertex", "options": {"baseURL": "http://fake"}, "models": {"gemini": {}}},
+    "fake-google-genai": {"npm": "@ai-sdk/google", "options": {"baseURL": "http://fake"}, "models": {"gemini": {}}},
+    "fake-openai-compatible": {"npm": "@ai-sdk/openai-compatible", "options": {"baseURL": "http://fake"}, "models": {"compatible-model": {}}}
+  }
+}
+EOF
+export OPENCODE_CONFIG="$TEMP_CONFIG"
+timeout 600 opencode run hello -m fake-openai/gpt-4 || true
+timeout 600 opencode run hello -m fake-anthropic/claude-3 || true
+timeout 600 opencode run hello -m fake-groq/llama3 || true
+timeout 600 opencode run hello -m fake-together/llama3 || true
+timeout 600 opencode run hello -m fake-fireworks/llama3 || true
+timeout 600 opencode run hello -m fake-deepseek/deepseek-chat || true
+timeout 600 opencode run hello -m fake-cerebras/llama3 || true
+timeout 600 opencode run hello -m fake-xai/grok || true
+timeout 600 opencode run hello -m fake-google-vertex/gemini || true
+timeout 600 opencode run hello -m fake-google-genai/gemini || true
+timeout 600 opencode run hello -m fake-openai-compatible/compatible-model || true
+rm -f "$TEMP_CONFIG"
+unset OPENCODE_CONFIG

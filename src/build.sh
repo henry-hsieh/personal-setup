@@ -184,7 +184,7 @@ print_process_item "Download opencode"
 download_file https://github.com/sst/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-x64.zip $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
 mkdir -p $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64
 pushd $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64
-unzip $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
+unzip -o $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
 rsync -a opencode $OUT_DIR/.local/bin/
 mkdir -p $OUT_DIR/.config/opencode
 download_file https://opencode.ai/config.json $OUT_DIR/.config/opencode/schema.json
@@ -291,7 +291,7 @@ popd
 # yazi
 print_process_item "Download yazi"
 download_file https://github.com/sxyazi/yazi/releases/download/v${YAZI_VERSION}/yazi-x86_64-unknown-linux-musl.zip $BUILD_DIR/yazi-x86_64-unknown-linux-musl.zip
-unzip $BUILD_DIR/yazi-x86_64-unknown-linux-musl.zip -d $BUILD_DIR
+unzip -o $BUILD_DIR/yazi-x86_64-unknown-linux-musl.zip -d $BUILD_DIR
 pushd $BUILD_DIR/yazi-x86_64-unknown-linux-musl
 rsync -a yazi $OUT_DIR/.local/bin/
 rsync -a ya $OUT_DIR/.local/bin/
