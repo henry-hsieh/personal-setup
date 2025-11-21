@@ -1,0 +1,32 @@
+priority_rules:
+  - name: high priority
+    conditions:
+      - label = urgent
+    priority: high
+
+queue_rules:
+  # High priority queue for urgent PRs
+  - name: urgent
+    autoqueue: true
+    conditions:
+      - "base=main"
+      - "label=urgent"
+      - "-label~=^autorelease:"
+      - "check-success=build"
+      - "check-success=test"
+      - "-draft"
+    merge_method: squash
+    update_method: rebase
+
+  # Default queue for all normal PRs except release-please PRs
+  - name: default
+    autoqueue: true
+    conditions:
+      - "base=main"
+      - "-label=urgent"
+      - "-label~=^autorelease:"
+      - "check-success=build"
+      - "check-success=test"
+      - "-draft"
+    merge_method: squash
+    update_method: rebase
