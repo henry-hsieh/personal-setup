@@ -181,10 +181,10 @@ popd
 
 # opencode
 print_process_item "Download opencode"
-download_file https://github.com/sst/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-x64.zip $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
+download_file https://github.com/sst/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-x64.tar.gz $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.tar.gz
 mkdir -p $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64
 pushd $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64
-unzip -o $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.zip
+tar -axf $BUILD_DIR/opencode-${OPENCODE_VERSION}-linux-x64.tar.gz
 rsync -a opencode $OUT_DIR/.local/bin/
 mkdir -p $OUT_DIR/.config/opencode
 download_file https://opencode.ai/config.json $OUT_DIR/.config/opencode/schema.json
