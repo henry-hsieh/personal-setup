@@ -16,7 +16,7 @@ queue_rules:
       - -draft
     merge_method: squash
     update_method: rebase
-    update_bot_account: henry-hsieh[bot]
+    update_bot_account: henry-hsieh
   - name: default
     autoqueue: true
     batch_size: 1
@@ -29,6 +29,6 @@ queue_rules:
       - -draft
     merge_method: squash
     update_method: rebase
-    update_bot_account: henry-hsieh[bot]
+    update_bot_account: henry-hsieh
 merge_queue:
   max_parallel_checks: 1
