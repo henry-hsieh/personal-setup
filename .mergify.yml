@@ -6,23 +6,25 @@ priority_rules:
 queue_rules:
   - name: urgent
     autoqueue: true
-    conditions:
+    batch_size: 1
+    queue_conditions:
       - base=main
       - label=urgent
       - "-label~=^autorelease:"
-      - check-success=build
-      - check-success=test
+      - check-success~=^Build
+      - check-success~=^Test
       - -draft
     merge_method: squash
     update_method: rebase
   - name: default
     autoqueue: true
-    conditions:
+    batch_size: 1
+    queue_conditions:
       - base=main
       - -label=urgent
       - "-label~=^autorelease:"
-      - check-success=build
-      - check-success=test
+      - check-success~=^Build
+      - check-success~=^Test
       - -draft
     merge_method: squash
     update_method: rebase
