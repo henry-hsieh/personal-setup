@@ -162,7 +162,7 @@ download_file https://github.com/charmbracelet/crush/releases/download/v${CRUSH_
 tar -axf $BUILD_DIR/crush_${CRUSH_VERSION}_Linux_x86_64.tar.gz -C $BUILD_DIR
 pushd $BUILD_DIR/crush_${CRUSH_VERSION}_Linux_x86_64
 rsync -a crush $OUT_DIR/.local/bin/
-rsync -a manpage/crush.1.gz $OUT_DIR/.local/man/man1/
+rsync -a manpages/crush.1.gz $OUT_DIR/.local/man/man1/
 rsync -a completions/crush.bash $OUT_DIR/.local/share/bash-completion/completions/
 mkdir -p $OUT_DIR/.config/crush
 download_file https://charm.land/crush.json $OUT_DIR/.config/crush/schema.json
