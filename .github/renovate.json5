@@ -1,13 +1,13 @@
 {
-    automerge: true,
+    automerge: false,
     digest: {
-        automerge: true,
+        automerge: false,
     },
     extends: [
         'config:recommended',
         ':dependencyDashboard',
     ],
-    platformAutomerge: true,
+    platformAutomerge: false,
     automergeType: 'pr',
     commitMessagePrefix: 'feat({{depName}}):',
     commitMessageAction: 'bump',
@@ -16,7 +16,7 @@
     prHourlyLimit: 0,
     prConcurrentLimit: 0,
     branchConcurrentLimit: 0,
-    rebaseWhen: 'behind-base-branch',
+    rebaseWhen: 'never',
     enabledManagers: [
         'custom.regex',
     ],
