@@ -1518,6 +1518,11 @@ require("lazy").setup({
           backend = "tmux",
           enabled = true,
         },
+        win = {
+          keys = {
+            prompt = { "<a-p>", "prompt", mode = "t", desc = "insert prompt or context" },
+          },
+        },
       },
       copilot = {
         status = {
