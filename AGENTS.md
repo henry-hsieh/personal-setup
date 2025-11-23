@@ -62,5 +62,6 @@
 - **Pull Request Management**: Use GitHub CLI (`gh`) for creating and managing pull requests.
 - **Creating Pull Requests**: If a pull request does not exist, create a new one and set it as draft.
 - **Commenting on Changes**: Add comments in the pull request describing the changes made.
+- **Handling Comment Bodies**: When you want to add/edit PR body or comment body, remember to use `cat <<EOF` syntax for handling the multi-line text.
 - **Merging Process**: Once confirmed ready for merge, remove the draft status. Mergify will handle the automated merge process.
 - Do not commit unless explicitly instructed.
