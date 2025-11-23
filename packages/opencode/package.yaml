@@ -1,4 +1,4 @@
 name: opencode
-version: 1.0.105
+version: 1.0.106
 datasource: github-releases
 package: sst/opencode
