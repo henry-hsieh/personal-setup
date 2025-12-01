@@ -1,4 +1,4 @@
 name: crush
-version: 0.19.3
+version: 0.19.4
 datasource: github-releases
 package: charmbracelet/crush
