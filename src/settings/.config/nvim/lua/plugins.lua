@@ -22,7 +22,6 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 
 -- LSP list
 local ensure_lsp = {
-  "lua_ls",
   "clangd",
   "svlangserver",
   "verible",
@@ -343,6 +342,7 @@ require("lazy").setup({
       vim.lsp.config("lua_ls", {
         root_markers = extend_root_markers("lua_ls", "lazy-lock.json")
       })
+      vim.lsp.enable("lua_ls")
       --- svlangserver
       vim.lsp.config("svlangserver", {
         filetypes = extend_filetypes("svlangserver", "verilog_systemverilog"),
