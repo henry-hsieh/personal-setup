@@ -6,11 +6,11 @@ all: shellrc utils nvim-plugins mason-packages ts-parsers
 
 shellrc: bash tcsh
 
-utils: bat fd fzf git-extras lazygit genlint gh crush node npm opencode htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy tree-sitter java wezterm yq yazi zoxide copilot
+utils: bat fd fzf git-extras lazygit genlint gh crush node npm opencode htop nvim rg tinty tmux rustup rust-analyzer rustfmt cargo-clippy lua-language-server tree-sitter java wezterm yq yazi zoxide copilot
 
 nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim trouble.nvim yazi.nvim nvim-lint sidekick.nvim riscv-asm-vim verilog_systemverilog.vim
 
-mason-packages: lua-language-server clangd svlangserver verible-verilog-ls vim-language-server pyright harper-ls bash-language-server typescript-language-server vscode-json-language-server copilot-language-server
+mason-packages: clangd svlangserver verible-verilog-ls vim-language-server pyright harper-ls bash-language-server typescript-language-server vscode-json-language-server copilot-language-server
 
 $(LOG_DIR):
 	@mkdir -p $(LOG_DIR)
@@ -87,6 +87,9 @@ cargo-clippy: | $(LOG_DIR)
 	@{ eval "$(subst -, ,$@) --version" 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 tree-sitter: | $(LOG_DIR)
+	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+lua-language-server: | $(LOG_DIR)
 	@{ "$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 java: | $(LOG_DIR)
@@ -173,9 +176,6 @@ verilog_systemverilog.vim: | $(LOG_DIR) nvim-fresh-start
 	@{ nvim --headless -c 'lua dofile("test-vim-plugin.lua")' +qa! -- $@.v '*GetVerilogSystemVerilogIndent' ':let dummy=GetVerilogSystemVerilogIndent()' 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test mason packages
-lua-language-server: | $(LOG_DIR)
-	@{ $(HOME)/.local/share/nvim/mason/bin/"$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
-
 clangd: | $(LOG_DIR)
 	@{ $(HOME)/.local/share/nvim/mason/bin/"$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 

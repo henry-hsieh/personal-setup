@@ -1,0 +1,4 @@
+name: lua-language-server
+version: 3.16.1
+datasource: github-releases
+package: henry-hsieh/lua-language-server.appimage

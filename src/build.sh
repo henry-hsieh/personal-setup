@@ -27,6 +27,7 @@ TREE_SITTER_VERSION=$(cat ${PKG_DIR}/tree-sitter/package.yaml | grep version: | 
 TINTY_VERSION=$(cat ${PKG_DIR}/tinty/package.yaml | grep version: | sed 's/.\+:\s//g')
 TMUX_VERSION=$(cat ${PKG_DIR}/tmux/package.yaml | grep version: | sed 's/.\+:\s//g')
 HTOP_VERSION=$(cat ${PKG_DIR}/htop/package.yaml | grep version: | sed 's/.\+:\s//g')
+LUA_LS_VERSION=$(cat ${PKG_DIR}/lua-language-server/package.yaml | grep version: | sed 's/.\+:\s//g')
 ZOXIDE_VERSION=$(cat ${PKG_DIR}/zoxide/package.yaml | grep version: | sed 's/.\+:\s//g')
 RUSTUP_VERSION=$(cat ${PKG_DIR}/rustup/package.yaml | grep version: | sed 's/.\+:\s//g')
 WEZTERM_VERSION=$(cat ${PKG_DIR}/wezterm/package.yaml | grep version: | sed 's/.\+:\s//g')
@@ -244,6 +245,15 @@ download_file https://github.com/henry-hsieh/htop.appimage/releases/download/v${
 pushd $BUILD_DIR/htop
 mv Htop-x86_64.AppImage htop
 rsync -a htop $OUT_DIR/.local/bin/
+popd
+
+# lua-language-server
+print_process_item "Download lua-language-server"
+mkdir -p $BUILD_DIR/lua-language-server
+download_exe https://github.com/henry-hsieh/lua-language-server.appimage/releases/download/v${LUA_LS_VERSION}/Lua_Language_Server-x86_64.AppImage $BUILD_DIR/lua-language-server/Lua_Language_Server-x86_64.AppImage
+pushd $BUILD_DIR/lua-language-server
+mv Lua_Language_Server-x86_64.AppImage lua-language-server
+rsync -a lua-language-server $OUT_DIR/.local/bin/
 popd
 
 # zoxide
