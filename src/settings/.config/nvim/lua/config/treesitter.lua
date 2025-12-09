@@ -131,12 +131,6 @@ local M = {
     fold = true,
     indent = true,
   },
-  jsonc = {
-    enable = true,
-    highlight = true,
-    fold = true,
-    indent = true,
-  },
   latex = {
     enable = true,
     highlight = true,
