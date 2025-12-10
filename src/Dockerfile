@@ -6,6 +6,7 @@ FROM ubuntu:18.04
 RUN apt update && \
     apt install -y build-essential software-properties-common && \
     apt install -y sudo gzip xz-utils bsdmainutils unzip git curl rsync fuse && \
+    apt install -y llvm-dev libclang-dev clang && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt update && \
     apt install -y python3.8
