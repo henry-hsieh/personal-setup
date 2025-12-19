@@ -2,3 +2,11 @@ name: zoxide
 version: 0.9.8
 datasource: github-releases
 package: ajeetdsouza/zoxide
+url: https://github.com/ajeetdsouza/zoxide/releases/download/v{version}/zoxide-{version}-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: zoxide
+    dst: .local/bin/zoxide
+  - src: completions/zoxide.bash
+    dst: .local/share/bash-completion/completions/zoxide.bash

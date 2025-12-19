@@ -55,29 +55,37 @@ if [ -z "$DISPLAY" ]; then
 fi
 
 tinty_source_shell_theme() {
+  local newer_file
+  newer_file=$(mktemp)
+  # Ensure temporary file is removed on function exit
+  trap '\rm -f -- "$newer_file"' RETURN
+
   tinty $@
   subcommand="$1"
 
   if [ "$subcommand" = "apply" ] || [ "$subcommand" = "init" ]; then
     tinty_data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/tinted-theming/tinty"
 
-    for tinty_script_file in $(find "$tinty_data_dir" -maxdepth 1 -type f -name "*.sh"); do
-      . $tinty_script_file
-    done
+    while read -r script; do
+      # shellcheck disable=SC1090
+      . "$script"
+    done < <(find "$tinty_data_dir" -maxdepth 1 -type f -o -type l -name "*.sh" -newer "$newer_file")
 
-    unset data_dir_prefix tinty_data_dir
+    unset tinty_data_dir
   fi
 
   unset subcommand
 }
 
 if [ -n "$(command -v 'tinty')" ] && [ -z "$NVIM" ]; then
-  tinty_source_shell_theme "init"
+  tinty_source_shell_theme "init" > /dev/null
+
   if [[ "${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 4 || "${BASH_VERSINFO[0]}" -gt 4 ]]; then
     complete -F _tinty -o nosort -o bashdefault -o default tinty_source_shell_theme
   else
     complete -F _tinty -o bashdefault -o default tinty_source_shell_theme
   fi
+
   alias tinty=tinty_source_shell_theme
 fi
 

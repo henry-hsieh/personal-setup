@@ -2,13 +2,17 @@
 
 ## Build/Lint/Test Commands
 
+### Tool configuration
+- Raise tool execution time limit to 600 seconds.
+
 ### Build Commands
-- `make build` - Build the environment in `build/personal-setup/build_home/`
-- `make release` - Archive the environment into `build/personal-setup.tar.gz`
-- `make build_docker` - Build the Docker image for building
+- `just parallel=1 retry=0 build` - Build the environment in `build/output/`
+- `just parallel=1 retry=0 fast_fail=1 build` - Immediately stop when building process has error
+- `just release` - Archive the environment into `build/personal-setup.tar.gz`
+- `just build_docker` - Build the Docker image for building. Remember to rebuild docker after changing `src/Dockerfile`.
 
 ### Test Commands
-- `make test` - Run full test suite (builds, installs, and tests environment)
+- `just test` - Run full test suite (builds, installs, and tests environment)
 - `make -C tests <target>` - Run individual test (replace `<target>` with test name)
 
 ### Lint Commands

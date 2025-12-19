@@ -1,3 +1,15 @@
 name: node
 version: 23.7.0
 datasource: custom.unofficial_node
+url: https://unofficial-builds.nodejs.org/download/release/v{version}/node-v{version}-linux-x64-glibc-217.tar.xz
+extract: true
+checksum_source: https://unofficial-builds.nodejs.org/download/release/v{version}/SHASUMS256.txt
+files:
+  - src: bin
+    dst: .local/bin
+  - src: include
+    dst: .local/include
+  - src: lib
+    dst: .local/lib
+  - src: share
+    dst: .local/share

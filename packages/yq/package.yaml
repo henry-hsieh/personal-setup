@@ -2,3 +2,13 @@ name: yq
 version: 4.50.1
 datasource: github-releases
 package: mikefarah/yq
+url: https://github.com/mikefarah/yq/releases/download/v{version}/yq_linux_amd64.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: yq_linux_amd64
+    dst: .local/bin/yq
+  - src: yq.1
+    dst: .local/man/man1/yq.1
+init_cmds:
+  - yq shell-completion bash > $HOME/.local/share/bash-completion/completions/yq.bash

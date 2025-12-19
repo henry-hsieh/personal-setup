@@ -2,3 +2,28 @@ name: nvim
 version: 0.11.5
 datasource: github-releases
 package: neovim/neovim-releases
+url: https://github.com/neovim/neovim-releases/releases/download/v{version}/nvim-linux-x86_64.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: bin
+    dst: .local/bin
+  - src: lib
+    dst: .local/lib
+  - src: share
+    dst: .local/share
+init_cmds:
+  - nvim --headless -c 'Lazy! sync' -c 'Lazy! build nvim-treesitter' +qa
+  - nvim --headless -c 'MasonToolsUpdateSync' +qa
+  - |
+    QUERIES_DIR="$HOME/.local/share/nvim/site/queries"
+    if [ -d "$QUERIES_DIR" ]; then
+      for link in "$QUERIES_DIR"/*; do
+        if [ -L "$link" ]; then
+          target=$(readlink "$link")
+          if [[ "$target" == /* ]]; then
+            ln -rsf "$target" "$link"
+          fi
+        fi
+      done
+    fi

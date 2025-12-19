@@ -3,3 +3,6 @@ version: 4850357beac6f8e37b66bd78ccf90008ea3de40b
 datasource: git-refs
 branch: master
 package: lincheney/fzf-tab-completion
+files:
+  - src: https://raw.githubusercontent.com/lincheney/fzf-tab-completion/{version}/bash/fzf-bash-completion.sh
+    dst: .local/share/scripts/fzf-bash-completion.sh

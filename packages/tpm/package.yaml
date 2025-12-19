@@ -2,3 +2,12 @@ name: tpm
 version: 3.1.0
 datasource: github-tags
 package: tmux-plugins/tpm
+url: https://github.com/tmux-plugins/tpm.git
+extract: false
+checksum_source: git-refs
+files:
+  - src: .
+    dst: .cache/personal-setup/init/tpm
+init_cmds:
+  - $HOME/.cache/personal-setup/init/tpm/bin/install_plugins
+  - $HOME/.cache/personal-setup/init/tpm/bin/update_plugins all

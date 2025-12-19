@@ -1,4 +1,16 @@
 name: fzf
-version: v0.67.0
+version: 0.67.0
 datasource: github-releases
 package: junegunn/fzf
+url: https://github.com/junegunn/fzf/releases/download/v{version}/fzf-{version}-linux_amd64.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: fzf
+    dst: .local/bin/fzf
+  - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/man/man1/fzf.1
+    dst: .local/man/man1/fzf.1
+  - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/completion.bash
+    dst: .local/share/scripts/fzf-completion.bash
+  - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/key-bindings.bash
+    dst: .local/share/scripts/fzf-key-bindings.bash

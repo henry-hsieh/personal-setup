@@ -2,3 +2,13 @@ name: genlint
 version: 0.2.1
 datasource: github-releases
 package: henry-hsieh/genlint
+url: https://github.com/henry-hsieh/genlint/releases/download/v{version}/genlint-v{version}-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: genlint
+    dst: .local/bin/genlint
+  - src: genlint.1
+    dst: .local/man/man1/genlint.1
+  - src: genlint.bash
+    dst: .local/share/bash-completion/completions/genlint.bash

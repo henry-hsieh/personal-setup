@@ -2,3 +2,20 @@ name: rustup
 version: 1.28.2
 datasource: github-tags
 package: rust-lang/rustup
+url: https://static.rust-lang.org/rustup/archive/{version}/x86_64-unknown-linux-gnu/rustup-init
+extract: false
+checksum_source: https://static.rust-lang.org/rustup/archive/{version}/x86_64-unknown-linux-gnu/rustup-init.sha256
+files:
+  - src: .
+    dst: .cache/personal-setup/init/rustup-init
+    chmod: "755"
+init_cmds:
+  - |
+    RUSTUP_INIT_SKIP_SUDO_CHECK=yes \
+    RUSTUP_INIT_SKIP_PATH_CHECK=yes \
+    $HOME/.cache/personal-setup/init/rustup-init -y -q
+  - rustup -q toolchain install nightly
+  - rustup -q default nightly
+  - rustup -q component add rust-analyzer rustfmt clippy
+  - rustup -q completions bash > $HOME/.local/share/bash-completion/completions/rustup.bash
+  - rustup -q completions bash cargo > $HOME/.local/share/bash-completion/completions/cargo.bash

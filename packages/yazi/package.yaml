@@ -2,3 +2,17 @@ name: yazi
 version: 25.5.31
 datasource: github-releases
 package: sxyazi/yazi
+url: https://github.com/sxyazi/yazi/releases/download/v{version}/yazi-x86_64-unknown-linux-musl.zip
+extract: true
+checksum_source: github-release
+files:
+  - src: yazi
+    dst: .local/bin/yazi
+    chmod: "755"
+  - src: ya
+    dst: .local/bin/ya
+    chmod: "755"
+  - src: completions/yazi.bash
+    dst: .local/share/bash-completion/completions/yazi.bash
+  - src: completions/ya.bash
+    dst: .local/share/bash-completion/completions/ya.bash
