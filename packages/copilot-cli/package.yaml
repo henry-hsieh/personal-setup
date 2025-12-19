@@ -1,0 +1,28 @@
+name: copilot-cli
+version: 0.0.369
+datasource: github-releases
+package: github/copilot
+init_cmds:
+  - |
+    mkdir -p $HOME/.local/share/personal-setup
+    npm install --prefix $HOME/.local/share/personal-setup @github/copilot@{version}
+    ln -rsf $HOME/.local/share/personal-setup/node_modules/.bin/copilot $HOME/.local/bin/copilot
+  - |
+    # Create a temporary directory
+    TEMP_DIR=$(mktemp -d)
+    trap 'rm -rf -- "$TEMP_DIR"' EXIT
+    cd "$TEMP_DIR"
+
+    # Rebuild node-pty for GLIBC 2.27
+    npm install --quiet @devm33/node-pty
+    rm -rf node_modules/@devm33/node-pty/prebuilds
+    npm exec --quiet node-gyp install --dist-url=https://unofficial-builds.nodejs.org/download/release/
+    # Patch common.gypi to lower version of standard supported by gcc 7.5.0
+    GYP_CACHE_DIR="$HOME/.cache/node-gyp/$(node -v | sed 's/^v//')"
+    sed -i 's/-std=gnu++20/-std=gnu++17/g' "$GYP_CACHE_DIR/include/node/common.gypi"
+    npm rebuild --quiet @devm33/node-pty --dist-url=https://unofficial-builds.nodejs.org/download/release/
+
+    # Move artifacts to destination
+    COPILOT_PTY_DIR="$HOME/.local/share/personal-setup/node_modules/@github/copilot/prebuilds/linux-x64"
+    mkdir -p "$COPILOT_PTY_DIR"
+    cp -f node_modules/@devm33/node-pty/build/Release/pty.node "$COPILOT_PTY_DIR"

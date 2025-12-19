@@ -59,9 +59,10 @@ If you want to build from source or to contribute, following is the guide to do 
 
 ### Build Step
 
-1. Execute `make build` to build the environment in `build/personal-setup/build_home/`.
-2. Execute `make release` to archive the environment into `build/personal-setup.tar.gz`.
-3. **(Optional)** Execute `make test` to test the correctness of the environment.
+1. Execute `just build_docker` to build the docker environment.
+2. Execute `just build` to build the environment in `build/output/`.
+3. Execute `just release` to archive the environment into `build/personal-setup.tar.gz`.
+4. **(Optional)** Execute `just test` to test the correctness of the environment.
 
 ### Organization
 

@@ -2,3 +2,13 @@ name: tinty
 version: 0.29.0
 datasource: github-releases
 package: tinted-theming/tinty
+url: https://github.com/tinted-theming/tinty/releases/download/v{version}/tinty-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: tinty
+    dst: .local/bin/tinty
+  - src: https://raw.githubusercontent.com/tinted-theming/tinty/v{version}/contrib/completion/tinty.bash
+    dst: .local/share/bash-completion/completions/tinty.bash
+init_cmds:
+  - tinty sync

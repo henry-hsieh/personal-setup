@@ -23,6 +23,9 @@ jobs:
       - name: Commit lint
         uses: wagoid/commitlint-github-action@v6
 
+      - name: Setup just
+        uses: extractions/setup-just@v3
+
       - name: Cache docker images
         id: cache_image
         uses: AndreKurait/docker-cache@0.6.0
@@ -33,12 +36,21 @@ jobs:
       - name: Build docker image
         run: |
           if [[ "$(docker images | grep 'personal-setup')" == "" ]]; then
-            make build_docker
+            just build_docker
           fi
 
       - name: Build
         id: run_build
-        run: make release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: just release
+
+      - name: Upload logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build/logs
 
       - name: Upload release artifact
         if: steps.run_build.outcome == 'success'
@@ -77,16 +89,20 @@ jobs:
           remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/share/glade* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell"
           testing: false
 
+      - name: Setup just
+        uses: extractions/setup-just@v3
+
       - name: Install dependencies
         run: |
           if [[ "${{ matrix.manager }}" == "apt" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
             echo "RUN apt update" >> Dockerfile
-            echo "RUN apt install -y tcsh wget tar gzip make git ca-certificates fuse" >> Dockerfile
+            echo "RUN apt install -y tcsh curl tar gzip make git ca-certificates fuse" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN yum install -y tcsh wget tar gzip make git ca-certificates fuse-libs" >> Dockerfile
+            echo "RUN yum install -y tcsh curl tar gzip make git ca-certificates fuse-libs" >> Dockerfile
           fi
+          echo "RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin/" >> Dockerfile
 
       - name: Cache docker images
         id: cache_image
@@ -110,7 +126,7 @@ jobs:
 
       - name: Run tests
         id: run_test
-        run: docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'make test'
+        run: docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'just test'
 
       - name: Create log name
         if: ${{ always() }}

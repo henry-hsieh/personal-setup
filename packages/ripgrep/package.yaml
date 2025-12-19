@@ -1,0 +1,14 @@
+name: ripgrep
+version: 15.1.0
+datasource: github-releases
+package: BurntSushi/ripgrep
+url: https://github.com/BurntSushi/ripgrep/releases/download/{version}/ripgrep-{version}-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: rg
+    dst: .local/bin/rg
+  - src: doc/rg.1
+    dst: .local/share/man/man1/rg.1
+  - src: complete/rg.bash
+    dst: .local/share/bash-completion/completions/rg.bash

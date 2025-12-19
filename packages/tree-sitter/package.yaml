@@ -2,3 +2,15 @@ name: tree-sitter
 version: 0.26.3
 datasource: github-releases
 package: tree-sitter/tree-sitter
+url: https://github.com/tree-sitter/tree-sitter.git
+extract: false
+checksum_source: git-refs
+files:
+  - src: target/release/tree-sitter
+    dst: .local/bin/tree-sitter
+build_cmds:
+  - CFLAGS="-O3 -D_GNU_SOURCE" cargo build --release -q
+cache:
+  - target
+init_cmds:
+  - tree-sitter complete --shell bash > $HOME/.local/share/bash-completion/completions/tree-sitter.bash

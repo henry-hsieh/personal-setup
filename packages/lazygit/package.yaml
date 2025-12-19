@@ -2,3 +2,9 @@ name: lazygit
 version: 0.57.0
 datasource: github-releases
 package: jesseduffield/lazygit
+url: https://github.com/jesseduffield/lazygit/releases/download/v{version}/lazygit_{version}_linux_x86_64.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: lazygit
+    dst: .local/bin/lazygit

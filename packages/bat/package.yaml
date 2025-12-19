@@ -2,3 +2,13 @@ name: bat
 version: 0.26.1
 datasource: github-releases
 package: sharkdp/bat
+url: https://github.com/sharkdp/bat/releases/download/v{version}/bat-v{version}-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: bat
+    dst: .local/bin/bat
+  - src: bat.1
+    dst: .local/man/man1/bat.1
+  - src: autocomplete/bat.bash
+    dst: .local/share/bash-completion/completions/bat.bash

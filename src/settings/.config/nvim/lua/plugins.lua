@@ -40,7 +40,18 @@ require("lazy").setup({
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
     lazy = false,
-    build = ':TSUpdate',
+    build = function()
+      local opts = require("config.treesitter")
+      local langs = {}
+      local insert = table.insert
+
+      for lang, _ in pairs(opts) do
+        insert(langs, lang)
+      end
+
+      require("nvim-treesitter").install(langs):wait(10*60*1000)
+      require("nvim-treesitter").update(langs):wait(10*60*1000)
+    end,
     config = function()
       local opts = require("config.treesitter")
       local ts_query = vim.treesitter.query
@@ -423,6 +434,7 @@ require("lazy").setup({
       "folke/lazydev.nvim",
     },
     version = '*',
+    build = 'cargo build --release',
     event = 'InsertEnter',
     opts = {
       keymap = {

@@ -3,3 +3,10 @@ version: 20251201-075747-d3b0fdad
 datasource: github-releases
 package: henry-hsieh/wezterm.appimage
 versioning: loose
+url: https://github.com/henry-hsieh/wezterm.appimage/releases/download/{version}/WezTerm-{version}-Ubuntu18.04.AppImage
+extract: false
+checksum_source: github-release
+files:
+  - src: .
+    dst: .local/bin/wezterm
+    chmod: "755"

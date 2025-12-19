@@ -2,3 +2,13 @@ name: git-extras
 version: 7.4.0
 datasource: github-releases
 package: tj/git-extras
+url: https://github.com/tj/git-extras.git
+extract: false
+checksum_source: git-refs
+files:
+  - src: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    dst: .local/share/bash-completion/completions/git
+  - src: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+    dst:  .local/share/scripts/git-prompt.sh
+build_cmds:
+  - make install DESTDIR={out_dir}/ PREFIX=.local/ SYSCONFDIR=.local/share/

@@ -1,3 +1,21 @@
 name: jdk
 version: 25.0.1+8
 datasource: custom.jdk_lts
+url: https://api.adoptium.net/v3/binary/version/jdk-{version}/linux/x64/jdk/hotspot/normal/adoptium
+extract: true
+checksum_source: https://api.adoptium.net/v3/checksum/version/jdk-{version}/linux/x64/jdk/hotspot/normal/adoptium
+files:
+  - src: bin/
+    dst: .local/lib/jvm/jdk-{version}/bin
+  - src: conf/
+    dst: .local/lib/jvm/jdk-{version}/conf
+  - src: include/
+    dst: .local/lib/jvm/jdk-{version}/include
+  - src: legal/
+    dst: .local/lib/jvm/jdk-{version}/legal
+  - src: lib/
+    dst: .local/lib/jvm/jdk-{version}/lib
+  - src: release
+    dst: .local/lib/jvm/jdk-{version}/release
+init_cmds:
+  - ln -srf $HOME/.local/lib/jvm/jdk-{version} $HOME/.local/lib/java

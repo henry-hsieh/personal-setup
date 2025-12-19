@@ -15,6 +15,9 @@ if ! id -u "$USER_ID" >/dev/null 2>&1; then
     useradd -M -d $USER_HOME -u "$USER_ID" -g "$GROUP_ID" -s /bin/bash "$USER_NAME"
 fi
 
+# Change owner of user's home directory
+chown $USER_ID:$GROUP_ID $USER_HOME
+
 # Give passwordless sudo
 echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/$USER_NAME
 chmod 0440 /etc/sudoers.d/$USER_NAME
