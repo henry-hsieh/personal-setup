@@ -1,5 +1,5 @@
 name: copilot-cli
-version: 0.0.369
+version: 0.0.372
 datasource: github-releases
 package: github/copilot-cli
 init_cmds:
@@ -26,3 +26,7 @@ init_cmds:
     COPILOT_PTY_DIR="$HOME/.local/share/personal-setup/node_modules/@github/copilot/prebuilds/linux-x64"
     mkdir -p "$COPILOT_PTY_DIR"
     cp -f node_modules/@devm33/node-pty/build/Release/pty.node "$COPILOT_PTY_DIR"
+
+    # Remove prebuilt GLIBC 2.28 copilot binary
+    rm -rf $HOME/.local/share/personal-setup/node_modules/.bin/copilot-linux-x64
+    rm -rf $HOME/.local/share/personal-setup/node_modules/@github/copilot-linux-x64
