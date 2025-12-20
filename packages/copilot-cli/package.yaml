@@ -1,7 +1,7 @@
 name: copilot-cli
 version: 0.0.369
 datasource: github-releases
-package: github/copilot
+package: github/copilot-cli
 init_cmds:
   - |
     mkdir -p $HOME/.local/share/personal-setup
