@@ -39,6 +39,14 @@ jobs:
             just build_docker
           fi
 
+      - name: Cache personal-setup
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/personal-setup
+          key: personal-setup-${{ hashFiles('packages/**') }}
+          restore-keys: |
+            personal-setup-
+
       - name: Build
         id: run_build
         env:
