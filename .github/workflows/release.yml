@@ -46,6 +46,7 @@ jobs:
           key: personal-setup-${{ hashFiles('packages/**') }}
           restore-keys: |
             personal-setup-
+          lookup-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Build
         id: run_build
