@@ -1,5 +1,5 @@
 name: opencode
-version: 1.0.199
+version: 1.0.200
 datasource: github-releases
 package: sst/opencode
 url: https://github.com/sst/opencode/releases/download/v{version}/opencode-linux-x64.tar.gz
