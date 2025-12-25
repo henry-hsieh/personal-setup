@@ -39,20 +39,28 @@ jobs:
             just build_docker
           fi
 
-      - name: Cache personal-setup
-        uses: actions/cache@v4
+      - name: Restore build cache
+        uses: actions/cache/restore@v4
         with:
           path: ~/.cache/personal-setup
           key: personal-setup-${{ hashFiles('packages/**') }}
           restore-keys: |
             personal-setup-
-          lookup-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Build
         id: run_build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: just release
+
+      - name: Save build cache
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/personal-setup
+          key: personal-setup-${{ hashFiles('packages/**') }}
+          restore-keys: |
+            personal-setup-
 
       - name: Upload logs
         if: ${{ always() }}
