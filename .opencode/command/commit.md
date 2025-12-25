@@ -3,7 +3,16 @@ description: commit current changes following guidelines
 agent: build
 ---
 Commit the current changes following the Git and Pull Request Guidelines in AGENTS.md.
-  1. If you're on main branch, create a feature (`feat-category-*`), hotfix (`fix-category-*`) or refactor (`refactor-category-*`) branch.
+  1. If you're on main branch, create a branch with one of the following prefixes:
+     - `feat-category-*`: Used for adding new features inside `packages/` or `src/settings/`
+     - `fix-category-*`: Used for fixing bugs inside `packages/` or `src/settings/`
+     - `refactor-category-*`: Used for refactoring code inside `packages/` or `src/settings/`
+     - `build-category-*`: Used for changing code of `src/build.py`, Justfile, or Dockerfile.
+     - `ci-category-*`: Used for updating GitHub Actions, Renovate, Mergify, Release Please, or OpenCode (inside `.opencode/`) configuration.
+     - `test-category-*`: Used for updating test patterns inside `tests/`.
+     - `docs-category-*`: Used for documentation changes.
+     - `style-category-*`: Used for code style changes that do not affect the meaning of the code.
+     - `chore-category-*`: Used for other changes that don't modify src or test files.
   2. If there is already an unmerged commit at the branch, amend the changes to the commit, and reword the commit.
   3. If there isn't an unmerged commit at the branch, create a conventional commit.
   4. Pushing to upstream, and creating a draft PR if none exists. Use following template as the body of PR:

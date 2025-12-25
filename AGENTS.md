@@ -60,7 +60,7 @@
 ## Git and Pull Request Guidelines
 
 - **Branch Management**: Never commit directly to the main branch. Always create a feature branch (e.g., `feat-category-short-summary`) or hotfix branch (e.g., `fix-category-short-summary`) and open a pull request for review. Branch names should match the commit title format.
-- **Commit Messages**: Use conventional commit format. Types include `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `ci`. Optionally add a category in parentheses, e.g., `feat(nvim): add new plugin`. Examine `git log` for examples.
+- **Commit Messages**: Use conventional commit format. Types include `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `ci`, `build`. Optionally add a category in parentheses, e.g., `feat(nvim): add new plugin`. Examine `git log` for examples.
 - **Amending Commits**: When changing implementation, squash the smaller commit to previous commit, or add additional commits for larger changes if necessary.
 - **Pushing Changes**: After creating or amending commits, push to the upstream repository.
 - **Pull Request Management**: Use GitHub CLI (`gh`) for creating and managing pull requests.
