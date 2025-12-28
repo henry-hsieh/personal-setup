@@ -1608,6 +1608,19 @@ require("lazy").setup({
       },
     },
   },
+
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons'
+    },
+    ft = 'markdown',
+    cmd = { 'RenderMarkdown' },
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
 },
 {
   defaults = {
