@@ -59,8 +59,6 @@ jobs:
         with:
           path: ~/.cache/personal-setup
           key: personal-setup-${{ hashFiles('packages/**') }}
-          restore-keys: |
-            personal-setup-
 
       - name: Upload logs
         if: ${{ always() }}
