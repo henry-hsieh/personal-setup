@@ -1,0 +1,18 @@
+name: cmake
+version: 4.2.1
+datasource: github-releases
+package: Kitware/CMake
+url: https://github.com/Kitware/CMake/releases/download/v{version}/cmake-{version}-linux-x86_64.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: bin/
+    dst: .local/bin/
+  - src: share/
+    dst: .local/share/
+  - src: man/
+    dst: .local/share/man/
+build_cmds:
+  - |
+    # Remove old cmake share files
+    find {out_dir}/.local/share/ -maxdepth 1 -type d -name cmake-* ! -name $(echo cmake-{version} | sed 's/\([[:digit:]]\+\.[[:digit:]]\+\).*/\1/g') -exec rm -rf {} \;
