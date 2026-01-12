@@ -1,5 +1,5 @@
 name: lazygit
-version: 0.58.0
+version: 0.58.1
 datasource: github-releases
 package: jesseduffield/lazygit
 url: https://github.com/jesseduffield/lazygit/releases/download/v{version}/lazygit_{version}_linux_x86_64.tar.gz
