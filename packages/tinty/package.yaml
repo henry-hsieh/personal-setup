@@ -1,5 +1,5 @@
 name: tinty
-version: 0.29.0
+version: 0.30.0
 datasource: github-releases
 package: tinted-theming/tinty
 url: https://github.com/tinted-theming/tinty/releases/download/v{version}/tinty-x86_64-unknown-linux-musl.tar.gz
