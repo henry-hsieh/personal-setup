@@ -89,4 +89,58 @@ function M.file_exists(filepath)
   return stat and stat.type == 'file'
 end
 
+-- Extract RGB from hex
+---@param color string string with #RRGGBB format
+---@return integer r
+---@return integer g
+---@return integer b
+local function hex_to_rgb(color)
+  local r = tonumber(color:sub(2, 3), 16)
+  local g = tonumber(color:sub(4, 5), 16)
+  local b = tonumber(color:sub(6, 7), 16)
+  return r, g, b
+end
+
+-- Encode RGB to hex
+---@param r integer
+---@param g integer
+---@param b integer
+---@return string color string with #RRGGBB format
+local function rgb_to_hex(r, g, b)
+  return string.format("#%02x%02x%02x", r, g, b)
+end
+
+-- Adjust brightness of given color with specified ratio
+---@param color string string with #RRGGBB format
+---@param ratio number multiplier of the color
+---@return string adjusted_color string with #RRGGBB format
+function M.adjust_brightness(color, ratio)
+  local r, g, b = hex_to_rgb(color)
+
+  r = math.floor(math.min(255, math.max(0, r * ratio)))
+  g = math.floor(math.min(255, math.max(0, g * ratio)))
+  b = math.floor(math.min(255, math.max(0, b * ratio)))
+
+  return rgb_to_hex(r, g, b)
+end
+
+-- Mixed two given colors with specified ratio
+---@param color1 string string with #RRGGBB format
+---@param color2 string string with #RRGGBB format
+---@param ratio number|nil ratio of the color1
+---@return string mixed_color string with #RRGGBB format
+function M.mix_color(color1, color2, ratio)
+  local r1, g1, b1 = hex_to_rgb(color1)
+  local r2, g2, b2 = hex_to_rgb(color2)
+
+  local ratio1 = ratio or 0.5
+  local ratio2 = 1 - ratio1
+
+  local r = math.floor(math.min(255, math.max(0, r1 * ratio1 + r2 * ratio2)))
+  local g = math.floor(math.min(255, math.max(0, g1 * ratio1 + g2 * ratio2)))
+  local b = math.floor(math.min(255, math.max(0, b1 * ratio1 + b2 * ratio2)))
+
+  return rgb_to_hex(r, g, b)
+end
+
 return M

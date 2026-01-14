@@ -521,6 +521,7 @@ require("lazy").setup({
         snacks_terminal = "Terminal",
         sidekick_terminal = "Terminal",
         trouble = "Trouble",
+        ["codediff-explorer"] = "CodeDiff Explorer",
       }
 
       -- Helpers
@@ -1433,6 +1434,7 @@ require("lazy").setup({
         trouble = true,
         bigfile = true,
         yazi = true,
+        ["codediff-explorer"] = true,
       }
 
       function M.lint()
@@ -1621,6 +1623,31 @@ require("lazy").setup({
     ---@type render.md.UserConfig
     opts = {},
   },
+
+  {
+    'esmuellert/codediff.nvim',
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "tinted-theming/tinted-nvim"
+    },
+    build = "./build.sh",
+    cmd = "CodeDiff",
+    version = "*",
+    opts = function()
+      local colors = require("tinted-colorscheme").colors
+      local utils = require("utils")
+      return {
+        highlights = {
+          line_insert = (colors and
+          utils.adjust_brightness(utils.mix_color(colors.base0B, colors.base0C, 0.7),
+          vim.o.background == "dark" and 0.4 or 1.6)) or 'DiffAdd',    -- Line-level insertions
+          line_delete = (colors and
+          utils.adjust_brightness(utils.mix_color(colors.base08, colors.base0E, 0.7),
+          vim.o.background == "dark" and 0.4 or 1.6)) or 'DiffDelete', -- Line-level deletions
+        },
+      }
+    end,
+  }
 },
 {
   defaults = {
