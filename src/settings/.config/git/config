@@ -2,12 +2,14 @@
 [core]
     editor = nvim
 [diff]
-    tool = nvimdiff
+    tool = codediff
 [difftool]
     prompt = false
     trustExitCode = true
 [difftool "nvimdiff"]
     cmd = nvim -d $LOCAL $REMOTE
+[difftool "codediff"]
+    cmd = nvim "$LOCAL" -c "CodeDiff file \"$LOCAL\" \"$REMOTE\""
 [alias]
     vd = difftool
     vm = mergetool
@@ -39,13 +41,15 @@
         git reset --soft HEAD~ ; \
     fi"
 [merge]
-    tool = nvimdiff
+    tool = codediff
 [mergetool]
     prompt = false
     trustExitCode = true
     keepBackup = false
 [mergetool "nvimdiff"]
     cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[mergetool "codediff"]
+    cmd = nvim "$MERGED" -c "CodeDiff merge \"$MERGED\""
 [tig]
     show-changes = true
 [tig "color"]
