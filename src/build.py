@@ -14,7 +14,7 @@ import threading
 import zipfile
 import glob
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union, Set
 
 # Third-party imports
 import requests
@@ -64,6 +64,9 @@ class PackageBuilder:
         # Load registry into memory
         self.registry = self._load_registry()
 
+        # Package names for cache cleaning
+        self.package_names: Set[str] = set()
+
     def _init_dirs(self):
         """Create necessary directories."""
         for p in [self.out_dir, self.build_dir, self.temp_dir, self.log_dir, self.cache_dir,
@@ -93,10 +96,13 @@ class PackageBuilder:
                 return {}
         return {}
 
-    def _save_registry(self):
+    def _save_registry(self, lock: bool = True):
         """Thread-safe registry save."""
-        with self.registry_lock:
-            with open(self.registry_file, 'w') as f:
+        if lock:
+            with self.registry_lock:
+                self._save_registry(lock=False)
+        else:
+            with open(self.registry_file, "w") as f:
                 json.dump(self.registry, f, indent=2)
 
     def _update_registry_key(self, key: str, subkey: str, value):
@@ -895,6 +901,58 @@ class PackageBuilder:
 
         return workspace_dir
 
+    def _clean_old_versions(self, name: str, current_version: str):
+        """Remove cache entries and files for older versions of the package."""
+        # Pre-calculate sub-packages to avoid re-computing inside the loop.
+        sub_packages = [p for p in self.package_names if p.startswith(f"{name}-")]
+        keys_to_remove = []
+        with self.registry_lock:
+            keys_to_remove = []
+            for key in self.registry:
+                # A key must be for this package family to be considered.
+                if not key.startswith(f"{name}-"):
+                    continue
+                # Exclude keys that belong to a more specific sub-package.
+                if any(key.startswith(f"{p}-") for p in sub_packages):
+                    continue
+                # Exclude the key for the currently processed version.
+                if key.removeprefix(f"{name}-") == current_version:
+                    continue
+                keys_to_remove.append(key)
+
+            if keys_to_remove:
+                # Remove the old versions from registry
+                for key in keys_to_remove:
+                    del self.registry[key]
+                # Save registry while still holding the lock
+                self._save_registry(lock=False)
+
+        # Clean up files (outside lock)
+        for key in keys_to_remove:
+            # Artifacts and Extracted cache
+            for cache_type, cache_base_dir in [
+                ("artifact", self.artifacts_cache_dir),
+                ("extracted", self.extracted_cache_dir),
+            ]:
+                dir_to_remove = cache_base_dir / key
+                if dir_to_remove.exists():
+                    logging.info(f"Removing old {cache_type} cache: {dir_to_remove}")
+                    try:
+                        shutil.rmtree(dir_to_remove)
+                    except OSError as e:
+                        logging.warning(f"Failed to remove old {cache_type} cache {dir_to_remove}: {e}")
+
+            # Downloads
+            for f in self.download_cache_dir.glob(f"{glob.escape(key)}*"):
+                # Ensure we match '{key}' exactly or '{key}.ext' to avoid accidentally
+                # deleting a file where the version is a prefix (e.g. 'pkg-1.2' vs 'pkg-1.2-beta').
+                if f.is_file() and (f.name == key or f.name.startswith(f"{key}.")):
+                    logging.info(f"Removing old download cache: {f}")
+                    try:
+                        f.unlink()
+                    except OSError as e:
+                        logging.warning(f"Failed to delete {f}: {e}")
+
     def process_package(self, pkg: Dict) -> bool:
         if self.abort_event.is_set(): return False
 
@@ -945,6 +1003,10 @@ class PackageBuilder:
                     pass
 
             logging.info(f"Completed {name}")
+
+            # Clean old versions
+            self._clean_old_versions(name, version)
+
             return True
 
         except Exception as e:
@@ -1016,6 +1078,9 @@ def main():
                         packages.append(pkg)
 
     print(f"Loaded {len(packages)} packages")
+
+    # Populate package names for cache cleaning
+    builder.package_names = {pkg['name'] for pkg in packages}
 
     # Copy skeleton
     if Path('src/settings').exists():
