@@ -1354,7 +1354,7 @@ require("lazy").setup({
             end
             return base_args
           end)(),
-          stream = 'both',
+          stream = 'stdout',
           parser = function(output, bufnr)
             local decoded = vim.json.decode(output) or {}
             local result = {}
