@@ -9,6 +9,6 @@ files:
   - src: bat
     dst: .local/bin/bat
   - src: bat.1
-    dst: .local/man/man1/bat.1
+    dst: .local/share/man/man1/bat.1
   - src: autocomplete/bat.bash
     dst: .local/share/bash-completion/completions/bat.bash

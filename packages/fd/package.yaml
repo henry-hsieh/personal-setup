@@ -9,6 +9,6 @@ files:
   - src: fd
     dst: .local/bin/fd
   - src: fd.1
-    dst: .local/man/man1/fd.1
+    dst: .local/share/man/man1/fd.1
   - src: autocomplete/fd.bash
     dst: .local/share/bash-completion/completions/fd.bash

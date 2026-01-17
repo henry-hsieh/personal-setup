@@ -11,4 +11,4 @@ files:
     dst: .local/bin/tmux
     chmod: "755"
   - src: https://github.com/henry-hsieh/tmux.appimage/releases/download/v{version}/tmux.1
-    dst: .local/man/man1/tmux.1
+    dst: .local/share/man/man1/tmux.1

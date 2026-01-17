@@ -9,6 +9,6 @@ files:
   - src: yq_linux_amd64
     dst: .local/bin/yq
   - src: yq.1
-    dst: .local/man/man1/yq.1
+    dst: .local/share/man/man1/yq.1
 init_cmds:
   - yq shell-completion bash > $HOME/.local/share/bash-completion/completions/yq.bash
