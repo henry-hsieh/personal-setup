@@ -9,7 +9,7 @@ files:
   - src: fzf
     dst: .local/bin/fzf
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/man/man1/fzf.1
-    dst: .local/man/man1/fzf.1
+    dst: .local/share/man/man1/fzf.1
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/completion.bash
     dst: .local/share/scripts/fzf-completion.bash
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/key-bindings.bash

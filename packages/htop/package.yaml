@@ -10,4 +10,4 @@ files:
     dst: .local/bin/htop
     chmod: "755"
   - src: https://github.com/henry-hsieh/htop.appimage/releases/download/v{version}/htop.1
-    dst: .local/man/man1/htop.1
+    dst: .local/share/man/man1/htop.1

@@ -9,6 +9,6 @@ files:
   - src: genlint
     dst: .local/bin/genlint
   - src: genlint.1
-    dst: .local/man/man1/genlint.1
+    dst: .local/share/man/man1/genlint.1
   - src: genlint.bash
     dst: .local/share/bash-completion/completions/genlint.bash
