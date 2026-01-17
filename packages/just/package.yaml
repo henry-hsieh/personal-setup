@@ -1,0 +1,14 @@
+name: just
+version: 1.46.0
+datasource: github-releases
+package: casey/just
+url: https://github.com/casey/just/releases/download/{version}/just-{version}-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: just
+    dst: .local/bin/just
+  - src: just.1
+    dst: .local/share/man/man1/just.1
+  - src: completions/just.bash
+    dst: .local/share/bash-completion/completions/just.bash
