@@ -67,6 +67,28 @@
             datasourceTemplate: '{{datasource}}',
             versioningTemplate: 'semver',
         },
+        {
+            "description": "Opencode Plugin: NPM (Scoped or Unscoped)",
+            "customType": "regex",
+            "fileMatch": [
+                "^packages/opencode/opencode\\.json$"
+            ],
+            "matchStrings": [
+                "\"(?<depName>@[^\"\\/]+\\/[^\"@]+|[^\"\\/@]+)@(?<currentValue>[^\"@]+)\""
+            ],
+            "datasourceTemplate": "npm"
+        },
+        {
+            "description": "Opencode Plugin: GitHub (github:owner/repo#version)",
+            "customType": "regex",
+            "fileMatch": [
+                "^packages/opencode/opencode\\.json$"
+            ],
+            "matchStrings": [
+                "\"github:(?<depName>[^#\"]+)#(?<currentValue>[^\"]+)\"(?:[\\s,]*//\\s*datasource:\\s*(?<datasource>[\\w-]+))?"
+            ],
+            "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}"
+        },
     ],
     customDatasources: {
         unofficial_node: {

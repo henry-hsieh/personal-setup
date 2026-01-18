@@ -10,18 +10,8 @@ files:
     dst: .local/bin/opencode
   - src: https://opencode.ai/config.json
     dst: .config/opencode/schema.json
+  - src: "{pkg_dir}/opencode.json"
+    dst: .config/opencode/opencode.json
 init_cmds:
   - |
-    TEMP_CONFIG="$(mktemp)"
-    trap 'rm -f -- "$TEMP_CONFIG"' EXIT
-    cat {pkg_dir}/fake-config.json > "$TEMP_CONFIG"
-    export OPENCODE_CONFIG="$TEMP_CONFIG"
-    export GOOGLE_VERTEX_LOCATION="/tmp/google-vertex/"
-    export GOOGLE_VERTEX_PROJECT="/tmp/google-project/"
-    providers=($(yq '.provider | to_entries[] | .key as $p | .value.models | keys[] | $p + "/" + .' < $TEMP_CONFIG))
-    for provider in "${providers[@]}"; do
-      # Force opencode to download SDKs
-      # Because of using fake URL and keys, the opencode always exits with error
-      timeout 600 opencode run hello -m "$provider" || true
-    done
-    unset OPENCODE_CONFIG
+    timeout 600 opencode run "/exit" -m $(opencode models opencode | head -1)

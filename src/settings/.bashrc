@@ -177,6 +177,11 @@ export RUSTUP_HOME="$HOME/.local/rustup"
 export CARGO_HOME="$HOME/.local/cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 
+# OpenCode
+if [ -f "$HOME/.config/opencode/custom.json" ]; then
+  export OPENCODE_CONFIG="$HOME/.config/opencode/custom.json"
+fi
+
 alias mv='mv -i'
 alias cp='cp -i'
 alias rm='rm -i'
