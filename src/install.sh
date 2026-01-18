@@ -33,6 +33,7 @@ function backup() {
 backup $INSTALL_DIR/.bashrc
 backup $INSTALL_DIR/.cshrc
 backup $INSTALL_DIR/.config/git/config
+backup $INSTALL_DIR/.config/opencode/opencode.json
 backup $INSTALL_DIR/.config/tmux/tmux.conf
 backup $INSTALL_DIR/.config/nvim/init.lua
 
@@ -56,6 +57,7 @@ echo -e "Start installing:"
 rm -rf $INSTALL_DIR/.local/share/nvim/runtime
 rm -rf $INSTALL_DIR/.local/lib/node_modules/npm/
 rm -rf $INSTALL_DIR/.local/lib/node_modules/corepack/
+rm -rf $INSTALL_DIR/.cache/opencode
 untar $SCRIPT_DIR/home.tar.gz
 echo -e "Clean plugins..."
 cd $INSTALL_DIR/.local/share/nvim/lazy
