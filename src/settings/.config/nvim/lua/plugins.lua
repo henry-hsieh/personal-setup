@@ -1370,8 +1370,8 @@ require("lazy").setup({
                 lnum = diagnostic.lnum,
                 end_lnum = diagnostic.end_lnum,
                 col = diagnostic.col,
-                end_col = diagnostic.end_col,
-                source = "genlint validate",
+                end_col = diagnostic.end_col and (diagnostic.end_col + 1) or nil,
+                source = "Genlint",
                 severity = genlint_severity[diagnostic.severity],
                 filename = buf_path,
               }
