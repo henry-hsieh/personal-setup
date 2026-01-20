@@ -53,6 +53,16 @@ endif
 setenv JAVA_HOME "$HOME/.local/lib/java"
 setenv PATH "$JAVA_HOME/bin:$PATH"
 
+# Rustup and Cargo
+setenv RUSTUP_HOME "$HOME/.local/rustup"
+setenv CARGO_HOME "$HOME/.local/cargo"
+setenv PATH "$CARGO_HOME/bin:$PATH"
+
+# OpenCode
+if ( -f "$HOME/.config/opencode/custom.json" ) then
+  setenv OPENCODE_CONFIG "$HOME/.config/opencode/custom.json"
+endif
+
 alias ll 'ls -alF'
 alias la 'ls -A'
 alias l  'ls -CF'
