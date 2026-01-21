@@ -39,7 +39,7 @@ The **personal-setup** tool is designed to facilitate the easy setup and mainten
    HOME=/path/to/install bash
    ```
 
-   Or inside TCSH:
+   Or inside Tcsh:
 
    ```csh
    env HOME=/path/to/install bash
@@ -48,6 +48,32 @@ The **personal-setup** tool is designed to facilitate the easy setup and mainten
 4. Refer to the [post-installation guide](https://github.com/henry-hsieh/personal-setup/wiki/Environment-Setup) in Wiki.
 
 5. Login to your shell again.
+
+## Customization
+
+The environment supports customization through specific configuration files.
+
+### Shell Customization
+
+You can add custom shell commands or environment variables by creating the following files in your home directory:
+
+- **Bash**:
+  - `~/.bashrc.pre`: Executed at the beginning of `.bashrc`.
+  - `~/.bashrc.post`: Executed at the end of `.bashrc`.
+- **Tcsh**:
+  - `~/.cshrc.pre`: Executed at the beginning of `.cshrc`.
+  - `~/.cshrc.post`: Executed at the end of `.cshrc`.
+
+### Neovim Customization
+
+User-specific Neovim configurations can be placed in `~/.config/nvim/lua/custom/`.
+
+- **General Settings**: Create `~/.config/nvim/lua/custom/config.lua`. The module should return a table of options to override defaults in `~/.config/nvim/lua/config/defaults.lua`.
+- **Plugins**: Add custom plugins by creating `.lua` files in the `~/.config/nvim/lua/custom/plugins/` directory. Each file should return a `lazy.nvim` plugin specification.
+
+### OpenCode Customization
+
+To configure OpenCode, create `~/.config/opencode/custom.json`. The `OPENCODE_CONFIG` environment variable is automatically set to this path if the file exists.
 
 ## Development Guide
 
