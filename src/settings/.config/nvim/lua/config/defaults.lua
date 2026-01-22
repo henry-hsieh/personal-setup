@@ -17,7 +17,6 @@ M.lsp = {
   -- LSP servers to install via Mason
   ensure_installed = {
     "clangd",
-    "svlangserver",
     "verible",
     "vimls",
     "pyright",

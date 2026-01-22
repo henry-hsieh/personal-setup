@@ -192,6 +192,7 @@ return {
       vim.lsp.config("svlangserver", {
         filetypes = extend_filetypes("svlangserver", "verilog_systemverilog"),
       })
+      vim.lsp.enable("svlangserver")
       --- verible
       vim.lsp.config("verible", {
         cmd = { 'verible-verilog-ls', '--rules_config_search', '--push_diagnostic_notifications=false' },
