@@ -1,0 +1,11 @@
+name: harper-ls
+version: 1.4.1
+datasource: github-releases
+package: automattic/harper
+url: https://github.com/automattic/harper/releases/download/v{version}/harper-ls-x86_64-unknown-linux-gnu.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: harper-ls
+    dst: .local/bin/harper-ls
+    chmod: "755"
