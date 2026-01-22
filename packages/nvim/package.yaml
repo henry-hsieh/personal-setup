@@ -18,11 +18,16 @@ init_cmds:
   - |
     QUERIES_DIR="$HOME/.local/share/nvim/site/queries"
     if [ -d "$QUERIES_DIR" ]; then
-      for link in "$QUERIES_DIR"/*; do
+      cd "$QUERIES_DIR" || exit 1
+      for link in *; do
         if [ -L "$link" ]; then
-          target=$(readlink "$link")
-          if [[ "$target" == /* ]]; then
-            ln -rsf "$target" "$link"
+          if target=$(realpath --relative-to="$QUERIES_DIR" "$link" 2>/dev/null); then
+            if [ -n "$target" ]; then
+              # `ln -sf` does not replace absolute path with relative path.
+              # Force unlinking the absolute path instead.
+              unlink "$link"
+              ln -s "$target" "$link"
+            fi
           fi
         fi
       done
