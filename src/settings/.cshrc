@@ -58,6 +58,12 @@ setenv RUSTUP_HOME "$HOME/.local/rustup"
 setenv CARGO_HOME "$HOME/.local/cargo"
 setenv PATH "$CARGO_HOME/bin:$PATH"
 
+# Bun
+setenv BUN_INSTALL "$HOME/.local/bun"
+setenv BUN_INSTALL_CACHE_DIR "$HOME/.cache/bun"
+setenv PATH "$BUN_INSTALL/bin:$PATH"
+alias bunx 'bun x'
+
 # OpenCode
 if ( -f "$HOME/.config/opencode/custom.json" ) then
   setenv OPENCODE_CONFIG "$HOME/.config/opencode/custom.json"

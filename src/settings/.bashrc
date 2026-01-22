@@ -177,6 +177,12 @@ export RUSTUP_HOME="$HOME/.local/rustup"
 export CARGO_HOME="$HOME/.local/cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 
+# Bun
+export BUN_INSTALL="$HOME/.local/bun"
+export BUN_INSTALL_CACHE_DIR="$HOME/.cache/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+alias bunx='bun x'
+
 # OpenCode
 if [ -f "$HOME/.config/opencode/custom.json" ]; then
   export OPENCODE_CONFIG="$HOME/.config/opencode/custom.json"
