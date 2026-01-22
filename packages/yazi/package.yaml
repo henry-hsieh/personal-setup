@@ -1,5 +1,5 @@
 name: yazi
-version: 26.1.4
+version: 26.1.22
 datasource: github-releases
 package: sxyazi/yazi
 url: https://github.com/sxyazi/yazi/releases/download/v{version}/yazi-x86_64-unknown-linux-musl.zip
