@@ -20,7 +20,6 @@ M.lsp = {
     "verible",
     "vimls",
     "pyright",
-    "harper_ls",
     "bashls",
     "ts_ls",
     "jsonls",
