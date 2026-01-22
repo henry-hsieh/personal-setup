@@ -15,7 +15,7 @@ fast_fail_cmd := if fast_fail != "0" { "--fast-fail" } else { "" }
 out := build_dir / "personal-setup.tar.gz"
 cache_include_list := "opencode"
 find_args := prepend("! -name ", cache_include_list)
-static_exclude_list := ".bun .npm .bash_history .tcsh_history .local/state tinty/current_scheme"
+static_exclude_list := ".npm .bash_history .tcsh_history .local/state tinty/current_scheme"
 tar_static_excludes := prepend("--exclude=", static_exclude_list)
 
 # Recipes
