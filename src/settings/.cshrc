@@ -96,6 +96,9 @@ alias y 'set tmp=`mktemp -t yazi-cwd.XXXXXX`; \
         if ("$cwd" != "") cd "$cwd"; \
         /usr/bin/rm -f "$tmp"'
 
+# b: jump to a parent directory using zoxide-like keyworks with fzf fallback
+alias b 'set __zoxide_target = `$0 -f ~/.local/share/scripts/zoxide-b.csh \!*`; zoxide add "$__zoxide_target"; cd "$__zoxide_target"; unset __zoxide_target'
+
 # Source post-setup script if exist
 if ( -f ~/.cshrc.post ) then
     source ~/.cshrc.post

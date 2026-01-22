@@ -223,6 +223,39 @@ function y() {
   /usr/bin/env rm -f -- "$tmp"
 }
 
+# b: jump to a parent directory using zoxide-like keyworks with fzf fallback
+function b() {
+  # 1. No arguments: go back one level
+  if [[ -z "$1" ]]; then
+    builtin cd ..
+    return
+  fi
+
+  # Get current path without trailing slash
+  local __zoxide_pwd="${PWD%/}"
+
+  # 2. At root: nowhere to go
+  if [[ -z "$__zoxide_pwd" ]]; then
+    builtin cd /
+    return
+  fi
+
+  # 3. Pattern match logic: fuzzy search with all arguments
+  local __zoxide_pattern="${*// /.*}"
+  # Greedy match to find at most one result.
+  # Training '/' is used to exclude current directory.
+  local __zoxide_target=$(rg -oi -- ".+${__zoxide_pattern}[^/]*/" <<< "$__zoxide_pwd")
+
+  if [[ -n "$__zoxide_target" ]]; then
+    builtin cd "$__zoxide_target"
+  else
+    # 4. Fallback to fzf
+    local __zoxide_result=$(echo "$__zoxide_pwd" | tr '/' '\n' | awk 'BEGIN{print "/"} NF{path=path"/"$1; print path}' | head -n -1 | tac | awk '{print "["NR"] "$0}' | fzf -1 --height 40% --reverse --ansi --prompt='Jump back > ' | sed 's/.* //')
+
+    [[ -n "$__zoxide_result" ]] && builtin cd "${__zoxide_result}"
+  fi
+}
+
 # Source post-setup script if exist
 if [ -f ~/.bashrc.post ]; then
     . ~/.bashrc.post
