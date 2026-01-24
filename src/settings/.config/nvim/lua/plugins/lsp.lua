@@ -131,45 +131,6 @@ return {
 
       -- LSP configuration
 
-      -- Extend LSP root_markers with a string or a table of strings
-      ---@param lsp_name string
-      ---@param root_markers string|string[]
-      ---@return string|string[]
-      local function extend_root_markers(lsp_name, root_markers)
-        local defaults = vim.lsp.config[lsp_name].root_markers
-        local result = {}
-
-        if type(defaults) == "string" then
-          result = { defaults }
-        elseif type(defaults) == "table" then
-          result = vim.list_extend({}, defaults) -- shallow copy
-        end
-
-        if type(root_markers) == "string" then
-          table.insert(result, root_markers)
-        elseif type(root_markers) == "table" then
-          vim.list_extend(result, root_markers)
-        end
-
-        return result
-      end
-
-      -- Extend LSP filetypes with a string or a table of strings
-      ---@param lsp_name string
-      ---@param filetypes string|string[]
-      ---@return string[]
-      local function extend_filetypes(lsp_name, filetypes)
-        local result = vim.lsp.config[lsp_name].filetypes or {}
-
-        if type(filetypes) == "string" then
-          table.insert(result, filetypes)
-        elseif type(filetypes) == "table" then
-          vim.list_extend(result, filetypes)
-        end
-
-        return result
-      end
-
       --- harper-ls
       local prose_filetypes = { "markdown", "tex", "plaintex", "asciidoc", "gitcommit", "text" }
       local code_filetypes = { "lua", "python", "java", "ruby", "javascript", "typescript", "rust", "go", "c", "cpp", "verilog_systemverilog" }
@@ -222,14 +183,14 @@ return {
       })
       vim.lsp.enable("rust_analyzer")
       --- lua-language-server
-      --- append lazy-lock.json for detecting neovim configuration
+      -- Use `lua/` directory to detect roots of Neovim plugins and configurations
       vim.lsp.config("lua_ls", {
-        root_markers = extend_root_markers("lua_ls", "lazy-lock.json")
+        root_markers = utils.extend_lsp_config_list("lua_ls", "root_markers", "lua/")
       })
       vim.lsp.enable("lua_ls")
       --- svlangserver
       vim.lsp.config("svlangserver", {
-        filetypes = extend_filetypes("svlangserver", "verilog_systemverilog"),
+        filetypes = utils.extend_lsp_config_list("svlangserver", "filetypes", "verilog_systemverilog"),
       })
       vim.lsp.enable("svlangserver")
       --- ruff
@@ -239,8 +200,8 @@ return {
       --- verible
       vim.lsp.config("verible", {
         cmd = { 'verible-verilog-ls', '--rules_config_search', '--push_diagnostic_notifications=false' },
-        root_markers = extend_root_markers("verible", 'verible.filelist'),
-        filetypes = extend_filetypes("verible", "verilog_systemverilog"),
+        root_markers = utils.extend_lsp_config_list("verible", "root_markers", "verible.filelist"),
+        filetypes = utils.extend_lsp_config_list("verible", "filetypes", "verilog_systemverilog"),
       })
     end,
   },
