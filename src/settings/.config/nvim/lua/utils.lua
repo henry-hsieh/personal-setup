@@ -143,6 +143,23 @@ function M.mix_color(color1, color2, ratio)
   return rgb_to_hex(r, g, b)
 end
 
+-- Merge two arrays and uniquify them
+---@generic T
+---@param t1 T[]
+---@param t2 T[]
+---@return T[]
+function M.merge_unique_list(t1, t2)
+  local set = {}
+  for _, v in ipairs(t1) do set[v] = true end
+  for _, v in ipairs(t2) do set[v] = true end
+
+  local result = {}
+  for k in pairs(set) do
+    table.insert(result, k)
+  end
+  return result
+end
+
 -- Helper for flash.nvim
 function M.flash_jump_regex(regex)
   local Flash = require("flash")

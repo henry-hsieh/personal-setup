@@ -77,6 +77,8 @@ return {
       -- LSP log level
       -- vim.lsp.set_log_level("info")
 
+      local utils = require("utils")
+
       -- Appearance
       vim.diagnostic.config({
         virtual_text = true,
@@ -168,7 +170,43 @@ return {
         return result
       end
 
-      --- lua_ls
+      --- harper-ls
+      local prose_filetypes = { "markdown", "tex", "plaintex", "asciidoc", "gitcommit", "text" }
+      local code_filetypes = { "lua", "python", "java", "ruby", "javascript", "typescript", "rust", "go", "c", "cpp", "verilog_systemverilog" }
+      local harper_lspconfig = vim.lsp.config["harper_ls"] or {}
+      harper_lspconfig.filetypes = harper_lspconfig.filetypes or {}
+      local harper_configs = {
+        prose = {
+          filetypes = prose_filetypes,
+          grammar = true,
+        },
+        code = {
+          filetypes = vim.tbl_filter(function(ft)
+            return not vim.tbl_contains(prose_filetypes, ft)
+          end, utils.merge_unique_list(harper_lspconfig.filetypes, code_filetypes)),
+          grammar = false,
+        },
+      }
+
+      for name, config in pairs(harper_configs) do
+        local new_harper_lspconfig = vim.tbl_deep_extend("force", harper_lspconfig, {
+          filetypes = config.filetypes,
+          settings = {
+            ["harper-ls"] = {
+              linters = {
+                SentenceCapitalization = config.grammar,
+                SpellCheck = config.grammar,
+                OrthographicConsistency = config.grammar,
+                SplitWords = config.grammar,
+                ExpandStandardInputAndOutput = config.grammar,
+              },
+            },
+          },
+        })
+        vim.lsp.config("harper_ls_" .. name, new_harper_lspconfig)
+        vim.lsp.enable("harper_ls_" .. name)
+      end
+
       --- rust-analyzer
       vim.lsp.config("rust_analyzer", {
         settings = {
@@ -183,6 +221,7 @@ return {
         }
       })
       vim.lsp.enable("rust_analyzer")
+      --- lua-language-server
       --- append lazy-lock.json for detecting neovim configuration
       vim.lsp.config("lua_ls", {
         root_markers = extend_root_markers("lua_ls", "lazy-lock.json")
