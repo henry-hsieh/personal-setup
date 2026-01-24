@@ -19,7 +19,6 @@ M.lsp = {
     "clangd",
     "verible",
     "vimls",
-    "pyright",
     "bashls",
     "ts_ls",
     "jsonls",

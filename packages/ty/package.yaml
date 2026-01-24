@@ -1,0 +1,10 @@
+name: ty
+version: 0.0.13
+datasource: github-releases
+package: astral-sh/ty
+url: https://github.com/astral-sh/ty/releases/download/{version}/ty-x86_64-unknown-linux-gnu.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: ty
+    dst: .local/bin/ty
