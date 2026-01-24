@@ -143,7 +143,37 @@ function M.mix_color(color1, color2, ratio)
   return rgb_to_hex(r, g, b)
 end
 
--- Merge two arrays and uniquify them
+-- Extend LSP config list with a generic item or list of items
+---@generic T
+---@param lsp_name string
+---@param key string
+---@param values elem_or_list<T>
+---@return elem_or_list<T>
+function M.extend_lsp_config_list(lsp_name, key, values)
+  local lsp_config = vim.lsp.config[lsp_name] or {}
+  local defaults = lsp_config[key]
+  local result = {}
+
+  -- Handle existing defaults
+  if type(defaults) == "table" and vim.islist(defaults) then
+    result = vim.list_extend({}, defaults) -- shallow copy
+  elseif defaults ~= nil then
+    result = { defaults }
+  end
+
+  -- Append new values
+  if type(values) == "table" and vim.islist(values) then
+    -- If it's a list, extend
+    vim.list_extend(result, values)
+  elseif values ~= nil then
+    -- If it's a single item (string, number, or non-list table), insert it
+    table.insert(result, values)
+  end
+
+  return result
+end
+
+-- Merge two lists and uniquify them
 ---@generic T
 ---@param t1 T[]
 ---@param t2 T[]
