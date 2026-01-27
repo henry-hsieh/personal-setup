@@ -1,5 +1,5 @@
 name: ty
-version: 0.0.13
+version: 0.0.14
 datasource: github-releases
 package: astral-sh/ty
 url: https://github.com/astral-sh/ty/releases/download/{version}/ty-x86_64-unknown-linux-gnu.tar.gz
