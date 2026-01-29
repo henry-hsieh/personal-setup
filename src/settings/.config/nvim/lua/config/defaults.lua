@@ -14,15 +14,40 @@ M.features = {
 -- LSP Configuration
 --------------------------------------------------------------------------------
 M.lsp = {
+  -- Log level
+  log_level = "WARN",
   -- LSP servers to install via Mason
   ensure_installed = {
     "clangd",
     "verible",
+  },
+
+  -- LSP servers to enable
+  enable = {
+    "clangd",
+    "verible",
+    "rust_analyzer",
+    "lua_ls",
+    "slang-server",
+    "ruff",
+    "ty",
+    "ts_ls",
     "vimls",
     "bashls",
-    "ts_ls",
     "jsonls",
     "copilot",
+  },
+
+  -- Harper-ls config
+  harper = {
+    prose = {
+      enable = true,
+      filetypes = { "markdown", "tex", "plaintex", "asciidoc", "gitcommit", "text" },
+    },
+    code = {
+      enable = true,
+      filetypes = { "lua", "python", "java", "ruby", "javascript", "typescript", "rust", "go", "c", "cpp", "verilog_systemverilog" },
+    },
   },
 
   -- Diagnostic keymaps

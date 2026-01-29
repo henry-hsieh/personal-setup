@@ -74,10 +74,11 @@ return {
       }
     end,
     config = function()
-      -- LSP log level
-      -- vim.lsp.set_log_level("info")
-
       local utils = require("utils")
+      local config = require("config")
+
+      -- LSP log level
+      vim.lsp.set_log_level(config.lsp.log_level)
 
       -- Appearance
       vim.diagnostic.config({
@@ -130,42 +131,39 @@ return {
       })
 
       -- LSP configuration
-
       --- harper-ls
-      local prose_filetypes = { "markdown", "tex", "plaintex", "asciidoc", "gitcommit", "text" }
-      local code_filetypes = { "lua", "python", "java", "ruby", "javascript", "typescript", "rust", "go", "c", "cpp", "verilog_systemverilog" }
       local harper_lspconfig = vim.lsp.config["harper_ls"] or {}
       harper_lspconfig.filetypes = harper_lspconfig.filetypes or {}
       local harper_configs = {
         prose = {
-          filetypes = prose_filetypes,
+          filetypes = config.lsp.harper.prose.filetypes,
           grammar = true,
         },
         code = {
           filetypes = vim.tbl_filter(function(ft)
-            return not vim.tbl_contains(prose_filetypes, ft)
-          end, utils.merge_unique_list(harper_lspconfig.filetypes, code_filetypes)),
+            return not vim.tbl_contains(config.lsp.harper.prose.filetypes, ft)
+          end, utils.merge_unique_list(harper_lspconfig.filetypes, config.lsp.harper.code.filetypes)),
           grammar = false,
         },
       }
 
-      for name, config in pairs(harper_configs) do
+      for name, harper_config in pairs(harper_configs) do
         local new_harper_lspconfig = vim.tbl_deep_extend("force", harper_lspconfig, {
-          filetypes = config.filetypes,
+          filetypes = harper_config.filetypes,
           settings = {
             ["harper-ls"] = {
               linters = {
-                SentenceCapitalization = config.grammar,
-                SpellCheck = config.grammar,
-                OrthographicConsistency = config.grammar,
-                SplitWords = config.grammar,
-                ExpandStandardInputAndOutput = config.grammar,
+                SentenceCapitalization = harper_config.grammar,
+                SpellCheck = harper_config.grammar,
+                OrthographicConsistency = harper_config.grammar,
+                SplitWords = harper_config.grammar,
+                ExpandStandardInputAndOutput = harper_config.grammar,
               },
             },
           },
         })
         vim.lsp.config("harper_ls_" .. name, new_harper_lspconfig)
-        vim.lsp.enable("harper_ls_" .. name)
+        vim.lsp.enable("harper_ls_" .. name, config.lsp.harper[name].enable)
       end
 
       --- rust-analyzer
@@ -181,30 +179,26 @@ return {
           }
         }
       })
-      vim.lsp.enable("rust_analyzer")
       --- lua-language-server
       -- Use `lua/` directory to detect roots of Neovim plugins and configurations
       vim.lsp.config("lua_ls", {
         root_markers = utils.extend_lsp_config_list("lua_ls", "root_markers", "lua/")
       })
-      vim.lsp.enable("lua_ls")
       --- slang-server
       vim.lsp.config("slang-server", {
         cmd = { "slang-server" },
         root_markers = utils.extend_lsp_config_list("slang-server", "root_markers", { ".slang/", ".git" }),
         filetypes = utils.extend_lsp_config_list("slang-server", "filetypes", { "verilog", "systemverilog", "verilog_systemverilog" }),
       })
-      vim.lsp.enable("slang-server")
-      --- ruff
-      vim.lsp.enable("ruff")
-      --- ty
-      vim.lsp.enable("ty")
       --- verible
       vim.lsp.config("verible", {
         cmd = { 'verible-verilog-ls', '--rules_config_search', '--push_diagnostic_notifications=false' },
         root_markers = utils.extend_lsp_config_list("verible", "root_markers", "verible.filelist"),
         filetypes = utils.extend_lsp_config_list("verible", "filetypes", "verilog_systemverilog"),
       })
+
+      -- Enable all listed LSPs
+      vim.lsp.enable(config.lsp.enable)
     end,
   },
 

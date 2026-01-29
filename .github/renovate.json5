@@ -19,6 +19,7 @@
     rebaseWhen: 'never',
     enabledManagers: [
         'custom.regex',
+        'bun',
     ],
     customManagers: [
         {
