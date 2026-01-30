@@ -1,0 +1,10 @@
+name: slang-server
+version: 0.2.1
+datasource: github-releases
+package: hudson-trading/slang-server
+url: https://github.com/hudson-trading/slang-server/releases/download/v{version}/slang-server-linux-x64-gcc.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: slang-server
+    dst: .local/bin/slang-server

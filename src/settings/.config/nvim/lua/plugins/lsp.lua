@@ -188,11 +188,13 @@ return {
         root_markers = utils.extend_lsp_config_list("lua_ls", "root_markers", "lua/")
       })
       vim.lsp.enable("lua_ls")
-      --- svlangserver
-      vim.lsp.config("svlangserver", {
-        filetypes = utils.extend_lsp_config_list("svlangserver", "filetypes", "verilog_systemverilog"),
+      --- slang-server
+      vim.lsp.config("slang-server", {
+        cmd = { "slang-server" },
+        root_markers = utils.extend_lsp_config_list("slang-server", "root_markers", { ".slang/", ".git" }),
+        filetypes = utils.extend_lsp_config_list("slang-server", "filetypes", { "verilog", "systemverilog", "verilog_systemverilog" }),
       })
-      vim.lsp.enable("svlangserver")
+      vim.lsp.enable("slang-server")
       --- ruff
       vim.lsp.enable("ruff")
       --- ty
