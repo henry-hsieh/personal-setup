@@ -54,6 +54,7 @@ function untar() {
 }
 
 echo -e "Start installing:"
+rm -rf $INSTALL_DIR/.local/share/personal-setup
 rm -rf $INSTALL_DIR/.local/share/nvim/runtime
 rm -rf $INSTALL_DIR/.local/lib/node_modules/npm/
 rm -rf $INSTALL_DIR/.local/lib/node_modules/corepack/

@@ -3,7 +3,7 @@ import * as child_process from "child_process";
 
 const lsp_path = process.argv[2]
 console.log("Test LSP: " + lsp_path);
-let lspProcess = child_process.spawn("node", [ lsp_path, "--stdio" ]);
+let lspProcess = child_process.spawn(lsp_path, ["--stdio" ]);
 let messageId = 1;
 
 function send(method: string, params: object) {

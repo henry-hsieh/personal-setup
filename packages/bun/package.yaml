@@ -9,3 +9,5 @@ files:
   - src: bun
     dst: .local/bin/bun
     chmod: "755"
+init_cmds:
+  - bash {pkg_dir}/install-bun-packages.sh
