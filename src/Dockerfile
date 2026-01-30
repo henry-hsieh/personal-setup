@@ -16,7 +16,8 @@ RUN apt update && \
         fuse \
         llvm-dev \
         libclang-dev \
-        clang && \
+        clang \
+        libatomic1 && \
     add-apt-repository -y ppa:git-core/ppa && \
     apt update && \
     apt install -y --no-install-recommends git && \

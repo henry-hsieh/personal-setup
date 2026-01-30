@@ -112,10 +112,10 @@ jobs:
           if [[ "${{ matrix.manager }}" == "apt" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
             echo "RUN apt update" >> Dockerfile
-            echo "RUN apt install -y tcsh curl tar gzip make git ca-certificates fuse" >> Dockerfile
+            echo "RUN apt install -y tcsh curl tar gzip make git ca-certificates fuse libatomic1" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN yum install -y tcsh curl tar gzip make git ca-certificates fuse-libs" >> Dockerfile
+            echo "RUN yum install -y tcsh curl tar gzip make git ca-certificates fuse-libs libatomic" >> Dockerfile
           fi
           echo "RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin/" >> Dockerfile
 
