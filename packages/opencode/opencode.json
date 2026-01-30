@@ -1,6 +1,11 @@
 {
   "$schema": "schema.json",
   "autoupdate": false,
+  "agent": {
+    "general": {
+      "disable": true
+    }
+  },
   "plugin": [
     "@howaboua/opencode-roadmap-plugin@0.2.1",
     "opencode-antigravity-auth@1.4.3"
