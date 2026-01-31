@@ -1,5 +1,5 @@
 name: zoxide
-version: 0.9.8
+version: 0.9.9
 datasource: github-releases
 package: ajeetdsouza/zoxide
 url: https://github.com/ajeetdsouza/zoxide/releases/download/v{version}/zoxide-{version}-x86_64-unknown-linux-musl.tar.gz
