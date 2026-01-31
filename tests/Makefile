@@ -8,7 +8,7 @@ shellrc: bash tcsh
 
 utils: bat fd fzf git-extras lazygit genlint gh node npm opencode htop nvim rg ruff tinty tmux bun uv rustup rust-analyzer rustfmt cargo-clippy lua-language-server slang-server tree-sitter java just wezterm yq yazi zoxide harper-ls ty
 
-bun-packages: vim-language-server bash-language-server typescript-language-server vscode-json-language-server copilot-language-server
+bun-packages: vim-language-server bash-language-server typescript-language-server vscode-json-language-server copilot-language-server openspec
 
 nvim-plugins: lazy.nvim nvim-treesitter nvim-ufo mason.nvim gitsigns.nvim blink.cmp lualine.nvim Comment.nvim which-key.nvim tabby.nvim noice.nvim lazydev.nvim flash.nvim snacks.nvim tinted-nvim trouble.nvim yazi.nvim nvim-lint sidekick.nvim riscv-asm-vim verilog_systemverilog.vim
 
@@ -141,6 +141,9 @@ vscode-json-language-server: | $(LOG_DIR)
 	@{ ./test-lsp-stdio.ts $(HOME)/.local/bin/"$@" 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log && echo "Test $@ pass" >> $(LOG_DIR)/$@.log
 
 copilot-language-server: | $(LOG_DIR)
+	@{ $(HOME)/.local/bin/"$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
+
+openspec: | $(LOG_DIR)
 	@{ $(HOME)/.local/bin/"$@" --version 2> >(tee -a $(LOG_DIR)/$@.log >&2); } > $(LOG_DIR)/$@.log
 
 # Test neovim lua plugins
