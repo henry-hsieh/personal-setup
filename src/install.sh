@@ -59,6 +59,10 @@ rm -rf $INSTALL_DIR/.local/share/nvim/runtime
 rm -rf $INSTALL_DIR/.local/lib/node_modules/npm/
 rm -rf $INSTALL_DIR/.local/lib/node_modules/corepack/
 rm -rf $INSTALL_DIR/.cache/opencode
+rm -rf $INSTALL_DIR/.config/opencode/opencode-workflows
+if [[ -d $INSTALL_DIR/.config/opencode ]]; then
+  find $INSTALL_DIR/.config/opencode -type l -lname '../opencode-workflows/*' -delete
+fi
 untar $SCRIPT_DIR/home.tar.gz
 echo -e "Clean plugins..."
 cd $INSTALL_DIR/.local/share/nvim/lazy

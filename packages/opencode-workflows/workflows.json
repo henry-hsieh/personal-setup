@@ -1,0 +1,31 @@
+{
+  "agent": {
+    "fast.md": "agents/generic/.opencode/agent/fast.md",
+    "smart.md": "agents/generic/.opencode/agent/smart.md",
+    "subagent-orchestrator.md": "agents/generic/.opencode/agent/subagent-orchestrator.md",
+    "openspec-orchestrator.md": "agents/generic/.opencode/agent/openspec-orchestrator.md",
+    "repo-navigator.md": "agents/repo-navigator/agent/repo-navigator.md",
+    "opencode-configurator.md": "agents/opencode-configurator/agent/opencode-configurator.md"
+  },
+  "command": {
+    "loop.md": "commands/.opencode/command/loop.md",
+    "refactor.md": "commands/.opencode/command/refactor.md",
+    "refactor-rfc-xml.md": "commands/.opencode/command/refactor-rfc-xml.md",
+    "improve-run.md": "commands/.opencode/command/improve-run.md",
+    "improve-save.md": "commands/.opencode/command/improve-save.md",
+    "init.md": "agents/repo-navigator/command/init.md",
+    "learn.md": "agents/repo-navigator/command/learn.md",
+    "howto.md": "commands/.opencode/command/howto.md",
+    "rmslop.md": "commands/.opencode/command/rmslop.md"
+  },
+  "skill": {
+    "agent-architect": "agents/opencode-configurator/skill/agent-architect",
+    "command-creator": "agents/opencode-configurator/skill/command-creator",
+    "skill-creator": "agents/opencode-configurator/skill/skill-creator",
+    "opencode-config": "agents/opencode-configurator/skill/opencode-config",
+    "plugin-installer": "agents/opencode-configurator/skill/plugin-installer",
+    "mcp-installer": "agents/opencode-configurator/skill/mcp-installer",
+    "agent-navigation-sop": "agents/repo-navigator/skill/agent-navigation-sop",
+    "user-onboard-sop": "agents/repo-navigator/skill/user-onboard-sop"
+  }
+}
