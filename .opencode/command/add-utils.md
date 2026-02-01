@@ -1,8 +1,14 @@
 ---
-description: Automates the addition of a new utility package
+description: automate utility package addition
 agent: build
 ---
-Search GitHub for a prebuilt binary release of '$1' for the linux-x86_64 architecture. If a suitable binary is not found on GitHub, search the web for the official download site.
-Create a new file `packages/$1/package.yaml`. Following the package specification in `packages/README.md`:
-Add a test to `tests/Makefile`.
 
+<util_name>$1</util_name>
+<author_or_organization>$2</author_or_organization>
+
+<instructions>
+1. Search GitHub for linux-x86_64 binary releases of `<util_name>`, respecting `<author_or_organization>` if provided.
+2. Fall back to official download sites if GitHub search fails.
+3. Create `packages/<util_name>/package.yaml` following the specification in `packages/README.md`.
+4. Register a new test in `tests/Makefile`.
+</instructions>

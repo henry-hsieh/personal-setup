@@ -1,5 +1,10 @@
 ---
 description: mark PR as ready to merge
-agent: general
+agent: fast
 ---
-Change the status of the current pull request from draft to ready for merge, allowing Mergify to handle the automated merge process.
+
+<instructions>
+
+The agent MUST change the pull request status from draft to ready for merge.
+
+</instructions>
