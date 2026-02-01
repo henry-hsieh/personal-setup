@@ -8,3 +8,5 @@ checksum_source: github-release
 files:
   - src: ty
     dst: .local/bin/ty
+test:
+  type: version-check

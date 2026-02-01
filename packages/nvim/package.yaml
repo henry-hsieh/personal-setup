@@ -32,3 +32,19 @@ init_cmds:
         fi
       done
     fi
+subpackages:
+  - manifest: tests/nvim/manifest.lua
+    manifest_type: lua
+    test_defaults:
+      type: nvim-plugin
+  - manifest: inline
+    manifest_type: inline
+    test_defaults:
+      type: version-check
+    packages:
+      - name: verible
+        bin: verible-verilog-ls
+      - name: clangd
+test:
+  type: cmd
+  cmd: nvim --version && nvim --headless -c "PlenaryBustedFile tests/nvim/runner.lua" +qa

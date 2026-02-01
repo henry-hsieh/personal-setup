@@ -12,3 +12,5 @@ files:
     dst: .local/share/bash-completion/completions/tinty.bash
 init_cmds:
   - tinty sync
+test:
+  type: version-check

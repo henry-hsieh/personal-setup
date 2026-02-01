@@ -183,6 +183,9 @@ export BUN_INSTALL_CACHE_DIR="$HOME/.cache/bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 alias bunx='bun x'
 
+# Mason (Neovim package manager)
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+
 # OpenCode
 if [ -f "$HOME/.config/opencode/custom.json" ]; then
   export OPENCODE_CONFIG="$HOME/.config/opencode/custom.json"

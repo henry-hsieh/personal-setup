@@ -12,6 +12,8 @@ files:
     dst: .config/opencode/schema.json
   - src: "{pkg_dir}/opencode.json"
     dst: .config/opencode/opencode.json
+test:
+  type: version-check
 init_cmds:
   - |
     timeout 600 opencode run "/exit" -m $(opencode models opencode | head -1)

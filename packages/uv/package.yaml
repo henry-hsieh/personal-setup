@@ -10,3 +10,5 @@ files:
     dst: .local/bin/uv
   - src: uvx
     dst: .local/bin/uvx
+test:
+  type: version-check

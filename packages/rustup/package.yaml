@@ -20,3 +20,16 @@ build_cmds:
     # Install rustup completions
     $CARGO_HOME/bin/rustup -q completions bash > {out_dir}/.local/share/bash-completion/completions/rustup.bash
     $CARGO_HOME/bin/rustup -q completions bash cargo > {out_dir}/.local/share/bash-completion/completions/cargo.bash
+subpackages:
+  manifest: inline
+  manifest_type: inline
+  test_defaults:
+    type: version-check
+  packages:
+    - name: rustup
+    - name: rustc
+    - name: cargo
+    - name: rustfmt
+    - name: rust-analyzer
+    - name: clippy
+      bin: cargo-clippy

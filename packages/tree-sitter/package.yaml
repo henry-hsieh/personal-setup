@@ -14,3 +14,5 @@ cache:
   - target
 init_cmds:
   - tree-sitter complete --shell bash > $HOME/.local/share/bash-completion/completions/tree-sitter.bash
+test:
+  type: version-check

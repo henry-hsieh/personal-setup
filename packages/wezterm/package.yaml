@@ -10,3 +10,5 @@ files:
   - src: .
     dst: .local/bin/wezterm
     chmod: "755"
+test:
+  type: version-check

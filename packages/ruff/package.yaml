@@ -8,3 +8,5 @@ checksum_source: github-release
 files:
   - src: ruff
     dst: .local/bin/ruff
+test:
+  type: version-check

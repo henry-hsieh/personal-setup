@@ -12,3 +12,5 @@ files:
     dst:  .local/share/scripts/git-prompt.sh
 build_cmds:
   - make install DESTDIR={out_dir}/ PREFIX=.local/ SYSCONFDIR=.local/share/
+test:
+  type: version-check
