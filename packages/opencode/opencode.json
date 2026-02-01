@@ -7,8 +7,8 @@
     }
   },
   "plugin": [
-    "@howaboua/opencode-roadmap-plugin@0.2.1",
-    "opencode-antigravity-auth@1.4.3"
+    "opencode-antigravity-auth@1.4.3",
+    "@tarquinen/opencode-dcp@1.2.8"
   ],
   "provider": {
     "google": {
