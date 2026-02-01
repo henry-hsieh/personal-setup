@@ -3,7 +3,7 @@ description: commit current changes following guidelines
 agent: build
 ---
 
-<type>$1</type>
+<input_type>$1</input_type>
 <category>$2</category>
 <summary>$3</summary>
 
@@ -15,7 +15,7 @@ All arguments are optional:
 |----------|-------------|
 | **type** | Conventional commit type: feat, fix, refactor, build, ci, test, docs, style, chore |
 | **category** | Package or module name (e.g., nvim, tmux). MAY be empty. |
-| **summary** | Custom commit summary. If it starts with `!`, indicates a breaking change. |
+| **summary** | Custom commit summary.|
 
 </arguments>
 
@@ -30,9 +30,11 @@ The agent MUST commit current changes following the Git and Pull Request Guideli
 ## 1. Determine Commit Type
 
 Resolution order:
-1. If `<type>` argument is provided, MUST use it.
-2. If current branch matches `<type>-*` pattern (e.g., `feat-nvim-foo`), SHOULD extract type from branch name.
-3. Otherwise, MUST use the `question` tool to ask user to select:
+1. If `<input_type>` argument is provided, MUST use it.
+2. If `<input_type>` is end with `!`, the commit is a BREAKING-CHANGE commit. Otherwise, the commit is a normal commit.
+3. The `<type>` is `<input_type>` stripping `!`.
+4. If current branch matches `<type>-*` pattern (e.g., `feat-nvim-foo`), SHOULD extract type from branch name.
+5. Otherwise, MUST use the `question` tool to ask user to select:
    - `feat`: New feature
    - `fix`: Bug fix
    - `refactor`: Code refactoring
@@ -65,7 +67,6 @@ Resolution order:
 
 - If `<summary>` argument is provided:
   - MUST fix typos only; preserve user's wording.
-  - If summary starts with `!`, it indicates a breaking change (strip the `!` prefix for the summary text).
 - If `<summary>` is not provided:
   - MUST generate a concise summary based on staged changes.
   - SHOULD keep it under 50 characters.
@@ -96,9 +97,10 @@ If current branch is `main`, MUST create a new branch.
 ## 5. Commit Message Format
 
 <rules>
-- With category: `<type>(<category>): <summary>`
-- Without category: `<type>: <summary>`
-- Breaking change: MUST add `!` before `:` (e.g., `feat(nvim)!: redesign config`)
+- Normal change with category: `<type>(<category>): <summary>`
+- Normal change without category: `<type>: <summary>`
+- BREAKING-CHANGE with category: `<type>(<category>)!: <summary>`
+- BREAKING-CHANGE without category: `<type>!: <summary>`
 </rules>
 
 </step>
@@ -107,7 +109,7 @@ If current branch is `main`, MUST create a new branch.
 
 ## 6. Commit Strategy
 
-- If an unmerged commit exists on current branch, SHOULD amend and reword the commit.
+- If an unmerged commit exists on current branch, SHOULD squash to the unmerged commit and SHOULD reword the message.
 - If no unmerged commit exists, MUST create a new commit.
 
 </step>

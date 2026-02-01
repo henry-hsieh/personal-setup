@@ -10,5 +10,5 @@ agent: build
 1. Search GitHub for linux-x86_64 binary releases of `<util_name>`, respecting `<author_or_organization>` if provided.
 2. Fall back to official download sites if GitHub search fails.
 3. Create `packages/<util_name>/package.yaml` following the specification in `packages/README.md`.
-4. Register a new test in `tests/Makefile`.
+4. You must add tests in `packages/<util_name>/package.yaml`.
 </instructions>
