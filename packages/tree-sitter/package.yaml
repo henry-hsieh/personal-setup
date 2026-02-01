@@ -1,5 +1,5 @@
 name: tree-sitter
-version: 0.26.3
+version: 0.26.5
 datasource: github-releases
 package: tree-sitter/tree-sitter
 url: https://github.com/tree-sitter/tree-sitter.git
