@@ -16,3 +16,5 @@ files:
     dst: .local/share/bash-completion/completions/yazi.bash
   - src: completions/ya.bash
     dst: .local/share/bash-completion/completions/ya.bash
+test:
+  type: version-check

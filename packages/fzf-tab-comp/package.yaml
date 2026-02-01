@@ -6,3 +6,4 @@ package: lincheney/fzf-tab-completion
 files:
   - src: https://raw.githubusercontent.com/lincheney/fzf-tab-completion/{version}/bash/fzf-bash-completion.sh
     dst: .local/share/scripts/fzf-bash-completion.sh
+test: false

@@ -12,3 +12,6 @@ files:
     dst: .local/share/man/man1/rg.1
   - src: complete/rg.bash
     dst: .local/share/bash-completion/completions/rg.bash
+test:
+  type: version-check
+  bin: rg

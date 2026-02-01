@@ -12,3 +12,5 @@ files:
     dst: .local/share/man/man1/just.1
   - src: completions/just.bash
     dst: .local/share/bash-completion/completions/just.bash
+test:
+  type: version-check

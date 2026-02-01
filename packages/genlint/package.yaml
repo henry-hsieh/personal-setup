@@ -12,3 +12,5 @@ files:
     dst: .local/share/man/man1/genlint.1
   - src: genlint.bash
     dst: .local/share/bash-completion/completions/genlint.bash
+test:
+  type: version-check

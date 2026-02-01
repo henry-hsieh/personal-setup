@@ -64,6 +64,9 @@ setenv BUN_INSTALL_CACHE_DIR "$HOME/.cache/bun"
 setenv PATH "$BUN_INSTALL/bin:$PATH"
 alias bunx 'bun x'
 
+# Mason (Neovim package manager)
+setenv PATH "$HOME/.local/share/nvim/mason/bin:$PATH"
+
 # OpenCode
 if ( -f "$HOME/.config/opencode/custom.json" ) then
   setenv OPENCODE_CONFIG "$HOME/.config/opencode/custom.json"

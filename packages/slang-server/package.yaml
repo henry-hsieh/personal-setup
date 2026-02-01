@@ -8,3 +8,5 @@ checksum_source: github-release
 files:
   - src: slang-server
     dst: .local/bin/slang-server
+test:
+  type: version-check

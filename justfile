@@ -63,7 +63,7 @@ test:
     @echo "Installing environment..."
     {{test_dir}}/personal-setup/install.sh {{test_home}} > {{log_dir}}/install.log
     rm -rf {{test_dir}}/personal-setup
-    cd {{test_home}} && HOME={{test_home}} bash -i -c "make -C {{test_src_dir}} LOG_DIR={{log_dir}} -j{{parallel}}"
+    cd {{test_home}} && HOME={{test_home}} /bin/bash -i +m -e -c 'unalias -a; PARALLEL={{parallel}} {{test_src_dir}}/runner.sh; exit'
 
 clean:
     rm -rf {{build_dir}}

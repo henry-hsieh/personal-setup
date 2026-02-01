@@ -11,3 +11,20 @@ files:
     chmod: "755"
 init_cmds:
   - bash {pkg_dir}/install-bun-packages.sh
+subpackages:
+  manifest: src/settings/.local/share/personal-setup/package.json
+  manifest_type: npm
+  test_defaults:
+    type: version-check
+  packages:
+    - name: "@fission-ai/openspec"
+      bin: openspec
+    - name: "@github/copilot-language-server"
+      bin: copilot-language-server
+    - name: vscode-langservers-extracted
+      bin: vscode-json-language-server
+      test:
+        type: lsp-stdio
+    - name: vim-language-server
+      test:
+        type: lsp-stdio

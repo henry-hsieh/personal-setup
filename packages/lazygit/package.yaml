@@ -8,3 +8,5 @@ checksum_source: github-release
 files:
   - src: lazygit
     dst: .local/bin/lazygit
+test:
+  type: version-check

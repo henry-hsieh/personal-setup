@@ -12,3 +12,5 @@ files:
     dst: .local/share/man/man1/bat.1
   - src: autocomplete/bat.bash
     dst: .local/share/bash-completion/completions/bat.bash
+test:
+  type: version-check

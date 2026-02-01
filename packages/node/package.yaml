@@ -13,3 +13,11 @@ files:
     dst: .local/lib
   - src: share
     dst: .local/share
+subpackages:
+  manifest: inline
+  manifest_type: inline
+  test_defaults:
+    type: version-check
+  packages:
+    - name: node
+    - name: npm

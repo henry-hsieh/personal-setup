@@ -8,5 +8,6 @@ checksum_source: git-refs
 files:
   - src: .
     dst: .config/opencode/opencode-workflows
+test: false
 build_cmds:
   - python3 {pkg_dir}/create_symlinks.py {out_dir} {pkg_dir}/workflows.json

@@ -14,3 +14,5 @@ files:
     dst: .local/share/scripts/fzf-completion.bash
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/key-bindings.bash
     dst: .local/share/scripts/fzf-key-bindings.bash
+test:
+  type: version-check

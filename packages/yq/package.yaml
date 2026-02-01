@@ -12,3 +12,5 @@ files:
     dst: .local/share/man/man1/yq.1
 init_cmds:
   - yq shell-completion bash > $HOME/.local/share/bash-completion/completions/yq.bash
+test:
+  type: version-check

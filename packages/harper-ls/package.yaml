@@ -9,3 +9,5 @@ files:
   - src: harper-ls
     dst: .local/bin/harper-ls
     chmod: "755"
+test:
+  type: version-check

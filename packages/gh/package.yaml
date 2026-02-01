@@ -10,3 +10,5 @@ files:
     dst: .local/bin
   - src: share
     dst: .local/share
+test:
+  type: version-check

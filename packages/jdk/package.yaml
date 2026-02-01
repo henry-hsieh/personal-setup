@@ -19,3 +19,6 @@ files:
     dst: .local/lib/jvm/jdk-{version}/release
 init_cmds:
   - ln -srf $HOME/.local/lib/jvm/jdk-{version} $HOME/.local/lib/java
+test:
+  type: version-check
+  bin: java

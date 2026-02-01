@@ -11,3 +11,4 @@ files:
 init_cmds:
   - $HOME/.cache/personal-setup/init/tpm/bin/install_plugins
   - $HOME/.cache/personal-setup/init/tpm/bin/update_plugins all
+test: false
