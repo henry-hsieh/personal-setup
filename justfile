@@ -15,7 +15,7 @@ fast_fail_cmd := if fast_fail != "0" { "--fast-fail" } else { "" }
 out := build_dir / "personal-setup.tar.gz"
 cache_include_list := "opencode"
 find_args := prepend("! -name ", cache_include_list)
-static_exclude_list := ".npm .bash_history .tcsh_history .local/state tinty/current_scheme"
+static_exclude_list := ".npm .bash_history .tcsh_history .local/state"
 tar_static_excludes := prepend("--exclude=", static_exclude_list)
 
 # Recipes
@@ -48,6 +48,7 @@ start_service:
 release: (build_home)
     mkdir -p {{build_dir}}/release
     cd {{output_dir}} && find .cache -mindepth 1 -maxdepth 1 {{find_args}} -printf "%p\n" > {{build_dir}}/exclude.list
+    cd {{output_dir}} && find .local/share/tinted-theming/tinty \( -type l -o -name ".tinty.lock" \) -printf "%p\n" >> {{build_dir}}/exclude.list
     cd {{output_dir}} && tar -czf ../release/home.tar.gz \
         {{tar_static_excludes}} \
         --exclude-from={{build_dir}}/exclude.list \
