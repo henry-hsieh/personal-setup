@@ -265,3 +265,4 @@ if [ -f ~/.bashrc.post ]; then
 fi
 
 eval "$(zoxide init bash)"
+eval "$(direnv hook bash)"

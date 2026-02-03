@@ -1,0 +1,21 @@
+name: direnv
+version: 2.37.1
+datasource: github-releases
+package: direnv/direnv
+url: https://github.com/direnv/direnv/releases/download/v{version}/direnv.linux-amd64
+extract: false
+checksum_source: github-release
+files:
+  - src: .
+    dst: .local/bin/direnv
+    chmod: "755"
+  - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv.1
+    dst: .local/share/man/man1/direnv.1
+  - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv-stdlib.1
+    dst: .local/share/man/man1/direnv-stdlib.1
+  - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv-fetchurl.1
+    dst: .local/share/man/man1/direnv-fetchurl.1
+  - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv.toml.1
+    dst: .local/share/man/man1/direnv.toml.1
+test:
+  type: version-check

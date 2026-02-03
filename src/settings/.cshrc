@@ -108,4 +108,4 @@ if ( -f ~/.cshrc.post ) then
 endif
 
 # Set precmd
-alias precmd 'history -S; history -c; history -M; source ~/.local/share/scripts/git-prompt.csh; __zoxide_hook'
+alias precmd 'history -S; history -c; history -M; source ~/.local/share/scripts/git-prompt.csh; __zoxide_hook; eval `direnv export tcsh`'
