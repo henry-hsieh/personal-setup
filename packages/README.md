@@ -76,6 +76,7 @@ Each item in the `files` list MUST be a dictionary with the following fields:
   - A URL to download
   - A local path (MUST start with `{pkg_dir}` for downloadless packages)
 - `dst` (string): Destination path relative to the user's home directory (typically starts with `.local/`). REQUIRED.
+- `chmod` (string): Sets the file mode of the destination file using a 3-digit octal string (e.g., "755"), similar to the `chmod` command's octal mode. OPTIONAL.
 </format>
 </schema>
 
@@ -168,10 +169,9 @@ version: 1.0.0
 files:
   - src: https://example.com/script.sh
     dst: .local/bin/script.sh
+    chmod: "755"
   - src: {pkg_dir}/local-file.txt
     dst: .local/share/example/file.txt
-init_cmds:
-  - chmod +x $HOME/.local/bin/script.sh
 ```
 </output>
 </example>
