@@ -1,5 +1,5 @@
 name: opencode-workflows
-version: 8e28cc50917708eba3d036218e332aea75067d54
+version: 1388bf98dcbfd027ac20b072fbc9a202ad4b187c
 datasource: git-refs
 branch: master
 package: IgorWarzocha/Opencode-Workflows
