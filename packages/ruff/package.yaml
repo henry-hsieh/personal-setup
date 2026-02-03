@@ -1,5 +1,5 @@
 name: ruff
-version: 0.14.14
+version: 0.15.0
 datasource: github-releases
 package: astral-sh/ruff
 url: https://github.com/astral-sh/ruff/releases/download/{version}/ruff-x86_64-unknown-linux-gnu.tar.gz
