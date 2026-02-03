@@ -1,0 +1,10 @@
+[project]
+name = "personal-setup"
+version = "2.0.0"
+description = "Facilitate the easy setup and maintenance of a personalized Linux environment"
+requires-python = ">=3.13"
+dependencies = [
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+    "tenacity>=9.1.2",
+]
