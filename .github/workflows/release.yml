@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    # Weekly build every Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
 permissions:
   contents: write
   pull-requests: write
@@ -195,3 +198,42 @@ jobs:
           asset_path: build/personal-setup.tar.gz
           asset_name: personal-setup-${{ steps.create_release.outputs.tag_name }}.tar.gz
           asset_content_type: application/gzip
+
+  nightly-release:
+    name: Nightly Release
+    runs-on: ubuntu-latest
+    needs: test
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download release artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifact
+          path: build/
+
+      - name: Delete existing nightly release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete nightly --yes --cleanup-tag || true
+
+      - name: Create nightly release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create nightly \
+            --title "Nightly Build" \
+            --notes "Automated nightly build from the latest main branch.
+
+          **Commit:** ${{ github.sha }}
+          **Build Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+
+          > [!WARNING]
+          > This is an unstable pre-release build. Use at your own risk." \
+            --prerelease \
+            --target ${{ github.sha }} \
+            build/personal-setup.tar.gz#personal-setup-nightly.tar.gz
