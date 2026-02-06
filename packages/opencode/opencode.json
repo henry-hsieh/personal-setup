@@ -7,7 +7,7 @@
     }
   },
   "plugin": [
-    "opencode-antigravity-auth@1.4.5",
+    "opencode-antigravity-auth@1.4.6",
     "@tarquinen/opencode-dcp@2.0.0"
   ],
   "provider": {
