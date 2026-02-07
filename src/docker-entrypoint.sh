@@ -12,7 +12,7 @@ fi
 
 # Create user if missing
 if ! id -u "$USER_ID" >/dev/null 2>&1; then
-    useradd -M -d $USER_HOME -u "$USER_ID" -g "$GROUP_ID" -s /bin/bash "$USER_NAME"
+    useradd -m -d $USER_HOME -u "$USER_ID" -g "$GROUP_ID" -s /bin/bash "$USER_NAME"
 fi
 
 # Change owner of user's home directory

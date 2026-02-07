@@ -118,10 +118,10 @@ jobs:
           if [[ "${{ matrix.manager }}" == "apt" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
             echo "RUN apt update" >> Dockerfile
-            echo "RUN apt install -y tcsh curl tar xz-utils make git ca-certificates fuse libatomic1" >> Dockerfile
+            echo "RUN apt install -y tcsh curl tar xz-utils make git ca-certificates fuse libatomic1 sudo" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN yum install -y tcsh curl tar xz make git ca-certificates fuse-libs libatomic" >> Dockerfile
+            echo "RUN yum install -y tcsh curl tar xz make git ca-certificates fuse-libs libatomic sudo" >> Dockerfile
           fi
           echo "RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin/" >> Dockerfile
 
@@ -149,7 +149,10 @@ jobs:
         id: run_test
         run: |
           chmod +x build/personal-setup.xz.sh
-          docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) --user $(id -u):$(id -g) test-${{ matrix.image }} bash -c 'just test_clean=1 test'
+          docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) \
+            -e TARGET_UID=$(id -u) -e TARGET_GID=$(id -g) \
+            test-${{ matrix.image }} \
+            bash src/docker-entrypoint.sh just test_clean=1 test
 
       - name: Create log name
         if: ${{ always() }}
