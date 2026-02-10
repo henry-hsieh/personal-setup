@@ -1,5 +1,5 @@
 name: uv
-version: 0.10.0
+version: 0.10.1
 datasource: github-releases
 package: astral-sh/uv
 url: https://github.com/astral-sh/uv/releases/download/{version}/uv-x86_64-unknown-linux-gnu.tar.gz
