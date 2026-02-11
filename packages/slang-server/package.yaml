@@ -1,5 +1,5 @@
 name: slang-server
-version: 0.2.1
+version: 0.2.2
 datasource: github-releases
 package: hudson-trading/slang-server
 url: https://github.com/hudson-trading/slang-server/releases/download/v{version}/slang-server-linux-x64-gcc.tar.gz
