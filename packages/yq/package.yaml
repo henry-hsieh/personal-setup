@@ -1,5 +1,5 @@
 name: yq
-version: 4.52.2
+version: 4.52.4
 datasource: github-releases
 package: mikefarah/yq
 url: https://github.com/mikefarah/yq/releases/download/v{version}/yq_linux_amd64.tar.gz
