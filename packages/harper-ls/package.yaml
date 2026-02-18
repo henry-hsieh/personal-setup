@@ -1,5 +1,5 @@
 name: harper-ls
-version: 1.7.0
+version: 1.8.0
 datasource: github-releases
 package: automattic/harper
 url: https://github.com/automattic/harper/releases/download/v{version}/harper-ls-x86_64-unknown-linux-gnu.tar.gz
