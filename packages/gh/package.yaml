@@ -1,5 +1,5 @@
 name: gh
-version: 2.87.0
+version: 2.87.2
 datasource: github-releases
 package: cli/cli
 url: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_linux_amd64.tar.gz
