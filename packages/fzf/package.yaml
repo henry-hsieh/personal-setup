@@ -1,5 +1,5 @@
 name: fzf
-version: 0.67.0
+version: 0.68.0
 datasource: github-releases
 package: junegunn/fzf
 url: https://github.com/junegunn/fzf/releases/download/v{version}/fzf-{version}-linux_amd64.tar.gz
