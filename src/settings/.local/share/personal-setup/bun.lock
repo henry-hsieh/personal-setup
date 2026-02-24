@@ -4,7 +4,7 @@
   "workspaces": {
     "": {
       "dependencies": {
-        "@fission-ai/openspec": "1.1.1",
+        "@fission-ai/openspec": "1.2.0",
         "@github/copilot-language-server": "^1.415.0",
         "bash-language-server": "^5.6.0",
         "typescript-language-server": "^5.1.3",
@@ -14,7 +14,7 @@
     },
   },
   "packages": {
-    "@fission-ai/openspec": ["@fission-ai/openspec@1.1.1", "", { "dependencies": { "@inquirer/core": "^10.2.2", "@inquirer/prompts": "^7.8.0", "chalk": "^5.5.0", "commander": "^14.0.0", "fast-glob": "^3.3.3", "ora": "^8.2.0", "posthog-node": "^5.20.0", "yaml": "^2.8.2", "zod": "^4.0.17" }, "bin": { "openspec": "bin/openspec.js" } }, "sha512-wgu/c+NfJjv23s5F9ABr2Z3OZtJlxIRsyYSc2BKB4XvfX1aPkBhPNGbwn9PPdh05K6xgUL2wDXa4f5N9Lw4kZA=="],
+    "@fission-ai/openspec": ["@fission-ai/openspec@1.2.0", "", { "dependencies": { "@inquirer/core": "^10.2.2", "@inquirer/prompts": "^7.8.0", "chalk": "^5.5.0", "commander": "^14.0.0", "fast-glob": "^3.3.3", "ora": "^8.2.0", "posthog-node": "^5.20.0", "yaml": "^2.8.2", "zod": "^4.0.17" }, "bin": { "openspec": "bin/openspec.js" } }, "sha512-2XDmPZcVY0Bs014lP9aoxe3VoEU8hFvqaBFxQaiJO2nhC8vTKCyo6sT/5YpQcOTfR/a64Hht2anTyqLR4eNhlg=="],
 
     "@github/copilot-language-server": ["@github/copilot-language-server@1.415.0", "", { "dependencies": { "vscode-languageserver-protocol": "^3.17.5" }, "optionalDependencies": { "@github/copilot-language-server-darwin-arm64": "1.415.0", "@github/copilot-language-server-darwin-x64": "1.415.0", "@github/copilot-language-server-linux-arm64": "1.415.0", "@github/copilot-language-server-linux-x64": "1.415.0", "@github/copilot-language-server-win32-x64": "1.415.0" }, "bin": { "copilot-language-server": "dist/language-server.js" } }, "sha512-RWQrqF9UXWPDLUm1rT9LbXJXGx3GYWMpv9LcxkvEYpTmUW2Zu68TLmcY7LmytT9JINncWFyIaOd18WDC4QZ80g=="],
 
