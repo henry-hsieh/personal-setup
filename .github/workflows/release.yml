@@ -29,6 +29,9 @@ jobs:
       - name: Setup just
         uses: extractions/setup-just@v3
 
+      - name: Setup makeself
+        uses: henry-hsieh/setup-makeself@v1
+
       - name: Cache docker images
         id: cache_image
         uses: AndreKurait/docker-cache@0.6.0
@@ -54,7 +57,7 @@ jobs:
         id: run_build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: just release
+        run: just
 
       - name: Save build cache
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
@@ -75,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-artifact
-          path: build/personal-setup.tar.gz
+          path: build/personal-setup.xz.sh
 
   test:
     name: Test
@@ -115,12 +118,15 @@ jobs:
           if [[ "${{ matrix.manager }}" == "apt" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
             echo "RUN apt update" >> Dockerfile
-            echo "RUN apt install -y tcsh curl tar gzip make git ca-certificates fuse libatomic1" >> Dockerfile
+            echo "RUN apt install -y tcsh curl tar xz-utils make git ca-certificates fuse libatomic1" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN yum install -y tcsh curl tar gzip make git ca-certificates fuse-libs libatomic" >> Dockerfile
+            echo "RUN yum install -y tcsh curl tar xz make git ca-certificates fuse-libs libatomic" >> Dockerfile
           fi
           echo "RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin/" >> Dockerfile
+          echo "COPY src/docker-entrypoint.sh /usr/local/bin/" >> Dockerfile
+          echo "ENTRYPOINT [\"/usr/local/bin/docker-entrypoint.sh\"]" >> Dockerfile
+          echo "CMD [\"bash\"]" >> Dockerfile
 
       - name: Cache docker images
         id: cache_image
@@ -144,7 +150,11 @@ jobs:
 
       - name: Run tests
         id: run_test
-        run: docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) test-${{ matrix.image }} bash -c 'just test'
+        run: |
+          chmod +x build/personal-setup.xz.sh
+          docker run -t --privileged -v $(pwd):$(pwd) -w $(pwd) \
+            -e TARGET_UID=$(id -u) -e TARGET_GID=$(id -g) -e TARGET_USER=$(id -un) \
+            test-${{ matrix.image }} bash -c 'just test_clean=1 test'
 
       - name: Create log name
         if: ${{ always() }}
@@ -195,9 +205,8 @@ jobs:
           GITHUB_TOKEN: ${{ steps.get_token.outputs.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/personal-setup.tar.gz
-          asset_name: personal-setup-${{ steps.create_release.outputs.tag_name }}.tar.gz
-          asset_content_type: application/gzip
+          asset_path: build/personal-setup.xz.sh
+          asset_name: personal-setup-${{ steps.create_release.outputs.tag_name }}.xz.sh
 
   nightly-release:
     name: Nightly Release
@@ -236,4 +245,4 @@ jobs:
           > This is an unstable pre-release build. Use at your own risk." \
             --prerelease \
             --target ${{ github.sha }} \
-            build/personal-setup.tar.gz#personal-setup-nightly.tar.gz
+            build/personal-setup.xz.sh#personal-setup-nightly.xz.sh
