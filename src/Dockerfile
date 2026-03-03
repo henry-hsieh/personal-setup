@@ -7,7 +7,6 @@ RUN apt update && \
     apt install -y --no-install-recommends \
         build-essential \
         software-properties-common \
-        sudo \
         gzip \
         xz-utils \
         bsdmainutils \

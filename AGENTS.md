@@ -11,11 +11,11 @@
 - `just parallel=<num_cpus> retry=0 build` - Build the environment in `build/output/`
 - `just parallel=<num_cpus> retry=0 fast_fail=1 build` - Immediately stop when building process has error
 - `just release` - Archive the environment into `build/personal-setup.tar.gz`
-- `just build_docker` - Build the Docker image for building. MUST rebuild docker after changing `src/Dockerfile`.
+- `just build_docker` - Build the Docker image for building. MUST rebuild Docker after changing `src/Dockerfile`.
 
 ### Test Commands
-- `just test` - Run full test suite (builds, installs, and tests environment). You MUST run `just release` before `just test` to create release archive.
-- `make -C tests <target>` - Run individual test (replace `<target>` with test name)
+- `just test_fast` - Run test suite without generating release artifact. You MUST run `just build` to build the environment first.
+- `just test_clean=1 test` - Run full test suite by extracting release artifact. Only used by CI. You MUST run `just all` before `just test` to create release artifact.
 
 ### Lint and Format Commands
 - `ruff check && ty check` for Python script checking.
