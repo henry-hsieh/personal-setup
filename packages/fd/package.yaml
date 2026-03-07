@@ -1,5 +1,5 @@
 name: fd
-version: 10.3.0
+version: 10.4.0
 datasource: github-releases
 package: sharkdp/fd
 url: https://github.com/sharkdp/fd/releases/download/v{version}/fd-v{version}-x86_64-unknown-linux-musl.tar.gz
