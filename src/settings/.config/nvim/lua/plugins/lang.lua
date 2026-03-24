@@ -47,7 +47,7 @@ return {
     cmd = "CodeDiff",
     version = "*",
     opts = function()
-      local colors = require("tinted-colorscheme").colors
+      local colors = require("tinted-nvim").get_palette()
       local utils = require("utils")
       return {
         highlights = {

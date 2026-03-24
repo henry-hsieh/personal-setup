@@ -49,7 +49,6 @@ return {
         return ""
       end
 
-      local theme = require('lualine.themes.tinted')
       local function winbar_sep_color(active)
         -- Terminal background
         local normal_hl = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
@@ -57,7 +56,10 @@ return {
             normal_hl.ctermbg and normal_hl.ctermbg or nil
 
         -- fg = theme bg, bg = terminal bg
-        local theme_bg = active and theme.normal.b.bg or theme.inactive.b.bg
+        local lualine_normal_b_hl = vim.api.nvim_get_hl(0, { name = 'LualineNormalB', link = false })
+        local lualine_inactive_b_hl = vim.api.nvim_get_hl(0, { name = 'LualineInactiveB', link = false })
+        local bg_val = active and lualine_normal_b_hl.bg or lualine_inactive_b_hl.bg
+        local theme_bg = bg_val and string.format("#%06x", bg_val)
 
         return {
           fg = theme_bg,
@@ -208,7 +210,7 @@ return {
       }
 
       return opts
-    end
+    end,
   },
 
   {
