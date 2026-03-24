@@ -8,7 +8,7 @@ return {
     end,
     config = function()
       -- require manual setup because the module name is not conventional
-      local tinted = require('tinted-colorscheme')
+      local tinted = require('tinted-nvim')
       tinted.setup(nil, {
         supports = {
           tinted_shell = true,
@@ -19,7 +19,7 @@ return {
         pattern = "TintedColorsPost",
         callback = function()
           -- Do things whenever the theme changes.
-          local colors = require("tinted-colorscheme").colors
+          local colors = require("tinted-nvim").colors
           if colors then
             vim.api.nvim_set_hl(0, "FlashLabel",     { fg = colors.base06, bg = colors.base08, bold = false, italic = false })
             vim.api.nvim_set_hl(0, "FlashMatch",     { fg = colors.base06, bg = colors.base0D, bold = false, italic = false })
