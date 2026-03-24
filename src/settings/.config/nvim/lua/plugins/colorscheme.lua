@@ -6,36 +6,29 @@ return {
     init = function()
       vim.o.termguicolors = true
     end,
-    config = function()
-      -- require manual setup because the module name is not conventional
-      local tinted = require('tinted-nvim')
-      tinted.setup(nil, {
-        supports = {
-          tinted_shell = true,
-          live_reload = true,
-        },
-      })
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "TintedColorsPost",
-        callback = function()
-          -- Do things whenever the theme changes.
-          local colors = require("tinted-nvim").colors
-          if colors then
-            vim.api.nvim_set_hl(0, "FlashLabel",     { fg = colors.base06, bg = colors.base08, bold = false, italic = false })
-            vim.api.nvim_set_hl(0, "FlashMatch",     { fg = colors.base06, bg = colors.base0D, bold = false, italic = false })
-            vim.api.nvim_set_hl(0, "Folded",
-              { fg = nil, bg = colors.base01, bold = false, italic = false })
-            vim.api.nvim_set_hl(0, "FoldColumn",
-              { fg = colors.base03, bg = nil, bold = false, italic = false })
-            vim.api.nvim_set_hl(0, "SnacksIndent",
-              { fg = colors.base02, bg = nil, bold = false, italic = false })
-            vim.api.nvim_set_hl(0, "SnacksIndentScope",
-              { fg = colors.base0C, bg = nil, bold = false, italic = false })
-            vim.api.nvim_set_hl(0, "StatusLine", { link = "lualine_c_normal" })
-          end
+    opts = {
+      compile = true,
+      capabilities = {
+        undercurl = true,
+      },
+      highlights = {
+        overrides = function(colors)
+          return {
+            FlashLabel        = { fg = colors.base01, bg = colors.base08, bold = false, italic = false },
+            FlashMatch        = { fg = colors.base01, bg = colors.base09, bold = false, italic = false },
+            FlashCurrent      = { fg = colors.base01, bg = colors.base0D, bold = false, italic = false },
+            Folded            = { fg = nil, bg = colors.base01, bold = false, italic = false },
+            FoldColumn        = { fg = colors.base03, bg = nil, bold = false, italic = false },
+            NonText           = { fg = colors.base03, bg = nil, bold = false, italic = false },
+            SnacksIndent      = { fg = colors.base02, bg = nil, bold = false, italic = false },
+            SnacksIndentScope = { fg = colors.base0C, bg = nil, bold = false, italic = false },
+            StatusLine        = { link = "lualine_c_normal" },
+          }
         end,
-      })
-      vim.cmd.doautocmd("User TintedColorsPost")
-    end,
+      },
+      selector = {
+        enabled = true,
+      },
+    },
   },
 }
