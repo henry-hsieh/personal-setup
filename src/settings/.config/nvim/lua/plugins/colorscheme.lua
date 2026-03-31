@@ -23,6 +23,13 @@ return {
             SnacksIndent      = { fg = colors.base02, bg = nil, bold = false, italic = false },
             SnacksIndentScope = { fg = colors.base0C, bg = nil, bold = false, italic = false },
             StatusLine        = { link = "lualine_c_normal" },
+            DiffAdd           = { fg = "green" },
+            DiffChange        = { fg = "orange" },
+            DiffDelete        = { fg = "red" },
+            DiffText          = { fg = "blue" },
+            GitSignsAdd       = { link = "DiffAdd" },
+            GitSignsChange    = { link = "DiffChange" },
+            GitSignsDelete    = { link = "DiffDelete" },
           }
         end,
       },
