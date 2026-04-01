@@ -29,7 +29,7 @@
             ],
             matchStringsStrategy: 'combination',
             matchStrings: [
-                'name:\\s*(?<depName>.*?)\\n',
+                '^\\s*name:\\s*(?<depName>.*?)\\n',
                 'version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>github-.*?)\\n',
                 'version:\\s*(?<currentDigest>.*?)\\ndatasource:\\s*(?<datasource>git-refs?)\\n',
                 'branch:\\s*(?<branchName>.*?)\\n',
@@ -48,7 +48,7 @@
             ],
             matchStringsStrategy: 'combination',
             matchStrings: [
-                'name:\\s*(?<depName>.*?)\\n',
+                '^\\s*name:\\s*(?<depName>.*?)\\n',
                 'version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.jdk_lts?)\\n',
             ],
             datasourceTemplate: '{{datasource}}',
@@ -62,7 +62,7 @@
             ],
             matchStringsStrategy: 'combination',
             matchStrings: [
-                'name:\\s*(?<depName>.*?)\\n',
+                '^\\s*name:\\s*(?<depName>.*?)\\n',
                 'version:\\s*(?<currentValue>.*?)\\ndatasource:\\s*(?<datasource>custom\\.unofficial_node?)\\n',
             ],
             datasourceTemplate: '{{datasource}}',
