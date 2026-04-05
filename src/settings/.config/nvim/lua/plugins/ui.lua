@@ -403,6 +403,7 @@ return {
         { "<leader>x",    group = "Trouble", icon = "🚦" },
         { "<leader>y",    group = "Yazi", icon = { icon = "󰇥", color = "yellow" } },
         { "<space>b",     group = "Buffer" },
+        { "<space>h",     group = "Haunt" },
         { "<space><Tab>", group = "Tab" },
       },
     },
