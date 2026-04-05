@@ -11,6 +11,23 @@
     "@tarquinen/opencode-dcp@3.1.8",
     "opencode-mem@2.13.0"
   ],
+  "lsp": {
+    "slang-server": {
+      "command": ["slang-server"],
+      "extensions": [".v", ".sv", ".vh", ".svh", ".sva"]
+    },
+    "pyright": {
+      "disabled": true
+    },
+    "ruff": {
+      "command": ["ruff", "server"],
+      "extensions": [".py", ".pyi"]
+    },
+    "ty": {
+      "command": ["ty", "server"],
+      "extensions": [".py", ".pyi"]
+    }
+  },
   "provider": {
     "google": {
       "models": {
