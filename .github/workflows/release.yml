@@ -43,7 +43,7 @@ jobs:
           fi
 
       - name: Restore build cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.cache/personal-setup
           key: personal-setup-${{ hashFiles('packages/**') }}
@@ -58,7 +58,7 @@ jobs:
 
       - name: Save build cache
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ~/.cache/personal-setup
           key: personal-setup-${{ hashFiles('packages/**') }}
