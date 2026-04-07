@@ -16,4 +16,6 @@ test:
   type: version-check
 init_cmds:
   - |
-    timeout 600 opencode run "/exit" -m $(opencode models opencode | head -1)
+    for plugin in $(yq -r '.plugin[]' $HOME/.config/opencode/opencode.json); do
+      opencode plugin -g -f "${plugin}"
+    done
