@@ -78,7 +78,7 @@ return {
       local config = require("config")
 
       -- LSP log level
-      vim.lsp.set_log_level(config.lsp.log_level)
+      vim.lsp.log.set_level(config.lsp.log_level)
 
       -- Appearance
       vim.diagnostic.config({
