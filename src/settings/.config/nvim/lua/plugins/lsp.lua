@@ -189,12 +189,27 @@ return {
         cmd = { "slang-server" },
         root_markers = utils.extend_lsp_config_list("slang-server", "root_markers", { ".slang/", ".git" }),
         filetypes = utils.extend_lsp_config_list("slang-server", "filetypes", { "verilog", "systemverilog", "verilog_systemverilog" }),
+        get_language_id = function (_, filetype)
+          return filetype == "verilog_systemverilog" and "systemverilog" or filetype
+        end,
       })
       --- verible
       vim.lsp.config("verible", {
         cmd = { 'verible-verilog-ls', '--rules_config_search', '--push_diagnostic_notifications=false' },
         root_markers = utils.extend_lsp_config_list("verible", "root_markers", "verible.filelist"),
         filetypes = utils.extend_lsp_config_list("verible", "filetypes", "verilog_systemverilog"),
+        get_language_id = function (_, filetype)
+          return filetype == "verilog_systemverilog" and "systemverilog" or filetype
+        end,
+        on_attach = function(client, _)
+          -- prefer using slang-server as provider
+          client.server_capabilities.definitionProvider = false
+          client.server_capabilities.documentHighlightProvider = false
+          client.server_capabilities.documentSymbolProvider = false
+          client.server_capabilities.referencesProvider = false
+          client.server_capabilities.renameProvider = false
+          client.server_capabilities.hoverProvider = false
+        end
       })
 
       -- Enable all listed LSPs
