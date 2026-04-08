@@ -68,14 +68,14 @@ jobs:
 
       - name: Upload logs
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-logs
           path: build/logs
 
       - name: Upload release artifact
         if: steps.run_build.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-artifact
           path: build/personal-setup.xz.sh
@@ -140,7 +140,7 @@ jobs:
 
       - name: Download release artifact
         id: download_release_artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-artifact
           path: build/
@@ -157,7 +157,7 @@ jobs:
 
       - name: Upload logs
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-logs-${{ env.IMAGE_NAME }}
           path: build/logs
@@ -186,7 +186,7 @@ jobs:
       - name: Download release artifact
         id: download_release_artifact
         if: ${{ steps.create_release.outputs.release_created }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-artifact
           path: build/
@@ -212,7 +212,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download release artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: release-artifact
           path: build/
