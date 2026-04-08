@@ -27,7 +27,7 @@ jobs:
         uses: wagoid/commitlint-github-action@v6
 
       - name: Setup just
-        uses: extractions/setup-just@v3
+        uses: extractions/setup-just@v4
 
       - name: Cache docker images
         id: cache_image
@@ -108,7 +108,7 @@ jobs:
           testing: false
 
       - name: Setup just
-        uses: extractions/setup-just@v3
+        uses: extractions/setup-just@v4
 
       - name: Install dependencies
         run: |
