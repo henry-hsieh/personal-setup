@@ -60,7 +60,7 @@ release: _generate_exclude
         "{{output_dir}}" \
         "personal-setup.xz.sh" \
         "My personal Linux environment setup" \
-        "{{src_dir}}/post-install.sh" \
+        "./.local/share/scripts/post-install.sh" \
         "$({{output_dir}}/.local/bin/tmux -V 2>/dev/null | awk '{print $2}')"
 
 _test_setup:
