@@ -211,6 +211,13 @@ return {
           client.server_capabilities.hoverProvider = false
         end
       })
+      --- ruff
+      vim.lsp.config("ruff", {
+        on_attach = function(client, _)
+          -- prefer using ty as hover provider
+          client.server_capabilities.hoverProvider = false
+        end,
+      })
 
       -- Enable all listed LSPs
       vim.lsp.enable(config.lsp.enable)
