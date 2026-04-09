@@ -70,26 +70,26 @@
             versioningTemplate: 'semver',
         },
         {
-            "description": "Opencode Plugin: NPM (Scoped or Unscoped)",
-            "customType": "regex",
-            "fileMatch": [
-                "^packages/opencode/opencode\\.json$"
+            description: 'Opencode Plugin: NPM (Scoped or Unscoped)',
+            customType: 'regex',
+            managerFilePatterns: [
+                '/^packages/opencode/opencode\\.json$/',
             ],
-            "matchStrings": [
-                "\"(?<depName>@[^\"\\/]+\\/[^\"@]+|[^\"\\/@]+)@(?<currentValue>[^\"@]+)\""
+            matchStrings: [
+                '"(?<depName>@[^"\\/]+\\/[^"@]+|[^"\\/@]+)@(?<currentValue>[^"@]+)"',
             ],
-            "datasourceTemplate": "npm"
+            datasourceTemplate: 'npm',
         },
         {
-            "description": "Opencode Plugin: GitHub (github:owner/repo#version)",
-            "customType": "regex",
-            "fileMatch": [
-                "^packages/opencode/opencode\\.json$"
+            description: 'Opencode Plugin: GitHub (github:owner/repo#version)',
+            customType: 'regex',
+            managerFilePatterns: [
+                '/^packages/opencode/opencode\\.json$/',
             ],
-            "matchStrings": [
-                "\"github:(?<depName>[^#\"]+)#(?<currentValue>[^\"]+)\"(?:[\\s,]*//\\s*datasource:\\s*(?<datasource>[\\w-]+))?"
+            matchStrings: [
+                '"github:(?<depName>[^#"]+)#(?<currentValue>[^"]+)"(?:[\\s,]*//\\s*datasource:\\s*(?<datasource>[\\w-]+))?',
             ],
-            "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}"
+            datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
         },
     ],
     customDatasources: {
