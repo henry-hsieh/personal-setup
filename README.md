@@ -17,7 +17,7 @@ The **personal-setup** tool is designed to facilitate the easy setup and mainten
 1. Download the latest prebuilt installation package and install it. The target system should have `xz` for embedded archive extraction.
 
    ```bash
-   personal-setup.xz.sh --target /path/to/install
+chmod +x personal-setup.xz.sh && ./personal-setup.xz.sh --target /path/to/install
    ```
 
    Normally, the installation path will be your home directory: `$HOME`.
@@ -71,7 +71,7 @@ If you want to build from source or to contribute, following is the guide to do 
 
 - **Docker**: Docker is used for building the environment.
 - **Just**: All build and test commands are written in [just](https://just.systems/). You can manually install it, or this package is included in personal setup.
-- **Rsync** for fast test: Fast test use rsync to copy built environment to test folder.
+- **Rsync** for fast test: Fast test uses rsync to copy built environment to test folder.
 
 ### Build Step
 
@@ -86,9 +86,9 @@ If you want to build from source or to contribute, following is the guide to do 
 - `src/`: The directory contains source files.
   - `settings/`: The initial Linux environment settings. Put your preset scripts in correct hierarchy.
     - `.local/share/scripts/`: The directory contains the scripts called by `.bashrc` or `.cshrc`.
-      - `post-install.sh`: The script to call after install the Linux environment
+      - `post-install.sh`: The script to call after installing the Linux environment
   - `build.py`: The script to create the Linux environment.
-  - `pre-install.sh`: The script to call before install the Linux environment.
+  - `pre-install.sh`: The script to call before installing the Linux environment.
   - `Dockerfile`: The Docker settings. The packages required by `build.py` should be specified in the file.
 - `build/`: The directory contains the downloaded files and output of the scripts.
   - `output/`: The directory contains the final Linux environment, which will be compressed to self-extracted archive inside `personal-setup.xz.sh`.
