@@ -19,11 +19,25 @@ if ( ! $?LANG ) then
     setenv LANG "en_US.UTF-8"
 endif
 
+# Set XDG-relative environment variables
+if ( ! $?XDG_CONFIG_HOME ) then
+    setenv XDG_CONFIG_HOME $HOME/.config
+endif
+if ( ! $?XDG_DATA_HOME ) then
+    setenv XDG_DATA_HOME $HOME/.local/share
+endif
+if ( ! $?XDG_STATE_HOME ) then
+    setenv XDG_STATE_HOME $HOME/.local/state
+endif
+if ( ! $?XDG_CACHE_HOME ) then
+    setenv XDG_CACHE_HOME $HOME/.cache
+endif
+
 # Set colorscheme
 tinty init
 
 set autolist=ambiguous
-source ~/.local/share/scripts/git-completion.tcsh
+source ${XDG_DATA_HOME}/scripts/git-completion.tcsh
 set padhour
 set noding
 
@@ -65,11 +79,11 @@ setenv PATH "$BUN_INSTALL/bin:$PATH"
 alias bunx 'bun x'
 
 # Mason (Neovim package manager)
-setenv PATH "$HOME/.local/share/nvim/mason/bin:$PATH"
+setenv PATH "${XDG_DATA_HOME}/nvim/mason/bin:$PATH"
 
 # OpenCode
-if ( -f "$HOME/.config/opencode/custom.json" ) then
-  setenv OPENCODE_CONFIG "$HOME/.config/opencode/custom.json"
+if ( -f "${XDG_CONFIG_HOME}/opencode/custom.json" ) then
+  setenv OPENCODE_CONFIG "${XDG_CONFIG_HOME}/opencode/custom.json"
 endif
 
 alias ll 'ls -alF'
@@ -85,7 +99,7 @@ alias jq  'yq'
 setenv EDITOR 'nvim'
 
 # zoxide
-source ~/.local/share/scripts/zoxide.csh
+source ${XDG_DATA_HOME}/scripts/zoxide.csh
 
 # Set display if it's empty
 if ( ! $?DISPLAY ) then
@@ -100,7 +114,7 @@ alias y 'set tmp=`mktemp -t yazi-cwd.XXXXXX`; \
         /usr/bin/rm -f "$tmp"'
 
 # b: jump to a parent directory using zoxide-like keyworks with fzf fallback
-alias b 'set __zoxide_target = `$0 -f ~/.local/share/scripts/zoxide-b.csh \!*`; zoxide add "$__zoxide_target"; cd "$__zoxide_target"; unset __zoxide_target'
+alias b 'set __zoxide_target = `$0 -f ${XDG_DATA_HOME}/scripts/zoxide-b.csh \!*`; zoxide add "$__zoxide_target"; cd "$__zoxide_target"; unset __zoxide_target'
 
 # Source post-setup script if exist
 if ( -f ~/.cshrc.post ) then
@@ -108,4 +122,4 @@ if ( -f ~/.cshrc.post ) then
 endif
 
 # Set precmd
-alias precmd 'history -S; history -c; history -M; source ~/.local/share/scripts/git-prompt.csh; __zoxide_hook; eval `direnv export tcsh`'
+alias precmd 'history -S; history -c; history -M; source ${XDG_DATA_HOME}/scripts/git-prompt.csh; __zoxide_hook; eval `direnv export tcsh`'
