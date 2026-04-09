@@ -70,8 +70,8 @@ If you want to build from source or to contribute, following is the guide to do 
 ### Prerequisites
 
 - **Docker**: Docker is used for building the environment.
-- **Just**: All build and test commands are written in [just](https://just.systems/). You can manually install it, or this package is included in personal setup.
-- **Rsync** for fast test: Fast test uses rsync to copy built environment to test folder.
+- **Just**: All build and test commands are written in [just](https://just.systems/). You must install it to build from source.
+- **Rsync**: Required for the `just test_fast` command.
 
 ### Build Step
 
@@ -92,7 +92,7 @@ If you want to build from source or to contribute, following is the guide to do 
   - `Dockerfile`: The Docker settings. The packages required by `build.py` should be specified in the file.
 - `build/`: The directory contains the downloaded files and output of the scripts.
   - `output/`: The directory contains the final Linux environment, which will be compressed to self-extracted archive inside `personal-setup.xz.sh`.
-  - `test/`: The directory is used for running test patterns.
+-  `test/`: The directory where the built environment is deployed for testing.
 - `tests/`: The directory contains test scripts and configurations.
 - `packages/`: The directory contains package definitions.
 - `justfile`: Used to manage the build system.
