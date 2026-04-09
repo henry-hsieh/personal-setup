@@ -86,7 +86,7 @@ If you want to build from source or to contribute, following is the guide to do 
 - `src/`: The directory contains source files.
   - `settings/`: The initial Linux environment settings. Put your preset scripts in correct hierarchy.
     - `.local/share/scripts/`: The directory contains the scripts called by `.bashrc` or `.cshrc`.
-      - `post-install.sh`: The script that runs after the environment archive is extracted
+      - `post-install.sh`: The script that runs after the environment archive is extracted.
   - `build.py`: The script to create the Linux environment.
   - `pre-install.sh`: The script that runs before the environment archive is extracted.
   - `Dockerfile`: The Docker settings. The packages required by `build.py` should be specified in the file.
