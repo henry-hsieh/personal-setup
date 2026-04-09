@@ -57,7 +57,7 @@ You can add custom shell commands or environment variables by creating the follo
 User-specific Neovim configurations can be placed in `~/.config/nvim/lua/custom/`.
 
 - **General Settings**: Create `~/.config/nvim/lua/custom/config.lua`. The module should return a table of options to override defaults in `~/.config/nvim/lua/config/defaults.lua`.
-- **Plugins**: Add custom plugins by creating `.lua` files in the `~/.config/nvim/lua/custom/plugins/` directory. Each file should return a `lazy.nvim` specification of plugins.
+- **Plugins**: Add custom plugins by creating `.lua` files in the `~/.config/nvim/lua/custom/plugins/` directory. Each file should return a `lazy.nvim` plugin specification.
 
 ### OpenCode Customization
 
@@ -79,16 +79,16 @@ If you want to build from source or to contribute, following is the guide to do 
 2. Execute `just build` to build the environment in `build/output/`.
 3. **(Optional)** Execute `just test_fast` to fast test the correctness of the environment.
 4. Execute `just release` to archive the environment into `build/personal-setup.xz.sh`.
-5. **(Optional)** Execute `just test_clean=1 test` to test self-extracted function of `build/personal-setup.xz.sh` and the correctness of the environment.
+5. **(Optional)** Execute `just test_clean=1 test` to test the self-extraction functionality of `build/personal-setup.xz.sh` and the correctness of the environment.
 
 ### Organization
 
 - `src/`: The directory contains source files.
   - `settings/`: The initial Linux environment settings. Put your preset scripts in correct hierarchy.
     - `.local/share/scripts/`: The directory contains the scripts called by `.bashrc` or `.cshrc`.
-      - `post-install.sh`: The script to call after installing the Linux environment
+      - `post-install.sh`: The script that runs after the environment archive is extracted
   - `build.py`: The script to create the Linux environment.
-  - `pre-install.sh`: The script to call before installing the Linux environment.
+  - `pre-install.sh`: The script that runs before the environment archive is extracted.
   - `Dockerfile`: The Docker settings. The packages required by `build.py` should be specified in the file.
 - `build/`: The directory contains the downloaded files and output of the scripts.
   - `output/`: The directory contains the final Linux environment, which will be compressed to self-extracted archive inside `personal-setup.xz.sh`.
