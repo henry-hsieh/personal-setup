@@ -1,5 +1,5 @@
 name: htop
-version: 3.4.1
+version: 3.5.0
 datasource: github-releases
 package: henry-hsieh/htop.appimage
 url: https://github.com/henry-hsieh/htop.appimage/releases/download/v{version}/Htop-x86_64.AppImage
