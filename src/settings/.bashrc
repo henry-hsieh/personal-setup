@@ -23,6 +23,12 @@ if [ -z "$LANG" ]; then
     export LANG="en_US.UTF-8"
 fi
 
+# Set XDG-relative environment variables
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -64,7 +70,7 @@ tinty_source_shell_theme() {
   subcommand="$1"
 
   if [ "$subcommand" = "apply" ] || [ "$subcommand" = "init" ]; then
-    tinty_data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/tinted-theming/tinty"
+    tinty_data_dir="${XDG_DATA_HOME}/tinted-theming/tinty"
 
     while read -r script; do
       # shellcheck disable=SC1090
@@ -131,10 +137,10 @@ bind -x '"\C-g": fzf_bash_completion'
 if [ -f /usr/share/bash-completion/bash_completion ]; then
   source /usr/share/bash-completion/bash_completion
 fi
-source ~/.local/share/scripts/git-prompt.sh
-source ~/.local/share/scripts/fzf-completion.bash
-source ~/.local/share/scripts/fzf-key-bindings.bash
-source ~/.local/share/scripts/fzf-bash-completion.sh
+source ${XDG_DATA_HOME}/scripts/git-prompt.sh
+source ${XDG_DATA_HOME}/scripts/fzf-completion.bash
+source ${XDG_DATA_HOME}/scripts/fzf-key-bindings.bash
+source ${XDG_DATA_HOME}/scripts/fzf-bash-completion.sh
 
 set_prompt()
 {
@@ -184,11 +190,11 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 alias bunx='bun x'
 
 # Mason (Neovim package manager)
-export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+export PATH="${XDG_DATA_HOME}/nvim/mason/bin:$PATH"
 
 # OpenCode
-if [ -f "$HOME/.config/opencode/custom.json" ]; then
-  export OPENCODE_CONFIG="$HOME/.config/opencode/custom.json"
+if [ -f "${XDG_CONFIG_HOME}/opencode/custom.json" ]; then
+  export OPENCODE_CONFIG="${XDG_CONFIG_HOME}/opencode/custom.json"
 fi
 
 alias mv='mv -i'
