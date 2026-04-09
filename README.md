@@ -14,22 +14,10 @@ The **personal-setup** tool is designed to facilitate the easy setup and mainten
 
 ## Installation
 
-1. Download the latest prebuilt archive and untar it:
+1. Download the latest prebuilt installation package and install it. The target system should have `xz` for embedded archive extraction.
 
    ```bash
-   tar -xzvf personal-setup.tar.gz
-   ```
-
-2. Change into the `personal-setup` directory:
-
-   ```bash
-   cd personal-setup
-   ```
-
-3. Execute the `install.sh` script:
-
-   ```bash
-   ./install.sh /path/to/install
+chmod +x personal-setup.xz.sh && ./personal-setup.xz.sh --target /path/to/install
    ```
 
    Normally, the installation path will be your home directory: `$HOME`.
@@ -45,9 +33,9 @@ The **personal-setup** tool is designed to facilitate the easy setup and mainten
    env HOME=/path/to/install bash
    ```
 
-4. Refer to the [post-installation guide](https://github.com/henry-hsieh/personal-setup/wiki/Environment-Setup) in Wiki.
+2. Refer to the [post-installation guide](https://github.com/henry-hsieh/personal-setup/wiki/Environment-Setup) in Wiki.
 
-5. Login to your shell again.
+3. Login to your shell again.
 
 ## Customization
 
@@ -81,29 +69,33 @@ If you want to build from source or to contribute, following is the guide to do 
 
 ### Prerequisites
 
-- **Docker**: Ensure that Docker is installed on your system.
+- **Docker**: Docker is used for building the environment.
+- **Just**: All build and test commands are written in [just](https://just.systems/). You must install it to build from source.
+- **Rsync**: Required for the `just test_fast` command.
 
 ### Build Step
 
-1. Execute `just build_docker` to build the docker environment.
+1. Execute `just build_docker` to build the Docker environment.
 2. Execute `just build` to build the environment in `build/output/`.
-3. Execute `just release` to archive the environment into `build/personal-setup.tar.gz`.
-4. **(Optional)** Execute `just test` to test the correctness of the environment.
+3. **(Optional)** Execute `just test_fast` to fast test the correctness of the environment.
+4. Execute `just release` to archive the environment into `build/personal-setup.xz.sh`.
+5. **(Optional)** Execute `just test_clean=1 test` to test the self-extraction functionality of `build/personal-setup.xz.sh` and the correctness of the environment.
 
 ### Organization
 
 - `src/`: The directory contains source files.
   - `settings/`: The initial Linux environment settings. Put your preset scripts in correct hierarchy.
     - `.local/share/scripts/`: The directory contains the scripts called by `.bashrc` or `.cshrc`.
+      - `post-install.sh`: The script that runs after the environment archive is extracted.
   - `build.py`: The script to create the Linux environment.
-  - `install.sh`: The script to install the Linux environment. Should be included in release package.
+  - `pre-install.sh`: The script that runs before the environment archive is extracted.
   - `Dockerfile`: The Docker settings. The packages required by `build.py` should be specified in the file.
 - `build/`: The directory contains the downloaded files and output of the scripts.
-  - `output/`: The directory contains the final Linux environment, which will be archived into `personal-setup.tar.gz`.
-  - `test/`: The directory contains the decompressed files of the `personal-setup.tar.gz` for testing.
-    - `home/`: The directory is used for running test patterns.
+  - `output/`: The directory contains the final Linux environment, which will be compressed to self-extracted archive inside `personal-setup.xz.sh`.
+-  `test/`: The directory where the built environment is deployed for testing.
 - `tests/`: The directory contains test scripts and configurations.
-- `justfile`: Used to manage build system.
+- `packages/`: The directory contains package definitions.
+- `justfile`: Used to manage the build system.
 
 ## License
 

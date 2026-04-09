@@ -10,7 +10,7 @@
 ### Build Commands
 - `just parallel=<num_cpus> retry=0 build` - Build the environment in `build/output/`
 - `just parallel=<num_cpus> retry=0 fast_fail=1 build` - Immediately stop when building process has error
-- `just release` - Archive the environment into `build/personal-setup.tar.gz`
+- `just release` - Creates a self-extracting archive of the environment: `build/personal-setup.xz.sh`
 - `just build_docker` - Build the Docker image for building. MUST rebuild Docker after changing `src/Dockerfile`.
 
 ### Test Commands
