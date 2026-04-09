@@ -1,0 +1,15 @@
+name: lnav
+version: 0.13.2
+datasource: github-releases
+package: tstack/lnav
+url: https://github.com/tstack/lnav/releases/download/v{version}/lnav-{version}-linux-musl-x86_64.zip
+extract: true
+checksum_source: github-release
+files:
+  - src: lnav
+    dst: .local/bin/lnav
+    chmod: "755"
+  - src: lnav.1
+    dst: .local/share/man/man1/lnav.1
+test:
+  type: version-check
