@@ -1,5 +1,5 @@
 name: lnav
-version: 0.13.2
+version: 0.14.0
 datasource: github-releases
 package: tstack/lnav
 url: https://github.com/tstack/lnav/releases/download/v{version}/lnav-{version}-linux-musl-x86_64.zip
