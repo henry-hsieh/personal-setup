@@ -242,6 +242,35 @@ return {
           end
         end,
       }):map("<leader>t<Tab>")
+      Snacks.toggle.new({
+        id = "scroll",
+        name = "Scroll Animation",
+        get = function()
+          return Snacks.scroll.enabled
+        end,
+        set = function(state)
+          if state then
+            Snacks.scroll.enable()
+          else
+            Snacks.scroll.disable()
+          end
+        end,
+      }):map("<leader>ts")
+      Snacks.toggle.new({
+        id = "buf_diagnostics",
+        name = "Buffer Diagnostics",
+        get = function()
+          return vim.diagnostic.is_enabled({bufnr = 0})
+        end,
+        set = function(state)
+          if state then
+            pcall(vim.diagnostic.enable, true,  {bufnr = 0})
+          else
+            pcall(vim.diagnostic.enable, false, {bufnr = 0})
+          end
+        end,
+      }):map("<leader>tB")
+
       ---@type snacks.Config
       return {
         -- your configuration comes here
