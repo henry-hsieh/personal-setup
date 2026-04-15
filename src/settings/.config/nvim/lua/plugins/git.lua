@@ -38,4 +38,33 @@ return {
       end
     },
   },
+  {
+    'esmuellert/codediff.nvim',
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "tinted-theming/tinted-nvim"
+    },
+    build = "./build.sh",
+    cmd = "CodeDiff",
+    version = "*",
+    opts = function()
+      local colors = require("tinted-nvim").get_palette()
+      local utils = require("utils")
+      return {
+        highlights = {
+          line_insert = (colors and utils.adjust_brightness(
+            utils.mix_color(colors.base0B, colors.base0C, 0.7),
+            vim.o.background == "dark" and 0.4 or 1.6
+          )) or 'DiffAdd', -- Line-level insertions
+          line_delete = (colors and utils.adjust_brightness(
+            utils.mix_color(colors.base08, colors.base0E, 0.7),
+            vim.o.background == "dark" and 0.4 or 1.6
+          )) or 'DiffDelete', -- Line-level deletions
+        },
+        diff = {
+          hide_merge_artifacts = true,
+        }
+      }
+    end,
+  },
 }
