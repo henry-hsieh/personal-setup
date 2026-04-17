@@ -3,6 +3,7 @@ priority_rules:
     conditions:
       - label = urgent
     priority: high
+    allow_checks_interruption: true
 queue_rules:
   - name: urgent
     autoqueue: true
