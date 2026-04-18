@@ -1040,6 +1040,7 @@ class PackageBuilder:
                     if self.fast_fail:
                         self.abort_event.set()
                     raise e
+            logging.info(f"Init completed for {pkg['name']}")
 
     def run_init(self, packages: List[Dict]):
         env = os.environ.copy()
