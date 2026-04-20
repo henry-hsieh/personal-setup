@@ -1,8 +1,8 @@
 name: opencode
 version: 1.14.19
 datasource: github-releases
-package: sst/opencode
-url: https://github.com/sst/opencode/releases/download/v{version}/opencode-linux-x64.tar.gz
+package: anomalyco/opencode
+url: https://github.com/anomalyco/opencode/releases/download/v{version}/opencode-linux-x64.tar.gz
 extract: true
 checksum_source: github-release
 files:
@@ -10,12 +10,29 @@ files:
     dst: .local/bin/opencode
   - src: https://opencode.ai/config.json
     dst: .config/opencode/schema.json
-  - src: "{pkg_dir}/opencode.json"
-    dst: .config/opencode/opencode.json
+  - src: "{pkg_dir}/opencode.jsonc"
+    dst: .config/opencode/opencode.jsonc
 test:
   type: version-check
 init_cmds:
   - |
-    for plugin in $(yq -r '.plugin[]' $HOME/.config/opencode/opencode.json); do
-      opencode plugin -g -f "${plugin}"
+    # Install @opencode-ai/plugin in OpenCode config directory
+    OPENCODE_CONFIG_DIR=$HOME/.config/opencode/
+    rm -rf $OPENCODE_CONFIG_DIR/node_modules/
+    rm -rf $OPENCODE_CONFIG_DIR/package.json
+    rm -rf $OPENCODE_CONFIG_DIR/package-lock.json
+    rm -rf $OPENCODE_CONFIG_DIR/bun.lock
+    cd ${OPENCODE_CONFIG_DIR}
+    bun add --exact @opencode-ai/plugin@{version}
+    npm install --package-lock-only
+    # Install OpenCode plugins
+    OPENCODE_PLUGIN_DIR=$HOME/.cache/opencode/packages/
+    rm -rf $HOME/.cache/opencode/
+    mkdir -p $OPENCODE_PLUGIN_DIR
+    for plugin in $(cpp -P $HOME/.config/opencode/opencode.jsonc | yq -r '.plugin[]'); do
+      PLUGIN_PATH=${OPENCODE_PLUGIN_DIR}/${plugin}
+      mkdir -p ${PLUGIN_PATH}
+      cd ${PLUGIN_PATH}
+      bun add --exact ${plugin}
+      npm install --package-lock-only
     done

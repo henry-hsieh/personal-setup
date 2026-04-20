@@ -73,7 +73,7 @@
             description: 'Opencode Plugin: NPM (Scoped or Unscoped)',
             customType: 'regex',
             managerFilePatterns: [
-                '/^packages/opencode/opencode\\.json$/',
+                '/^packages/opencode/opencode\\.jsonc$/',
             ],
             matchStrings: [
                 '"(?<depName>@[^"\\/]+\\/[^"@]+|[^"\\/@]+)@(?<currentValue>[^"@]+)"',
