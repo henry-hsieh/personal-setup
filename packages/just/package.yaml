@@ -1,5 +1,5 @@
 name: just
-version: 1.49.0
+version: 1.50.0
 datasource: github-releases
 package: casey/just
 url: https://github.com/casey/just/releases/download/{version}/just-{version}-x86_64-unknown-linux-musl.tar.gz
