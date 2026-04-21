@@ -17,7 +17,7 @@ The **personal-setup** tool is designed to facilitate the easy setup and mainten
 1. Download the latest prebuilt installation package and install it. The target system should have `xz` for embedded archive extraction.
 
    ```bash
-chmod +x personal-setup.xz.sh && ./personal-setup.xz.sh --target /path/to/install
+   chmod +x personal-setup.xz.sh && ./personal-setup.xz.sh --target /path/to/install
    ```
 
    Normally, the installation path will be your home directory: `$HOME`.
