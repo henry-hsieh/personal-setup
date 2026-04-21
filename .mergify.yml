@@ -6,7 +6,6 @@ priority_rules:
     allow_checks_interruption: true
 queue_rules:
   - name: urgent
-    autoqueue: true
     batch_size: 1
     queue_conditions:
       - base=main
@@ -19,7 +18,6 @@ queue_rules:
     update_method: rebase
     update_bot_account: henry-hsieh
   - name: default
-    autoqueue: true
     batch_size: 1
     queue_conditions:
       - base=main
@@ -33,3 +31,5 @@ queue_rules:
     update_bot_account: henry-hsieh
 merge_queue:
   max_parallel_checks: 1
+merge_protections_settings:
+  auto_merge: true
