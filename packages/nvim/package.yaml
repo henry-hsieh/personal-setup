@@ -1,5 +1,5 @@
 name: nvim
-version: 0.12.1
+version: 0.12.2
 datasource: github-releases
 package: neovim/neovim-releases
 url: https://github.com/neovim/neovim-releases/releases/download/v{version}/nvim-linux-x86_64.tar.gz
