@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/henry-hsieh/personal-setup/compare/v2.0.0...v2.1.0) (2026-04-23)
+
+
+### Features
+
+* **opencode:** bump opencode version to v1.14.21 ([#889](https://github.com/henry-hsieh/personal-setup/issues/889)) ([837577b](https://github.com/henry-hsieh/personal-setup/commit/837577b47ae4e4e7628fdf93ef729c0dec6f0426))
+
 ## 2.0.0 (2026-04-22)
 
 
