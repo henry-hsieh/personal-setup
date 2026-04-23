@@ -206,13 +206,12 @@ jobs:
 
       - name: Upload release asset
         if: steps.download_release_artifact.outcome == 'success'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ steps.get_token.outputs.token }}
+        uses: softprops/action-gh-release@v3
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/personal-setup.xz.sh
-          asset_name: personal-setup-${{ steps.create_release.outputs.tag_name }}.xz.sh
+          tag_name: ${{ steps.create_release.outputs.tag_name }}
+          files: build/personal-setup.xz.sh
+          fail_on_unmatched_files: true
+          token: ${{ steps.get_token.outputs.token }}
 
   nightly-release:
     name: Nightly Release
