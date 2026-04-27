@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.2.0](https://github.com/henry-hsieh/personal-setup/compare/v2.1.0...v2.2.0) (2026-04-27)
+
+
+### Features
+
+* **fzf:** bump fzf version to v0.72.0 ([#897](https://github.com/henry-hsieh/personal-setup/issues/897)) ([bcbb7e5](https://github.com/henry-hsieh/personal-setup/commit/bcbb7e5a2503db5ca37b3dfdbbbfd024763b6b92))
+* **harper-ls:** bump harper-ls version to v2.1.0 ([#895](https://github.com/henry-hsieh/personal-setup/issues/895)) ([d039f23](https://github.com/henry-hsieh/personal-setup/commit/d039f23eac4694f111f05aff93df647c4b98098d))
+* **opencode:** bump opencode version to v1.14.22 ([#891](https://github.com/henry-hsieh/personal-setup/issues/891)) ([e049762](https://github.com/henry-hsieh/personal-setup/commit/e049762b7d6120ef6796fdc3a634b63ccd41aaa4))
+* **opencode:** bump opencode version to v1.14.24 ([#893](https://github.com/henry-hsieh/personal-setup/issues/893)) ([cf9d20b](https://github.com/henry-hsieh/personal-setup/commit/cf9d20ba45afd05b964032e8f83b6587457ab4a4))
+* **opencode:** bump opencode version to v1.14.25 ([#896](https://github.com/henry-hsieh/personal-setup/issues/896)) ([3ca5238](https://github.com/henry-hsieh/personal-setup/commit/3ca52383462e7d7632d0a3c8e600781baef987b3))
+* **opencode:** bump opencode version to v1.14.26 ([#898](https://github.com/henry-hsieh/personal-setup/issues/898)) ([a878d32](https://github.com/henry-hsieh/personal-setup/commit/a878d3208c20e737a2be59c6c4ccdf0d72c8d03a))
+* **opencode:** bump opencode version to v1.14.28 ([#899](https://github.com/henry-hsieh/personal-setup/issues/899)) ([47c0b71](https://github.com/henry-hsieh/personal-setup/commit/47c0b7123b1f7dfb73f62925b8030bb8fb1c6e21))
+* **ruff:** bump ruff version to v0.15.12 ([#894](https://github.com/henry-hsieh/personal-setup/issues/894)) ([415e03d](https://github.com/henry-hsieh/personal-setup/commit/415e03d80a2c3624320072c65eb9ba8a52180377))
+* **uv:** bump uv version to v0.11.8 ([#900](https://github.com/henry-hsieh/personal-setup/issues/900)) ([047f344](https://github.com/henry-hsieh/personal-setup/commit/047f344d4326d9f16d0f59e6386d5b60ac605e89))
+
 ## [2.1.0](https://github.com/henry-hsieh/personal-setup/compare/v2.0.0...v2.1.0) (2026-04-23)
 
 
