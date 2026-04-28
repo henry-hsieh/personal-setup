@@ -15,6 +15,7 @@ files:
 test:
   type: version-check
 init_cmds:
+  - opencode completion > $HOME/.local/share/bash-completion/completions/opencode.bash
   - |
     # Install @opencode-ai/plugin in OpenCode config directory
     OPENCODE_CONFIG_DIR=$HOME/.config/opencode/

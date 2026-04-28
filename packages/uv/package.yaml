@@ -10,5 +10,7 @@ files:
     dst: .local/bin/uv
   - src: uvx
     dst: .local/bin/uvx
+init_cmds:
+  - uv generate-shell-completion bash > $HOME/.local/share/bash-completion/completions/uv.bash
 test:
   type: version-check

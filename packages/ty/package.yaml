@@ -8,5 +8,7 @@ checksum_source: github-release
 files:
   - src: ty
     dst: .local/bin/ty
+init_cmds:
+  - ty generate-shell-completion bash > $HOME/.local/share/bash-completion/completions/ty.bash
 test:
   type: version-check

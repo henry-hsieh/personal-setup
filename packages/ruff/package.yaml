@@ -8,5 +8,7 @@ checksum_source: github-release
 files:
   - src: ruff
     dst: .local/bin/ruff
+init_cmds:
+  - ruff generate-shell-completion bash > $HOME/.local/share/bash-completion/completions/ruff.bash
 test:
   type: version-check
