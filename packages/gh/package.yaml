@@ -10,5 +10,7 @@ files:
     dst: .local/bin
   - src: share
     dst: .local/share
+init_cmds:
+  - gh completion -s bash > $HOME/.local/share/bash-completion/completions/gh.bash
 test:
   type: version-check
