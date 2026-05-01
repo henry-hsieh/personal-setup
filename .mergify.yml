@@ -32,4 +32,4 @@ queue_rules:
 merge_queue:
   max_parallel_checks: 1
 merge_protections_settings:
-  auto_merge: true
+  auto_merge_conditions: true
