@@ -3,14 +3,14 @@ version: v3.6a
 datasource: github-releases
 package: henry-hsieh/tmux.appimage
 versioning: deb
-url: https://github.com/henry-hsieh/tmux.appimage/releases/download/v{version}/Tmux-x86_64.AppImage
+url: https://github.com/henry-hsieh/tmux.appimage/releases/download/{version}/Tmux-x86_64.AppImage
 extract: false
 checksum_source: github-release
 files:
   - src: .
     dst: .local/bin/tmux
     chmod: "755"
-  - src: https://github.com/henry-hsieh/tmux.appimage/releases/download/v{version}/tmux.1
+  - src: https://github.com/henry-hsieh/tmux.appimage/releases/download/{version}/tmux.1
     dst: .local/share/man/man1/tmux.1
 test:
   type: version-check
