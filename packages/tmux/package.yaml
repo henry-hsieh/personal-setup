@@ -2,7 +2,7 @@ name: tmux
 version: 3.6
 datasource: github-releases
 package: henry-hsieh/tmux.appimage
-versioning: loose
+versioning: deb
 url: https://github.com/henry-hsieh/tmux.appimage/releases/download/v{version}/Tmux-x86_64.AppImage
 extract: false
 checksum_source: github-release
