@@ -10,6 +10,10 @@ files:
   - src: bun
     dst: .local/bin/bun
     chmod: "755"
+  - src: https://raw.githubusercontent.com/oven-sh/bun/refs/tags/bun-v{version}/completions/bun.bash
+    dst: .local/share/bash-completion/completions/bun.bash
+  - src: https://raw.githubusercontent.com/oven-sh/bun/refs/tags/bun-v{version}/completions/bun.fish
+    dst: .config/fish/completions/bun.fish
 init_cmds:
   - bash {pkg_dir}/install-bun-packages.sh
 subpackages:

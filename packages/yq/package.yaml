@@ -11,6 +11,7 @@ files:
   - src: yq.1
     dst: .local/share/man/man1/yq.1
 init_cmds:
-  - yq shell-completion bash > $HOME/.local/share/bash-completion/completions/yq.bash
+  - yq completion bash > $HOME/.local/share/bash-completion/completions/yq.bash
+  - yq completion fish > $HOME/.config/fish/completions/yq.fish
 test:
   type: version-check

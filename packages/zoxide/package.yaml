@@ -10,5 +10,7 @@ files:
     dst: .local/bin/zoxide
   - src: completions/zoxide.bash
     dst: .local/share/bash-completion/completions/zoxide.bash
+  - src: completions/zoxide.fish
+    dst: .config/fish/completions/zoxide.fish
 test:
   type: version-check

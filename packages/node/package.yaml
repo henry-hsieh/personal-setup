@@ -13,6 +13,8 @@ files:
     dst: .local/lib
   - src: share
     dst: .local/share
+init_cmds:
+  - npm completion > $HOME/.local/share/bash-completion/completions/npm.bash
 subpackages:
   manifest: inline
   manifest_type: inline

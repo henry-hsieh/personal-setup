@@ -16,5 +16,9 @@ files:
     dst: .local/share/bash-completion/completions/yazi.bash
   - src: completions/ya.bash
     dst: .local/share/bash-completion/completions/ya.bash
+  - src: completions/yazi.fish
+    dst: .config/fish/completions/yazi.fish
+  - src: completions/ya.fish
+    dst: .config/fish/completions/ya.fish
 test:
   type: version-check
