@@ -4,6 +4,7 @@ datasource: github-releases
 package: oven-sh/bun
 url: https://github.com/oven-sh/bun/releases/download/bun-v{version}/bun-linux-x64.zip
 extract: true
+version_prefix: bun-v
 checksum_source: github-release
 files:
   - src: bun
