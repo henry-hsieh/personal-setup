@@ -1,0 +1,16 @@
+name: stylua
+version: 2.3.1
+datasource: github-releases
+package: JohnnyMorganz/StyLua
+url: https://github.com/JohnnyMorganz/StyLua.git
+extract: false
+checksum_source: git-refs
+files:
+  - src: target/release/stylua
+    dst: .local/bin/stylua
+build_cmds:
+  - cargo build --release -q --features lua52,lua53,lua54,luajit,luau
+cache:
+  - target
+test:
+  type: version-check
