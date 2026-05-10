@@ -10,6 +10,8 @@ files:
     dst: .local/bin/tinty
   - src: https://raw.githubusercontent.com/tinted-theming/tinty/v{version}/contrib/completion/tinty.bash
     dst: .local/share/bash-completion/completions/tinty.bash
+  - src: https://raw.githubusercontent.com/tinted-theming/tinty/v{version}/contrib/completion/tinty.fish
+    dst: .config/fish/completions/tinty.fish
 init_cmds:
   - tinty sync
 test:

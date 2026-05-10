@@ -10,5 +10,6 @@ files:
     dst: .local/bin/ty
 init_cmds:
   - ty generate-shell-completion bash > $HOME/.local/share/bash-completion/completions/ty.bash
+  - ty generate-shell-completion fish > $HOME/.config/fish/completions/ty.fish
 test:
   type: version-check
