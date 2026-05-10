@@ -1,5 +1,5 @@
 name: git-extras
-version: 7.4.0
+version: 7.5.0
 datasource: github-releases
 package: tj/git-extras
 url: https://github.com/tj/git-extras.git
