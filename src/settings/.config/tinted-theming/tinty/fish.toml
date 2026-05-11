@@ -1,19 +1,19 @@
-shell = "bash -c '{}'"
+shell = "fish -c '{}'"
 default-scheme = "base24-tomorrow-night"
 default-cycle-ring = "default"
 
 [[items]]
 name = "tinted-shell"
 path = "https://github.com/tinted-theming/tinted-shell"
-themes-dir = "scripts"
-hook = ". \"$TINTY_THEME_FILE_PATH\""
+themes-dir = "fish"
+hook = "source \"$TINTY_THEME_FILE_PATH\""
 supported-systems = ["base16", "base24", "tinted8"]
 
 [[items]]
 name = "tinted-fzf"
 path = "https://github.com/tinted-theming/tinted-fzf"
-themes-dir = "sh"
-hook = ". \"$TINTY_THEME_FILE_PATH\""
+themes-dir = "fish"
+hook = "source \"$TINTY_THEME_FILE_PATH\""
 supported-systems = ["base16", "base24", "tinted8"]
 
 hooks = ["tmux source-file ~/.config/tmux/tmux.conf"]
