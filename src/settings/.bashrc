@@ -232,37 +232,49 @@ function y() {
   /usr/bin/env rm -f -- "$tmp"
 }
 
-# b: jump to a parent directory using zoxide-like keyworks with fzf fallback
+# b: jump to a parent directory matching keywords
 function b() {
-  # 1. No arguments: go back one level
   if [[ -z "$1" ]]; then
     builtin cd ..
     return
   fi
 
-  # Get current path without trailing slash
-  local __zoxide_pwd="${PWD%/}"
+  local __b_pwd="${PWD%/}"
 
-  # 2. At root: nowhere to go
-  if [[ -z "$__zoxide_pwd" ]]; then
+  if [[ -z "$__b_pwd" ]]; then
     builtin cd /
     return
   fi
 
-  # 3. Pattern match logic: fuzzy search with all arguments
-  local __zoxide_pattern="${*// /.*}"
-  # Greedy match to find at most one result.
-  # Training '/' is used to exclude current directory.
-  local __zoxide_target=$(rg -oi -- ".+${__zoxide_pattern}[^/]*/" <<< "$__zoxide_pwd")
+  local __b_pattern=""
+  local __b_sep=""
+  for arg in "$@"; do
+    local __b_escaped=$(sed 's/[][\.|*+?^$(){}]/\\&/g' <<< "$arg")
+    __b_pattern+="${__b_sep}${__b_escaped}"
+    __b_sep=".*"
+  done
+  local __b_target=$(rg -oi -- ".+${__b_pattern}[^/]*/" <<< "$__b_pwd")
 
-  if [[ -n "$__zoxide_target" ]]; then
-    builtin cd "$__zoxide_target"
+  if [[ -n "$__b_target" ]]; then
+    builtin cd "$__b_target"
   else
-    # 4. Fallback to fzf
-    local __zoxide_result=$(echo "$__zoxide_pwd" | tr '/' '\n' | awk 'BEGIN{print "/"} NF{path=path"/"$1; print path}' | head -n -1 | tac | awk '{print "["NR"] "$0}' | fzf -1 --height 40% --reverse --ansi --prompt='Jump back > ' | sed 's/.* //')
-
-    [[ -n "$__zoxide_result" ]] && builtin cd "${__zoxide_result}"
+    echo "b: no match found" >&2
+    return 1
   fi
+}
+
+# bi: interactively jump to a parent directory using fzf
+function bi() {
+  local __bi_pwd="${PWD%/}"
+
+  if [[ -z "$__bi_pwd" ]]; then
+    builtin cd /
+    return
+  fi
+
+  local __bi_result=$(echo "$__bi_pwd" | tr '/' '\n' | awk 'BEGIN{print "/"} NF{path=path"/"$0; print path}' | head -n -1 | tac | awk '{print "["NR"] "$0}' | fzf -1 --height 40% --reverse --ansi --prompt='Jump back > ' | sed 's/^\[[0-9]*\] //')
+
+  [[ -n "$__bi_result" ]] && builtin cd "${__bi_result}"
 }
 
 # Source post-setup script if exist
