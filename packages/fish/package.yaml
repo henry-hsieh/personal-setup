@@ -1,0 +1,13 @@
+name: fish
+version: 4.7.1
+datasource: github-releases
+package: fish-shell/fish-shell
+url: https://github.com/fish-shell/fish-shell/releases/download/{version}/fish-{version}-linux-x86_64.tar.xz
+extract: true
+checksum_source: github-release
+files:
+  - src: fish
+    dst: .local/bin/fish
+    chmod: "755"
+test:
+  type: version-check
