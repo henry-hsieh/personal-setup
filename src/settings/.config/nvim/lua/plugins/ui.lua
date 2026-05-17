@@ -321,7 +321,7 @@ return {
         scope = { enabled = true },
         toggle = { enabled = true, },
         scroll = { enabled = true },
-        terminal = { win = { wo = { winbar = "" } } },
+        terminal = { win = { wo = { winbar = "" } }, shell = "fish" },
         words = { enabled = true },
         zen = { enabled = true, toggles = { diagnostics = false }, },
         styles = { zen = { backdrop = { transparent = false } } },
