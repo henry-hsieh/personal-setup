@@ -3,7 +3,6 @@
 -------------------------
 -- Shell
 vim.o.shell = "bash"
-vim.env.SHELL = "bash"
 
 -- Clipboard
 vim.o.clipboard = "unnamed,unnamedplus"
