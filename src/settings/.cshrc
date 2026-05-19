@@ -1,43 +1,16 @@
 # .cshrc
 
-# User specific environment
-set -f path=("$HOME/bin" $path:q)
-set -f path=("$HOME/.local/bin" $path:q)
-
-# If not running interactively, don't do anything
-if ( ! $?prompt ) then
-    exit 0
-endif
-
-# Source pre-setup script if exist
-if ( -f ~/.cshrc.pre ) then
-    source ~/.cshrc.pre
-endif
-
-# Set LANG if there is no preset
-if ( ! $?LANG ) then
-    setenv LANG "en_US.UTF-8"
-endif
-
-# Set XDG-relative environment variables
-if ( ! $?XDG_CONFIG_HOME ) then
-    setenv XDG_CONFIG_HOME $HOME/.config
-endif
-if ( ! $?XDG_DATA_HOME ) then
-    setenv XDG_DATA_HOME $HOME/.local/share
-endif
-if ( ! $?XDG_STATE_HOME ) then
-    setenv XDG_STATE_HOME $HOME/.local/state
-endif
-if ( ! $?XDG_CACHE_HOME ) then
-    setenv XDG_CACHE_HOME $HOME/.cache
+# If not running interactively and not being sourced from .login, exit
+# (skip this check when __FROM_LOGIN is set - .login runs first and sets env vars)
+if ( ! $?prompt && ! $?__FROM_LOGIN ) then
+  exit 0
 endif
 
 # Set colorscheme
 tinty init
 
 set autolist=ambiguous
-source ${XDG_DATA_HOME}/scripts/git-completion.tcsh
+source "${XDG_DATA_HOME}/scripts/git-completion.tcsh"
 set padhour
 set noding
 
@@ -46,7 +19,7 @@ set history=1000
 set histdup=erase
 set histfile = ~/.tcsh_history
 if ( -e "$histfile.lock" ) then
-    rm -rf $histfile.lock
+  rm -rf $histfile.lock
 endif
 set savehist=(1000 merge lock)
 
@@ -55,35 +28,9 @@ alias cp 'cp -i'
 alias rm 'rm -i'
 
 if ( -x /usr/bin/dircolors ) then
-    test -r ~/.dircolors && eval "`dircolors -c ~/.dircolors`" || eval "`dircolors -c`"
-    alias ls 'ls --color=auto'
-
-    alias grep 'grep --color=auto'
-    alias fgrep 'fgrep --color=auto'
-    alias egrep 'egrep --color=auto'
-endif
-
-# Java
-setenv JAVA_HOME "$HOME/.local/lib/java"
-setenv PATH "$JAVA_HOME/bin:$PATH"
-
-# Rustup and Cargo
-setenv RUSTUP_HOME "$HOME/.local/rustup"
-setenv CARGO_HOME "$HOME/.local/cargo"
-setenv PATH "$CARGO_HOME/bin:$PATH"
-
-# Bun
-setenv BUN_INSTALL "$HOME/.local/bun"
-setenv BUN_INSTALL_CACHE_DIR "$HOME/.cache/bun"
-setenv PATH "$BUN_INSTALL/bin:$PATH"
-alias bunx 'bun x'
-
-# Mason (Neovim package manager)
-setenv PATH "${XDG_DATA_HOME}/nvim/mason/bin:$PATH"
-
-# OpenCode
-if ( -f "${XDG_CONFIG_HOME}/opencode/custom.json" ) then
-  setenv OPENCODE_CONFIG "${XDG_CONFIG_HOME}/opencode/custom.json"
+  test -r ~/.dircolors && eval "`dircolors -c ~/.dircolors`" || eval "`dircolors -c`"
+  alias ls 'ls --color=auto'
+  alias grep 'grep --color=auto'
 endif
 
 alias ll 'ls -alF'
@@ -91,20 +38,14 @@ alias la 'ls -A'
 alias l  'ls -CF'
 
 alias h 'history'
-alias vim 'nvim'
-alias vi  'nvim'
-alias v   'nvim'
+alias vi  'vim'
+alias n   'nvim'
+alias nn  'nvim -u NONE'
 alias bat "bat --theme='base16-256'"
-alias jq  'yq'
 setenv EDITOR 'nvim'
 
-# zoxide
-source ${XDG_DATA_HOME}/scripts/zoxide.csh
-
-# Set display if it's empty
-if ( ! $?DISPLAY ) then
-    setenv DISPLAY ":0"
-endif
+# Bun alias
+alias bunx 'bun x'
 
 # yazi
 alias y 'set tmp=`mktemp -t yazi-cwd.XXXXXX`; \
@@ -114,15 +55,18 @@ alias y 'set tmp=`mktemp -t yazi-cwd.XXXXXX`; \
         /usr/bin/rm -f "$tmp"'
 
 # b: jump to a parent directory matching keywords
-alias b 'set __b_target = `$0 -f ${XDG_DATA_HOME}/scripts/b.csh \!*` && cd "$__b_target" && unset __b_target'
+alias b 'set __b_target = `$0 -f "${XDG_DATA_HOME}/scripts/b.csh" \!*` && cd "$__b_target" && unset __b_target'
 
 # bi: interactively jump to a parent directory using fzf
-alias bi 'set __bi_target = `$0 -f ${XDG_DATA_HOME}/scripts/bi.csh` && cd "$__bi_target" && unset __bi_target'
+alias bi 'set __bi_target = `$0 -f "${XDG_DATA_HOME}/scripts/bi.csh"` && cd "$__bi_target" && unset __bi_target'
 
-# Source post-setup script if exist
-if ( -f ~/.cshrc.post ) then
-    source ~/.cshrc.post
-endif
+# zoxide
+source "${XDG_DATA_HOME}/scripts/zoxide.csh"
 
 # Set precmd
-alias precmd 'history -S; history -c; history -M; source ${XDG_DATA_HOME}/scripts/git-prompt.csh; __zoxide_hook; eval `direnv export tcsh`'
+alias precmd 'history -S; history -c; history -M; source "${XDG_DATA_HOME}/scripts/git-prompt.csh"; __zoxide_hook; eval `direnv export tcsh`'
+
+# Custom script for subshell
+if ( -f "${XDG_CONFIG_HOME}/personal-setup/csh-custom.csh" ) then
+  source "${XDG_CONFIG_HOME}/personal-setup/csh-custom.csh"
+endif
