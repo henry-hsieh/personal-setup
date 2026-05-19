@@ -1,0 +1,11 @@
+name: atuin
+version: 18.16.1
+datasource: github-releases
+package: atuinsh/atuin
+url: https://github.com/atuinsh/atuin/releases/download/v{version}/atuin-x86_64-unknown-linux-musl.tar.gz
+extract: true
+files:
+  - src: atuin
+    dst: .local/bin/atuin
+test:
+  type: version-check

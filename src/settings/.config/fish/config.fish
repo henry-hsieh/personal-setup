@@ -7,6 +7,7 @@ if status is-interactive
 
   # Keybindings
   fzf_configure_bindings --directory=ctrl-shift-f --variables=ctrl-alt-v
+  atuin init fish | source
   bind -M insert \cf forward-word
   bind \cf forward-word
 end
