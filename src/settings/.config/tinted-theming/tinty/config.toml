@@ -16,6 +16,12 @@ themes-dir = "sh"
 hook = ". \"$TINTY_THEME_FILE_PATH\""
 supported-systems = ["base16", "base24", "tinted8"]
 
+[[items]]
+path = "https://github.com/tinted-theming/tinted-delta"
+name = "tinted-delta"
+themes-dir = "configs"
+supported-systems = ["base16", "base24"]
+
 hooks = ["tmux source-file ~/.config/tmux/tmux.conf"]
 
 [[rings]]

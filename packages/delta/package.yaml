@@ -1,0 +1,14 @@
+name: delta
+version: 0.19.2
+datasource: github-releases
+package: dandavison/delta
+url: https://github.com/dandavison/delta/releases/download/{version}/delta-{version}-x86_64-unknown-linux-musl.tar.gz
+extract: true
+files:
+  - src: delta
+    dst: .local/bin/delta
+init_cmds:
+  - delta --generate-completion bash > $HOME/.local/share/bash-completion/completions/delta.bash
+  - delta --generate-completion fish > $HOME/.config/fish/completions/delta.fish
+test:
+  type: version-check

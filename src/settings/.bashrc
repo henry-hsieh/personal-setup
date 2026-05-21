@@ -261,6 +261,9 @@ function cd() {
   builtin cd "$@"
 }
 
+# lazygit wrapper
+alias lazygit="env DELTA_FEATURES= lazygit"
+
 # Custom script for subshell
 if [ -f "${XDG_CONFIG_HOME}/personal-setup/bash-custom.bash" ]; then
   . "${XDG_CONFIG_HOME}/personal-setup/bash-custom.bash"

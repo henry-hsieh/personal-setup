@@ -50,6 +50,9 @@ if ( -f "${XDG_CONFIG_HOME}/opencode/custom.json" ) then
   setenv OPENCODE_CONFIG "${XDG_CONFIG_HOME}/opencode/custom.json"
 endif
 
+# Delta
+setenv DELTA_FEATURES "+side-by-side"
+
 # Flag to indicate we're being sourced from .login
 setenv __FROM_LOGIN 1
 

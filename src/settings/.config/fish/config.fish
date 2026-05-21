@@ -1,3 +1,6 @@
+if status is-login
+  set -gx DELTA_FEATURES "+side-by-side"
+end
 if status is-interactive
   # Commands to run in interactive sessions can go here
   set -g fish_greeting ''
