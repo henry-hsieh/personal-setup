@@ -63,6 +63,9 @@ alias bi 'set __bi_target = `$0 -f "${XDG_DATA_HOME}/scripts/bi.csh"` && cd "$__
 # zoxide
 source "${XDG_DATA_HOME}/scripts/zoxide.csh"
 
+# lazygit wrapper
+alias lazygit 'env DELTA_FEATURES= lazygit'
+
 # Set precmd
 alias precmd 'history -S; history -c; history -M; source "${XDG_DATA_HOME}/scripts/git-prompt.csh"; __zoxide_hook; eval `direnv export tcsh`'
 

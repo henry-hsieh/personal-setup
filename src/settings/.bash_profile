@@ -45,6 +45,9 @@ if [ -f "${XDG_CONFIG_HOME}/opencode/custom.json" ]; then
   export OPENCODE_CONFIG="${XDG_CONFIG_HOME}/opencode/custom.json"
 fi
 
+# Delta
+export DELTA_FEATURES="+side-by-side"
+
 # Kernel source directory
 export KERN_DIR=/usr/src/kernels/$(uname -r)
 

@@ -1,3 +1,6 @@
 git:
   pull:
     mode: 'rebase'
+  pagers:
+    - pager: delta --dark --paging=never --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - pager: delta --dark --paging=never --side-by-side --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"

@@ -1,6 +1,7 @@
 # This is Git's per-user configuration file.
 [core]
     editor = nvim
+    pager = delta
 [diff]
     tool = codediff
 [difftool]
@@ -40,7 +41,13 @@
         git rebase --whitespace=fix HEAD~ && \
         git reset --soft HEAD~ ; \
     fi"
+[delta]
+    navigate = true
+    line-numbers = true
+[interactive]
+    diffFilter = delta --color-only
 [merge]
+    conflictStyle = zdiff3
     tool = codediff
 [mergetool]
     prompt = false
@@ -60,3 +67,6 @@
     skipSubmitEdit = true
 [fetch]
     prune = true
+[include]
+    path = "~/.local/share/tinted-theming/tinty/tinted-delta-configs-file.gitconfig"
+    path = "~/.config/git/custom.gitconfig"
