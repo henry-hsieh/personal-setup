@@ -47,7 +47,7 @@ jobs:
 
       - name: Cache docker images
         id: cache_image
-        uses: AndreKurait/docker-cache@0.6.0
+        uses: AndreKurait/docker-cache@0.7.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles('src/Dockerfile') }}
           read-only: ${{ github.event_name == 'pull_request' }}
@@ -140,7 +140,7 @@ jobs:
 
       - name: Cache docker images
         id: cache_image
-        uses: AndreKurait/docker-cache@0.6.0
+        uses: AndreKurait/docker-cache@0.7.0
         with:
           key: docker-${{ runner.os }}-${{ hashFiles('Dockerfile') }}
           read-only: ${{ github.event_name == 'pull_request' }}
