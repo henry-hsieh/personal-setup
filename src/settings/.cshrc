@@ -1,8 +1,8 @@
 # .cshrc
 
-# If not running interactively and not being sourced from .login, exit
+# If not running interactively or not being sourced from .login, exit
 # (skip this check when __FROM_LOGIN is set - .login runs first and sets env vars)
-if ( ! $?prompt && ! $?__FROM_LOGIN ) then
+if ( ! $?prompt || ($?loginsh && ! $?__FROM_LOGIN) ) then
   exit 0
 endif
 
