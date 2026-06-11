@@ -43,25 +43,55 @@ The environment supports customization through specific configuration files.
 
 ### Shell Customization
 
-You can add custom shell commands or environment variables by creating the following files in your home directory:
+You can add custom shell commands or environment variables by creating the following files:
 
 - **Bash**:
-  - `~/.bashrc.pre`: Executed at the beginning of `.bashrc`.
-  - `~/.bashrc.post`: Executed at the end of `.bashrc`.
+  - `${XDG_CONFIG_HOME}/personal-setup/bash-custom.bash`: Executed at the end of `.bashrc` (subshell).
+  - `${XDG_CONFIG_HOME}/personal-setup/bash-custom-login.bash`: Executed at the end of `.bash_profile` (login shell).
 - **Tcsh**:
-  - `~/.cshrc.pre`: Executed at the beginning of `.cshrc`.
-  - `~/.cshrc.post`: Executed at the end of `.cshrc`.
+  - `${XDG_CONFIG_HOME}/personal-setup/csh-custom.csh`: Executed at the end of `.cshrc` (subshell).
+  - `${XDG_CONFIG_HOME}/personal-setup/csh-custom-login.csh`: Executed at the end of `.login` (login shell).
+- **Fish**: Fish natively supports customization through standard paths:
+  - `${XDG_CONFIG_HOME}/fish/conf.d/*.fish`: Auto-loaded configuration snippets.
+  - `${XDG_CONFIG_HOME}/fish/functions/*.fish`: Function definitions (loaded on demand).
 
+By default, `XDG_CONFIG_HOME` is set to `~/.config`.
+
+
+### Git Customization
+
+- `${XDG_CONFIG_HOME}/git/custom.gitconfig`: Included via `[include]` in the global git config.
+
+### Tmux Customization
+
+- `${XDG_CONFIG_HOME}/tmux/custom.conf`: Sourced at the end of `tmux.conf`.
 ### Neovim Customization
 
-User-specific Neovim configurations can be placed in `~/.config/nvim/lua/custom/`.
+User-specific Neovim configurations can be placed in `${XDG_CONFIG_HOME}/nvim/lua/custom/`.
 
-- **General Settings**: Create `~/.config/nvim/lua/custom/config.lua`. The module should return a table of options to override defaults in `~/.config/nvim/lua/config/defaults.lua`.
-- **Plugins**: Add custom plugins by creating `.lua` files in the `~/.config/nvim/lua/custom/plugins/` directory. Each file should return a `lazy.nvim` plugin specification.
+- **General Settings**: Create `${XDG_CONFIG_HOME}/nvim/lua/custom/config.lua`. The module should return a table of options to override defaults in `${XDG_CONFIG_HOME}/nvim/lua/config/defaults.lua`.
+- **Plugins**: Add custom plugins by creating `.lua` files in the `${XDG_CONFIG_HOME}/nvim/lua/custom/plugins/` directory. Each file should return a `lazy.nvim` plugin specification.
+- **Tree-sitter**: Create `${XDG_CONFIG_HOME}/nvim/lua/custom/treesitter.lua` to extend Tree-sitter configuration.
+
+#### Feature Toggles
+
+You can toggle features by overriding the `features` table in your custom config:
+
+```lua
+-- ${XDG_CONFIG_HOME}/nvim/lua/custom/config.lua
+return {
+  features = {
+    copilot = false,        -- Disable Copilot/AI suggestions
+    ai_cli = false,         -- Disable AI CLI (sidekick)
+    linting = false,        -- Disable nvim-lint
+    format_on_save = true,  -- Enable auto-format on save
+  },
+}
+```
 
 ### OpenCode Customization
 
-To configure OpenCode, create `~/.config/opencode/custom.json`. The `OPENCODE_CONFIG` environment variable is automatically set to this path if the file exists.
+To configure OpenCode, create `${XDG_CONFIG_HOME}/opencode/custom.json`. The `OPENCODE_CONFIG` environment variable is automatically set to this path if the file exists.
 
 ## Development Guide
 

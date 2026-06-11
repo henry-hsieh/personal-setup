@@ -69,4 +69,4 @@
     prune = true
 [include]
     path = "~/.local/share/tinted-theming/tinty/tinted-delta-configs-file.gitconfig"
-    path = "~/.config/git/custom.gitconfig"
+    path = "custom.gitconfig"
