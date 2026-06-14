@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.4.0](https://github.com/henry-hsieh/personal-setup/compare/v2.3.0...v2.4.0) (2026-06-14)
+
+
+### Features
+
+* **harper-ls:** bump harper-ls version to v2.5.0 ([#1019](https://github.com/henry-hsieh/personal-setup/issues/1019)) ([63b1be1](https://github.com/henry-hsieh/personal-setup/commit/63b1be10a031d34e76dce4c53321203191429f0e))
+* **opencode:** bump opencode version to v1.17.4 ([#1023](https://github.com/henry-hsieh/personal-setup/issues/1023)) ([79395c8](https://github.com/henry-hsieh/personal-setup/commit/79395c85c90a0b39a6a824163ee715ab27c7d584))
+* **opencode:** bump opencode version to v1.17.5 ([#1026](https://github.com/henry-hsieh/personal-setup/issues/1026)) ([ce03fdc](https://github.com/henry-hsieh/personal-setup/commit/ce03fdcc0ef91031d4e5ffe633b4b53db6106085))
+* **opencode:** bump opencode version to v1.17.6 ([#1027](https://github.com/henry-hsieh/personal-setup/issues/1027)) ([c1a6477](https://github.com/henry-hsieh/personal-setup/commit/c1a6477b027cd48510b317790cf77f1ff26bcad4))
+* **ruff:** bump ruff version to v0.15.17 ([#1021](https://github.com/henry-hsieh/personal-setup/issues/1021)) ([baada96](https://github.com/henry-hsieh/personal-setup/commit/baada96d621fb4d4407e77e508b5bddb17855723))
+* **slang-server:** bump slang-server version to v0.2.7 ([#1025](https://github.com/henry-hsieh/personal-setup/issues/1025)) ([914ef94](https://github.com/henry-hsieh/personal-setup/commit/914ef9458f9437bd7505b89b29faff46aac7511d))
+* **ty:** bump ty version to v0.0.49 ([#1024](https://github.com/henry-hsieh/personal-setup/issues/1024)) ([dfa1364](https://github.com/henry-hsieh/personal-setup/commit/dfa136429e20b684aa272c18ca28918d8c7cff02))
+* **uv:** bump uv version to v0.11.21 ([#1022](https://github.com/henry-hsieh/personal-setup/issues/1022)) ([02281db](https://github.com/henry-hsieh/personal-setup/commit/02281db9d3588aad826d684a8e78718952c1ef37))
+
+
+### Bug Fixes
+
+* **shell:** respect XDG_CONFIG_HOME ([#1018](https://github.com/henry-hsieh/personal-setup/issues/1018)) ([0ea2fd5](https://github.com/henry-hsieh/personal-setup/commit/0ea2fd5649486203411d103b1b2fb445526caabf))
+
 ## [2.3.0](https://github.com/henry-hsieh/personal-setup/compare/v2.2.0...v2.3.0) (2026-06-11)
 
 
