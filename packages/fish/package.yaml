@@ -1,5 +1,5 @@
 name: fish
-version: 4.7.1
+version: 4.8.0
 datasource: github-releases
 package: fish-shell/fish-shell
 url: https://github.com/fish-shell/fish-shell/releases/download/{version}/fish-{version}-linux-x86_64.tar.xz
