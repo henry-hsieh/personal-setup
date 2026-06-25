@@ -8,7 +8,7 @@
   },
   "plugin": [
     "opencode-antigravity-auth@1.6.0",
-    "@tarquinen/opencode-dcp@3.1.13"
+    "@tarquinen/opencode-dcp@3.1.14"
   ],
   "lsp": {
     "slang-server": {
