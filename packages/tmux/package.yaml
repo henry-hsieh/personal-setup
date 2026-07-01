@@ -1,5 +1,5 @@
 name: tmux
-version: 3.7
+version: 3.7b
 datasource: github-releases
 package: henry-hsieh/tmux.appimage
 versioning: deb
