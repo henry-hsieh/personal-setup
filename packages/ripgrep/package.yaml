@@ -1,5 +1,5 @@
 name: ripgrep
-version: 15.1.0
+version: 15.2.0
 datasource: github-releases
 package: BurntSushi/ripgrep
 url: https://github.com/BurntSushi/ripgrep/releases/download/{version}/ripgrep-{version}-x86_64-unknown-linux-musl.tar.gz
