@@ -1,0 +1,12 @@
+name: tinymist
+version: 0.15.2
+datasource: github-releases
+package: Myriad-Dreamin/tinymist
+url: https://github.com/Myriad-Dreamin/tinymist/releases/download/v{version}/tinymist-x86_64-unknown-linux-musl.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: tinymist
+    dst: .local/bin/tinymist
+test:
+  type: version-check

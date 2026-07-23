@@ -1,0 +1,13 @@
+name: websocat
+version: 1.14.1
+datasource: github-releases
+package: vi/websocat
+url: https://github.com/vi/websocat/releases/download/v{version}/websocat.x86_64-unknown-linux-musl
+extract: false
+checksum_source: github-release
+files:
+  - src: .
+    dst: .local/bin/websocat
+    chmod: "755"
+test:
+  type: version-check

@@ -36,4 +36,19 @@ return {
     ---@type render.md.UserConfig
     opts = {},
   },
+
+  {
+    'chomosuke/typst-preview.nvim',
+    ft = 'typst',
+    version = '1.*',
+    opts = {
+      dependencies_bin = {
+        tinymist = 'tinymist',
+        websocat = 'websocat',
+      },
+    },
+    keys = {
+      { "<space>p", "<cmd>TypstPreviewToggle<CR>", desc = "Typst Preview Toggle" },
+    },
+  },
 }
