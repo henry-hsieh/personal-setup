@@ -36,6 +36,7 @@ M.lsp = {
     "bashls",
     "jsonls",
     "copilot",
+    "tinymist",
   },
 
   -- Harper-ls config

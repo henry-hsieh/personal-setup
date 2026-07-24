@@ -1,0 +1,12 @@
+name: typst
+version: 0.15.1
+datasource: github-releases
+package: typst/typst
+url: https://github.com/typst/typst/releases/download/v{version}/typst-x86_64-unknown-linux-musl.tar.xz
+extract: true
+checksum_source: github-release
+files:
+  - src: typst
+    dst: .local/bin/typst
+test:
+  type: version-check
