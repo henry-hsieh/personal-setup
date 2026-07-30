@@ -9,23 +9,36 @@ INSTALL_DIR="$(pwd)"
 
 echo "[Post-Install] Configuring environment..."
 
+function reset_git_repos() {
+  for d in */ ; do
+    if [[ -d "$d/.git" || -f "$d/.git" ]]; then
+      pushd "$d" > /dev/null || exit 1
+      git reset --hard HEAD > /dev/null || exit 1
+      git clean -fdq > /dev/null || exit 1
+      popd > /dev/null || exit 1
+    fi
+  done
+}
+
 # --- A. Reset Neovim Plugins ---
 if [[ -d "$INSTALL_DIR/.local/share/nvim/lazy" ]]; then
     echo "[Post-Install] Resetting Neovim plugins..."
     cd "$INSTALL_DIR/.local/share/nvim/lazy" || exit
-    for d in */ ; do
-      if [[ -d "$d/.git" || -f "$d/.git" ]]; then
-          pushd "$d" > /dev/null
-          git reset --hard HEAD > /dev/null
-          git clean -fdq > /dev/null
-          popd > /dev/null
-      fi
-    done
+    reset_git_repos
     # Return to root for consistency
     cd "$INSTALL_DIR" || exit
 fi
 
-# --- B. Restore Git Identity ---
+# --- B. Reset Tinty Plugins ---
+if [[ -d "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" ]]; then
+    echo "[Post-Install] Resetting Tinty plugins..."
+    cd "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" || exit
+    reset_git_repos
+    # Return to root for consistency
+    cd "$INSTALL_DIR" || exit
+fi
+
+# --- C. Restore Git Identity ---
 GIT_CONFIG_BACKUP="$INSTALL_DIR/.config/git/config~"
 TARGET_GIT_CONFIG="$INSTALL_DIR/.config/git/config"
 
