@@ -25,7 +25,23 @@ if [[ -d "$INSTALL_DIR/.local/share/nvim/lazy" ]]; then
     cd "$INSTALL_DIR" || exit
 fi
 
-# --- B. Restore Git Identity ---
+# --- B. Reset Tinty Plugins ---
+if [[ -d "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" ]]; then
+    echo "[Post-Install] Resetting Tinty plugins..."
+    cd "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" || exit
+    for d in */ ; do
+      if [[ -d "$d/.git" || -f "$d/.git" ]]; then
+          pushd "$d" > /dev/null
+          git reset --hard HEAD > /dev/null
+          git clean -fdq > /dev/null
+          popd > /dev/null
+      fi
+    done
+    # Return to root for consistency
+    cd "$INSTALL_DIR" || exit
+fi
+
+# --- C. Restore Git Identity ---
 GIT_CONFIG_BACKUP="$INSTALL_DIR/.config/git/config~"
 TARGET_GIT_CONFIG="$INSTALL_DIR/.config/git/config"
 
