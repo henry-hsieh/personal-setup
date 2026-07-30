@@ -29,12 +29,14 @@ fi
 if [[ -d "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" ]]; then
     echo "[Post-Install] Resetting Tinty plugins..."
     cd "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" || exit
-    for d in */ ; do
-      if [[ -d "$d/.git" || -f "$d/.git" ]]; then
-          pushd "$d" > /dev/null
-          git reset --hard HEAD > /dev/null
-          git clean -fdq > /dev/null
-          popd > /dev/null
+  for d in */ ; do
+    if [[ -d "$d/.git" || -f "$d/.git" ]]; then
+      pushd "$d" > /dev/null || exit 1
+      git reset --hard HEAD > /dev/null || exit 1
+      git clean -fdq > /dev/null || exit 1
+      popd > /dev/null || exit 1
+    fi
+  done
       fi
     done
     # Return to root for consistency
