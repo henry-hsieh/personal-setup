@@ -9,26 +9,7 @@ INSTALL_DIR="$(pwd)"
 
 echo "[Post-Install] Configuring environment..."
 
-# --- A. Reset Neovim Plugins ---
-if [[ -d "$INSTALL_DIR/.local/share/nvim/lazy" ]]; then
-    echo "[Post-Install] Resetting Neovim plugins..."
-    cd "$INSTALL_DIR/.local/share/nvim/lazy" || exit
-    for d in */ ; do
-      if [[ -d "$d/.git" || -f "$d/.git" ]]; then
-          pushd "$d" > /dev/null
-          git reset --hard HEAD > /dev/null
-          git clean -fdq > /dev/null
-          popd > /dev/null
-      fi
-    done
-    # Return to root for consistency
-    cd "$INSTALL_DIR" || exit
-fi
-
-# --- B. Reset Tinty Plugins ---
-if [[ -d "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" ]]; then
-    echo "[Post-Install] Resetting Tinty plugins..."
-    cd "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" || exit
+function reset_git_repos() {
   for d in */ ; do
     if [[ -d "$d/.git" || -f "$d/.git" ]]; then
       pushd "$d" > /dev/null || exit 1
@@ -37,8 +18,22 @@ if [[ -d "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" ]]; then
       popd > /dev/null || exit 1
     fi
   done
-      fi
-    done
+}
+
+# --- A. Reset Neovim Plugins ---
+if [[ -d "$INSTALL_DIR/.local/share/nvim/lazy" ]]; then
+    echo "[Post-Install] Resetting Neovim plugins..."
+    cd "$INSTALL_DIR/.local/share/nvim/lazy" || exit
+    reset_git_repos
+    # Return to root for consistency
+    cd "$INSTALL_DIR" || exit
+fi
+
+# --- B. Reset Tinty Plugins ---
+if [[ -d "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" ]]; then
+    echo "[Post-Install] Resetting Tinty plugins..."
+    cd "$INSTALL_DIR/.local/share/tinted-theming/tinty/repos" || exit
+    reset_git_repos
     # Return to root for consistency
     cd "$INSTALL_DIR" || exit
 fi
