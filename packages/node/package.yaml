@@ -1,5 +1,5 @@
 name: node
-version: 26.5.1
+version: 26.6.0
 datasource: custom.unofficial_node
 url: https://unofficial-builds.nodejs.org/download/release/v{version}/node-v{version}-linux-x64-glibc-217.tar.xz
 extract: true
