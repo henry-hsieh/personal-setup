@@ -1,5 +1,36 @@
 # Changelog
 
+## [2.5.0](https://github.com/henry-hsieh/personal-setup/compare/v2.4.0...v2.5.0) (2026-08-08)
+
+
+### Features
+
+* **@fission-ai/openspec:** bump @fission-ai/openspec version to v1.8.0 ([#1144](https://github.com/henry-hsieh/personal-setup/issues/1144)) ([f8e4918](https://github.com/henry-hsieh/personal-setup/commit/f8e4918080fb21815f1af1455b3122d5c36d7e27))
+* **fzf-tab-comp:** bump fzf-tab-comp digest to 7014e0a ([#1130](https://github.com/henry-hsieh/personal-setup/issues/1130)) ([566432d](https://github.com/henry-hsieh/personal-setup/commit/566432d9d9dc63b3253a56262c1b79571022e8c6))
+* **fzf:** bump fzf version to v0.74.2 ([#1132](https://github.com/henry-hsieh/personal-setup/issues/1132)) ([32c32bb](https://github.com/henry-hsieh/personal-setup/commit/32c32bb2d910bd60a98e6c338698370d55bf3160))
+* **gh:** bump gh version to v2.97.0 ([#1129](https://github.com/henry-hsieh/personal-setup/issues/1129)) ([7b6b4a8](https://github.com/henry-hsieh/personal-setup/commit/7b6b4a80e7d74098b18d4923d9cce7317eb5a4bc))
+* **just:** bump just version to v1.58.0 ([#1136](https://github.com/henry-hsieh/personal-setup/issues/1136)) ([5a9dfe3](https://github.com/henry-hsieh/personal-setup/commit/5a9dfe3862e298705f02cdf95c434d3cdcaf0a67))
+* **lazygit:** bump lazygit version to v0.64.0 ([#1137](https://github.com/henry-hsieh/personal-setup/issues/1137)) ([ac3b688](https://github.com/henry-hsieh/personal-setup/commit/ac3b68809ec7ec01ceabfa0acf9cf188133baac8))
+* **lua-language-server:** bump lua-language-server version to v3.19.0 ([#1150](https://github.com/henry-hsieh/personal-setup/issues/1150)) ([b6b7e55](https://github.com/henry-hsieh/personal-setup/commit/b6b7e551346389c31ec4a7039055ae0ccc5459bc))
+* **node:** bump node version to v26.6.0 ([#1138](https://github.com/henry-hsieh/personal-setup/issues/1138)) ([23d7fa6](https://github.com/henry-hsieh/personal-setup/commit/23d7fa6880b03a12e281b2e12f56fe5db1a001d2))
+* **node:** bump node version to v26.7.0 ([#1145](https://github.com/henry-hsieh/personal-setup/issues/1145)) ([15e1b5f](https://github.com/henry-hsieh/personal-setup/commit/15e1b5f650a802f9d17b7a5dd7bddaf13a504d4e))
+* **opencode:** bump opencode version to v1.18.10 ([#1126](https://github.com/henry-hsieh/personal-setup/issues/1126)) ([abcc779](https://github.com/henry-hsieh/personal-setup/commit/abcc7791e719d856aaa8db2c12610104b997b2a1))
+* **opencode:** bump opencode version to v1.18.11 ([#1133](https://github.com/henry-hsieh/personal-setup/issues/1133)) ([a08580f](https://github.com/henry-hsieh/personal-setup/commit/a08580f585e93c009d6d464bdd72eb53fd989873))
+* **opencode:** bump opencode version to v1.18.12 ([#1134](https://github.com/henry-hsieh/personal-setup/issues/1134)) ([abad44e](https://github.com/henry-hsieh/personal-setup/commit/abad44eb2f376bd004719206204b6e47bbb6d2ef))
+* **opencode:** bump opencode version to v1.18.13 ([#1139](https://github.com/henry-hsieh/personal-setup/issues/1139)) ([846e992](https://github.com/henry-hsieh/personal-setup/commit/846e9922e43b9b0c545707c7af8657f20bc10235))
+* **opencode:** bump opencode version to v1.18.14 ([#1142](https://github.com/henry-hsieh/personal-setup/issues/1142)) ([078ef88](https://github.com/henry-hsieh/personal-setup/commit/078ef882f4cc1ac692c83a43630fb19d43d587ee))
+* **opencode:** bump opencode version to v1.18.15 ([#1147](https://github.com/henry-hsieh/personal-setup/issues/1147)) ([371a98b](https://github.com/henry-hsieh/personal-setup/commit/371a98bafaede16bca90d0a7b508850c69fe0fd5))
+* **ruff:** bump ruff version to v0.16.1 ([#1128](https://github.com/henry-hsieh/personal-setup/issues/1128)) ([028b1ae](https://github.com/henry-hsieh/personal-setup/commit/028b1aeecbaa493b3bfed8d5ab4e589fb7b455de))
+* **ruff:** bump ruff version to v0.16.2 ([#1148](https://github.com/henry-hsieh/personal-setup/issues/1148)) ([a480ea5](https://github.com/henry-hsieh/personal-setup/commit/a480ea5e8f46f02e109c06ddf257ca6cfd633948))
+* **tree-sitter:** bump tree-sitter version to v0.26.12 ([#1151](https://github.com/henry-hsieh/personal-setup/issues/1151)) ([6fb41d7](https://github.com/henry-hsieh/personal-setup/commit/6fb41d760568c0e4fa1a256b4467645c8578eaf0))
+* **ty:** bump ty version to v0.0.66 ([#1135](https://github.com/henry-hsieh/personal-setup/issues/1135)) ([07f1ad7](https://github.com/henry-hsieh/personal-setup/commit/07f1ad74eade6d7175102a91baad658d76149be8))
+* **ty:** bump ty version to v0.0.67 ([#1140](https://github.com/henry-hsieh/personal-setup/issues/1140)) ([30e3428](https://github.com/henry-hsieh/personal-setup/commit/30e3428eda26d17a4a2399f9a30278df55b7a08d))
+* **ty:** bump ty version to v0.0.68 ([#1143](https://github.com/henry-hsieh/personal-setup/issues/1143)) ([a885106](https://github.com/henry-hsieh/personal-setup/commit/a8851068cc2fdadc88bfe288416c20f2bb4a4123))
+* **ty:** bump ty version to v0.0.69 ([#1146](https://github.com/henry-hsieh/personal-setup/issues/1146)) ([29254f8](https://github.com/henry-hsieh/personal-setup/commit/29254f8991dd3f6c7532aa8120ec31f023b8e6bd))
+* **uv:** bump uv version to v0.12.1 ([#1131](https://github.com/henry-hsieh/personal-setup/issues/1131)) ([00d5f68](https://github.com/henry-hsieh/personal-setup/commit/00d5f688b0ee8e46d07000856c12620a8c4b0601))
+* **uv:** bump uv version to v0.12.2 ([#1141](https://github.com/henry-hsieh/personal-setup/issues/1141)) ([e599679](https://github.com/henry-hsieh/personal-setup/commit/e5996796c538e2c7a7ec0cf993e44be3cde7b6b9))
+* **uv:** bump uv version to v0.12.3 ([#1149](https://github.com/henry-hsieh/personal-setup/issues/1149)) ([5d57d39](https://github.com/henry-hsieh/personal-setup/commit/5d57d39de5d1372cbac872d3e0e02c3d26b67ca3))
+
 ## [2.4.0](https://github.com/henry-hsieh/personal-setup/compare/v2.3.0...v2.4.0) (2026-07-30)
 
 
