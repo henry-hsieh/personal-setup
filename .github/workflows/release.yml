@@ -15,8 +15,31 @@ permissions:
   pull-requests: write
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Ruff check
+        uses: astral-sh/ruff-action@v4.1.0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Sync project dependencies
+        run: uv sync
+
+      - name: Ty check
+        uses: JacobCoffee/ty-action@v0.0.1
+        with:
+          args: 'check .'
+
   build:
     name: Build
+    needs: lint
     runs-on: ubuntu-latest
 
     steps:
