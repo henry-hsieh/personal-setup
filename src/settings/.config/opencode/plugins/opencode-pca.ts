@@ -56,7 +56,11 @@ function modelOf(messages: MessageWithParts[]): string | undefined {
   return undefined;
 }
 
-function mergeAssistantParts(prevParts: Part[], nextParts: Part[]): Part[] {
+function mergeAssistantParts(
+  messageID: string,
+  prevParts: Part[],
+  nextParts: Part[],
+): Part[] {
   const merged = [...prevParts];
   const lastTextIndex = merged.reduce(
     (idx, part, i) => (part.type === "text" ? i : idx),
@@ -69,7 +73,7 @@ function mergeAssistantParts(prevParts: Part[], nextParts: Part[]): Part[] {
       merged[lastTextIndex] = { ...lastTextPart, text: `${lastTextPart.text} ` };
     }
   }
-  merged.push(...nextParts);
+  merged.push(...nextParts.map((part) => ({ ...part, messageID })));
   return merged;
 }
 
@@ -126,7 +130,7 @@ const OpencodePca: Plugin = async (_ctx, options) => {
         for (const msg of messages) {
           const prev = merged[merged.length - 1];
           if (prev && prev.info.role === "assistant" && msg.info.role === "assistant") {
-            prev.parts = mergeAssistantParts(prev.parts, msg.parts);
+            prev.parts = mergeAssistantParts(prev.info.id, prev.parts, msg.parts);
           } else {
             merged.push({ info: msg.info, parts: [...msg.parts] });
           }

@@ -87,7 +87,15 @@ def main():
 
     ort_dir = os.path.join(storage, "onnxruntime", ORT_VERSION)
     lib_path = os.path.join(ort_dir, "libonnxruntime.so.%s" % ORT_VERSION)
-    if not os.path.exists(lib_path):
+    prov_path = os.path.join(ort_dir, "libonnxruntime_providers_shared.so")
+    so1_link = os.path.join(ort_dir, "libonnxruntime.so.1")
+    so_link = os.path.join(ort_dir, "libonnxruntime.so")
+    marker_path = os.path.join(ort_dir, ".aft-onnx-installed")
+    required = [lib_path, prov_path, so1_link, so_link, marker_path]
+    if not all(os.path.lexists(p) for p in required):
+        for stale in [lib_path, prov_path, so1_link, so_link, marker_path]:
+            if os.path.lexists(stale):
+                os.remove(stale)
         os.makedirs(ort_dir, exist_ok=True)
         tgz = fetch(
             "https://github.com/microsoft/onnxruntime/releases/download/v%s/"
@@ -110,15 +118,11 @@ def main():
         with open(lib_path, "wb") as fh:
             fh.write(lib_data)
         os.chmod(lib_path, 0o644)
-        prov_path = os.path.join(ort_dir, "libonnxruntime_providers_shared.so")
         with open(prov_path, "wb") as fh:
             fh.write(prov_data)
         os.chmod(prov_path, 0o644)
-        os.symlink(
-            "libonnxruntime.so.%s" % ORT_VERSION,
-            os.path.join(ort_dir, "libonnxruntime.so.1"),
-        )
-        os.symlink("libonnxruntime.so.1", os.path.join(ort_dir, "libonnxruntime.so"))
+        os.symlink("libonnxruntime.so.%s" % ORT_VERSION, so1_link)
+        os.symlink("libonnxruntime.so.1", so_link)
         now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.") + (
             "%03dZ" % (datetime.now(timezone.utc).microsecond // 1000)
         )
@@ -128,7 +132,7 @@ def main():
             "sha256": hashlib.sha256(lib_data).hexdigest(),
             "archiveSha256": archive_sha256,
         }
-        with open(os.path.join(ort_dir, ".aft-onnx-installed"), "w") as fh:
+        with open(marker_path, "w") as fh:
             json.dump(marker, fh)
 
 
