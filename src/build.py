@@ -14,7 +14,7 @@ import threading
 import zipfile
 import glob
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union, Set
+from typing import Dict, List, Optional, Union, Set
 
 # Third-party imports
 import requests
@@ -205,11 +205,16 @@ class PackageBuilder:
         return hash_sha.hexdigest()
 
     def get_file_ext(self, url: str) -> str:
-        if (url_path := url.split('?')[0]).endswith(('.tar.gz', '.tgz')): return 'tar.gz'
-        if url_path.endswith('.tar.xz'): return 'tar.xz'
-        if url_path.endswith('.tar.bz2'): return 'tar.bz2'
-        if url_path.endswith('.zip'): return 'zip'
-        if url_path.endswith('.AppImage'): return 'AppImage'
+        if (url_path := url.split('?')[0]).endswith(('.tar.gz', '.tgz')):
+            return 'tar.gz'
+        if url_path.endswith('.tar.xz'):
+            return 'tar.xz'
+        if url_path.endswith('.tar.bz2'):
+            return 'tar.bz2'
+        if url_path.endswith('.zip'):
+            return 'zip'
+        if url_path.endswith('.AppImage'):
+            return 'AppImage'
         return ''
 
     def _force_copy(self, src, dst):
@@ -447,7 +452,8 @@ class PackageBuilder:
                 universal_newlines=True, check=True, timeout=30
             )
             for line in result.stdout.strip().split('\n'):
-                if not line: continue
+                if not line:
+                    continue
                 _, ref = line.split('\t')
                 tag_name = ref.replace('refs/tags/', '')
                 if tag_name.lstrip('v') == version.lstrip('v'):
@@ -519,8 +525,10 @@ class PackageBuilder:
                     head_resp = requests.head(actual_url, allow_redirects=False, timeout=10)
                     if 'content-type' in head_resp.headers:
                         ct = head_resp.headers['content-type'].lower()
-                        if 'gzip' in ct or 'x-tar' in ct: ext = 'tar.gz'
-                        elif 'zip' in ct: ext = 'zip'
+                        if 'gzip' in ct or 'x-tar' in ct:
+                            ext = 'tar.gz'
+                        elif 'zip' in ct:
+                            ext = 'zip'
                 except requests.RequestException:
                     pass
             filename = f"{name}-{version}.{ext}" if ext else f"{name}-{version}"
@@ -654,7 +662,8 @@ class PackageBuilder:
             raise e
 
     def cache_artifacts(self, pkg: Dict, extracted_dir: Path, name: str, version: str):
-        if 'cache' not in pkg: return
+        if 'cache' not in pkg:
+            return
 
         # Fallback to parent dir if extracted_dir is a file (single-file package)
         base_dir = extracted_dir.parent if extracted_dir.is_file() else extracted_dir
@@ -673,7 +682,8 @@ class PackageBuilder:
                     dest.parent.mkdir(parents=True, exist_ok=True)
 
                     if match_path.is_dir():
-                        if dest.exists(): shutil.rmtree(dest)
+                        if dest.exists():
+                            shutil.rmtree(dest)
                         self._recursive_copy(match_path, dest, symlinks=True, copy_function=self._force_copy)
                     else:
                         self._force_copy(match_path, dest)
@@ -682,10 +692,12 @@ class PackageBuilder:
         self._update_registry_key(f"{name}-{version}", 'artifacts_sha256', sha)
 
     def restore_cache(self, pkg: Dict, extracted_dir: Path, name: str, version: str) -> bool:
-        if 'cache' not in pkg: return False
+        if 'cache' not in pkg:
+            return False
 
         cache_base = self.artifacts_cache_dir / f"{name}-{version}"
-        if not cache_base.exists(): return False
+        if not cache_base.exists():
+            return False
 
         # Fallback to parent dir if extracted_dir is a file
         base_dir = extracted_dir.parent if extracted_dir.is_file() else extracted_dir
@@ -710,7 +722,8 @@ class PackageBuilder:
                     target.parent.mkdir(parents=True, exist_ok=True)
 
                     if source.is_dir():
-                        if target.exists(): shutil.rmtree(target)
+                        if target.exists():
+                            shutil.rmtree(target)
                         self._recursive_copy(source, target, symlinks=True, copy_function=self._force_copy)
                     else:
                         self._force_copy(source, target)
@@ -755,7 +768,8 @@ class PackageBuilder:
             # Chmod logic
             if 'chmod' in file_info:
                 val = file_info['chmod']
-                if isinstance(val, str): val = int(val, 8)
+                if isinstance(val, str):
+                    val = int(val, 8)
 
                 # Security checks
                 if val & 0o002:
@@ -954,7 +968,8 @@ class PackageBuilder:
                         logging.warning(f"Failed to delete {f}: {e}")
 
     def process_package(self, pkg: Dict) -> bool:
-        if self.abort_event.is_set(): return False
+        if self.abort_event.is_set():
+            return False
 
         name = pkg['name']
         version = pkg['version']
@@ -996,7 +1011,8 @@ class PackageBuilder:
             if 'init_cmds' in pkg and workspace_dir and workspace_dir.exists():
                 link_path = self.out_dir / '.cache' / 'personal-setup' / f"{name}-{version}"
                 link_path.parent.mkdir(parents=True, exist_ok=True)
-                if link_path.exists(): link_path.unlink()
+                if link_path.exists():
+                    link_path.unlink()
                 try:
                     os.symlink(workspace_dir, link_path)
                 except FileExistsError:
