@@ -1,0 +1,11 @@
+{
+  "search_index": true,
+  "semantic_search": true,
+  "auto_update": false,
+  "bash": {
+    "rewrite": true,
+    "compress": true,
+    "background": true,
+    "subagent_background": true
+  }
+}
