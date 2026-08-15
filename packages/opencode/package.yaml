@@ -30,10 +30,44 @@ init_cmds:
     OPENCODE_PLUGIN_DIR=$HOME/.cache/opencode/packages/
     rm -rf $HOME/.cache/opencode/
     mkdir -p $OPENCODE_PLUGIN_DIR
-    for plugin in $(cpp -P $HOME/.config/opencode/opencode.jsonc | yq -r '.plugin[]'); do
+    for plugin in $(cpp -P $HOME/.config/opencode/opencode.jsonc | yq -r '.plugin[] | select(type == "!!str")'); do
       PLUGIN_PATH=${OPENCODE_PLUGIN_DIR}/${plugin}
       mkdir -p ${PLUGIN_PATH}
       cd ${PLUGIN_PATH}
       bun add --exact ${plugin}
       npm install --package-lock-only
+      # Pre-download Magic Context's local embedding model into the release
+      # archive so the airgap environment serves it from cache on first use.
+      if [[ "${plugin}" == @cortexkit/opencode-magic-context@* ]]; then
+        MODEL_CACHE_DIR=$HOME/.local/share/cortexkit/magic-context/models
+        MODEL_DIR="${MODEL_CACHE_DIR}/Xenova/all-MiniLM-L6-v2"
+        # Verify every artifact a partial download could leave missing, so a
+        # broken cache is healed instead of silently shipped to the airgap.
+        if [[ ! -f "${MODEL_DIR}/config.json" || ! -f "${MODEL_DIR}/tokenizer.json" \
+          || ! -f "${MODEL_DIR}/tokenizer_config.json" || ! -f "${MODEL_DIR}/onnx/model.onnx" ]]; then
+          PRECACHE_SCRIPT='import { env, pipeline } from "@huggingface/transformers";
+          env.cacheDir = process.env.MODEL_CACHE_DIR;
+          const pipe = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", { dtype: "fp32" });
+          pipe.dispose?.();
+          console.log("[opencode] magic-context embedding model pre-downloaded");'
+          MODEL_CACHE_DIR="${MODEL_CACHE_DIR}" bun -e "$PRECACHE_SCRIPT"
+        fi
+      fi
+      # Pre-download AFT's embedding model + ONNX Runtime into the release
+      # archive so the airgap environment serves them from cache on first use.
+      if [[ "${plugin}" == @cortexkit/aft-opencode@* ]]; then
+        # \b keeps this from matching INVALID_ORT_VERSION in the same file
+        ORT_VERSION=$(grep -oP '\bORT_VERSION\s*=\s*"\K[^"]+' \
+          "${PLUGIN_PATH}/node_modules/@cortexkit/aft-bridge/dist/onnx-runtime.js" 2>/dev/null)
+        if [[ -n "${ORT_VERSION}" ]]; then
+          AFT_MODEL_REF="$HOME/.local/share/cortexkit/aft/semantic/models/models--Qdrant--all-MiniLM-L6-v2-onnx/refs/main"
+          AFT_MARKER="$HOME/.local/share/cortexkit/aft/onnxruntime/${ORT_VERSION}/.aft-onnx-installed"
+          if [[ ! -f "$AFT_MODEL_REF" || ! -f "$AFT_MARKER" ]]; then
+            python3 {pkg_dir}/precache-aft.py "${ORT_VERSION}"
+            echo "[opencode] AFT embedding model + ONNX Runtime ${ORT_VERSION} pre-downloaded"
+          fi
+        else
+          echo "[opencode] WARNING: could not determine AFT ONNX Runtime version; airgap pre-download skipped"
+        fi
+      fi
     done
