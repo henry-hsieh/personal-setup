@@ -13,7 +13,7 @@
   "plugin": [
     "@cortexkit/opencode-magic-context@0.37.0",
     "@cortexkit/aft-opencode@0.50.3",
-    "@hueyexe/opencode-ensemble@0.16.0",
+    "@hueyexe/opencode-ensemble@0.16.1",
     [
       "./plugins/pca/opencode-pca.ts",
       {
