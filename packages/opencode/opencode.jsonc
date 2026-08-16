@@ -14,11 +14,15 @@
     "@cortexkit/opencode-magic-context@0.37.0",
     "@cortexkit/aft-opencode@0.50.3",
     [
-      "./plugins/opencode-pca.ts",
+      "./plugins/pca/opencode-pca.ts",
       {
         "strategy": "merge",
         "enabled": true
       }
+    ],
+    [
+      "./plugins/kata/kata-attention.ts",
+      {}
     ]
   ],
   "lsp": {
