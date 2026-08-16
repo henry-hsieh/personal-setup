@@ -11,7 +11,7 @@
     automergeType: 'pr',
     commitMessagePrefix: 'feat({{depName}}):',
     commitMessageAction: 'bump',
-    commitMessageTopic: '{{depName}} version',
+    commitMessageTopic: ' version',
     separateMajorMinor: false,
     prHourlyLimit: 0,
     prConcurrentLimit: 0,
