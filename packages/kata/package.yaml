@@ -1,0 +1,13 @@
+name: kata
+version: 0.14.3
+datasource: github-releases
+package: kenn-io/kata
+url: https://github.com/kenn-io/kata/releases/download/v{version}/kata_{version}_linux_amd64.tar.gz
+extract: true
+checksum_source: github-release
+files:
+  - src: kata
+    dst: .local/bin/kata
+test:
+  type: cmd
+  cmd: kata version

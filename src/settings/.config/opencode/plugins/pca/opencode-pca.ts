@@ -147,7 +147,7 @@ const OpencodePca: Plugin = async (_ctx, options) => {
           const current = messages[i];
           const next = messages[i + 1];
           sanitized.push(current);
-          if (current.info.role === "assistant" && next?.info.role === "assistant") {
+          if (current.info.role === "assistant" && next?.info.role === "assistant" && syntheticText) {
             sanitized.push(syntheticUserMessage(current, syntheticText));
           }
         }

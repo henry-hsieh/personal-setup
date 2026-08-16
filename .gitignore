@@ -2,3 +2,4 @@ build/
 tests/logs/
 .python-version
 .venv/
+.kata.local.toml
