@@ -14,7 +14,7 @@
     "@cortexkit/opencode-magic-context@0.38.0",
     "@cortexkit/aft-opencode@0.51.2",
     "@hueyexe/opencode-ensemble@0.16.1",
-    "@bybrawe/opencode-goal@1.3.17",
+    "@bybrawe/opencode-goal@1.3.18",
     [
       "./plugins/pca/opencode-pca.ts",
       {
