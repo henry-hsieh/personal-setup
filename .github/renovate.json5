@@ -77,6 +77,7 @@
             customType: 'regex',
             managerFilePatterns: [
                 '/^packages/opencode/opencode\\.jsonc$/',
+                '/^packages/opencode/tui\\.jsonc$/',
             ],
             matchStrings: [
                 '"(?<depName>@[^"\\/]+\\/[^"@]+|[^"\\/@]+)@(?<currentValue>[^"@]+)"',
@@ -109,4 +110,11 @@
             ],
         },
     },
+    "packageRules": [
+        {
+            "matchManagers": ["custom.regex"],
+            "matchFileNames": ["opencode.jsonc", "tui.jsonc"],
+            "groupName": "Opencode Plugins",
+        },
+    ],
 }
