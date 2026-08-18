@@ -113,7 +113,10 @@
     "packageRules": [
         {
             "matchManagers": ["custom.regex"],
-            "matchFileNames": ["opencode.jsonc", "tui.jsonc"],
+            "matchFileNames": [
+                '/^packages/opencode/opencode\\.jsonc$/',
+                '/^packages/opencode/tui\\.jsonc$/',
+            ],
             "groupName": "Opencode Plugins",
         },
     ],
