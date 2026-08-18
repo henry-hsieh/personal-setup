@@ -12,6 +12,8 @@ files:
     dst: .config/opencode/schema.json
   - src: "{pkg_dir}/opencode.jsonc"
     dst: .config/opencode/opencode.jsonc
+  - src: "{pkg_dir}/commands/goal.md"
+    dst: .config/opencode/commands/goal.md
 test:
   type: version-check
 init_cmds:
