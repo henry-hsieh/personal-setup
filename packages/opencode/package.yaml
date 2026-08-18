@@ -12,8 +12,8 @@ files:
     dst: .config/opencode/schema.json
   - src: "{pkg_dir}/opencode.jsonc"
     dst: .config/opencode/opencode.jsonc
-  - src: "{pkg_dir}/commands/goal.md"
-    dst: .config/opencode/commands/goal.md
+  - src: "{pkg_dir}/tui.jsonc"
+    dst: .config/opencode/tui.jsonc
 test:
   type: version-check
 init_cmds:
@@ -120,5 +120,20 @@ init_cmds:
         rm -f "${ENSEMBLE_PATH}/.personal-setup-tailwind.config.cjs" \
           "${ENSEMBLE_PATH}/src/.personal-setup-dashboard.css"
         echo "[opencode] Ensemble dashboard Tailwind CSS embedded for airgap use"
+      fi
+      if [[ "${plugin}" == @bybrawe/opencode-goal@* ]]; then
+        rm -rf /tmp/opencode-goal
+        env OPENCODE_CONFIG_DIR=/tmp/opencode-goal npx -y ${plugin}
+        cp -r /tmp/opencode-goal/commands/ $OPENCODE_CONFIG_DIR/
+      fi
+      if [[ "${plugin}" == @bybrawe/opencode-loop@* ]]; then
+        rm -rf /tmp/opencode-loop
+        env OPENCODE_CONFIG_DIR=/tmp/opencode-loop npx -y ${plugin}
+        # Remove experimental loop goal commands because we have goal plugin
+        rm -rf /tmp/opencode-loop/commands/loop-goal*
+        cp -rf /tmp/opencode-loop/commands/ $OPENCODE_CONFIG_DIR/
+        # Patch local agent to hidden subagent
+        sed -i 's/mode: primary/mode: subagent\nhidden: true/' /tmp/opencode-loop/agents/opencode-loop-local.md
+        cp -rf /tmp/opencode-loop/agents/ $OPENCODE_CONFIG_DIR/
       fi
     done
