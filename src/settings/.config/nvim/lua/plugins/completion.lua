@@ -8,12 +8,11 @@ return {
         version = "*",
       },
       "moyiz/blink-emoji.nvim",
-      "folke/sidekick.nvim",
       "folke/lazydev.nvim",
     },
     version = '*',
     build = 'cargo build --release',
-    event = 'InsertEnter',
+    event = { 'InsertEnter', 'CmdlineEnter' },
     opts = {
       keymap = {
         preset = "default",

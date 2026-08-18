@@ -1,6 +1,7 @@
 return {
   {
-    "folke/sidekick.nvim",
+    "henry-hsieh/sidekick.nvim",
+    branch = "fix-opencode-attach",
     init = function()
       vim.g.sidekick_nes = require("config").features.copilot
     end,
