@@ -23,6 +23,11 @@ if ( ! $?XDG_CACHE_HOME ) then
   setenv XDG_CACHE_HOME "$HOME/.cache"
 endif
 
+# Kata
+if ( ! $?KATA_HOME ) then
+  setenv KATA_HOME "${XDG_DATA_HOME:-$HOME/.local/share}/kata"
+endif
+
 # Set display if it's empty
 if ( ! $?DISPLAY ) then
   setenv DISPLAY ":0"
