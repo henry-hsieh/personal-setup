@@ -61,3 +61,6 @@ for plugin in $PLUGIN_LIST; do
     cp -rf /tmp/opencode-loop/agents/ "$OPENCODE_CONFIG_DIR/"
   fi
 done
+
+# 3. Pin Ensemble skills
+bash "${SCRIPT_DIR}/pin-ensemble-skills.sh"
