@@ -137,3 +137,22 @@ init_cmds:
         cp -rf /tmp/opencode-loop/agents/ $OPENCODE_CONFIG_DIR/
       fi
     done
+  - |
+    # Download and pin OpenCode Ensemble skills from a specific commit
+    # for reproducibility in airgap environments.
+    ENSEMBLE_SKILLS_SHA=5cb44fa16cde546453626eb9d7dcfa6eb0157068
+    SKILLS_DIR=$HOME/.config/opencode/skills/opencode-ensemble
+    rm -rf "${SKILLS_DIR}"
+    mkdir -p "${SKILLS_DIR}"
+    TMPDIR=$(mktemp -d)
+    curl -sL "https://api.github.com/repos/hueyexe/opencode-ensemble/tarball/${ENSEMBLE_SKILLS_SHA}" \
+      -o "${TMPDIR}/ensemble.tar.gz"
+    tar xzf "${TMPDIR}/ensemble.tar.gz" -C "${TMPDIR}"
+    ENSEMBLE_EXTRACTED=$(find "${TMPDIR}" -maxdepth 1 -type d -name "hueyexe-opencode-ensemble-*" | head -1)
+    if [[ -z "${ENSEMBLE_EXTRACTED}" ]]; then
+      echo "[opencode] ERROR: failed to extract ensemble skills tarball"
+      exit 1
+    fi
+    cp -r "${ENSEMBLE_EXTRACTED}/skills/opencode-ensemble/"* "${SKILLS_DIR}/"
+    rm -rf "${TMPDIR}"
+    echo "[opencode] Ensemble skills pinned at ${ENSEMBLE_SKILLS_SHA}"
