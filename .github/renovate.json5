@@ -119,5 +119,9 @@
             ],
             "groupName": "Opencode Plugins",
         },
+        {
+            "matchPackageNames": ["/^oven-sh/bun$/"],
+            "allowedVersions": "< 1.4.0",
+        },
     ],
 }
