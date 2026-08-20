@@ -10,7 +10,7 @@ export interface PreventConsecutiveAssistantOptions {
   /**
    * Strategy to prevent bad requests on strict providers:
    * - "merge"   : (Default) Combines consecutive assistant turns (including tool/block arrays) into 1 turn, separated by a space. 0 context loss.
-   * - "inject"  : Inserts synthetic user messages between consecutive assistant messages and at the tail.
+   * - "inject"  : Inserts synthetic user messages between consecutive assistant messages. Also inserts at the tail when the provider does not support assistant prefill (e.g. Claude 4.6+).
    */
   strategy?: "merge" | "inject";
 
@@ -21,7 +21,7 @@ export interface PreventConsecutiveAssistantOptions {
   models?: string[];
 
   /**
-   * Text used when strategy is set to "inject". Defaults to "Continue."
+   * Text used when strategy is set to "inject". Defaults to "[Note: previous assistant context preserved]".
    */
   syntheticMessage?: string;
 }
@@ -31,7 +31,7 @@ type MessageWithParts = {
   parts: Part[];
 };
 
-const DEFAULT_SYNTHETIC_MESSAGE = "Continue.";
+const DEFAULT_SYNTHETIC_MESSAGE = "[Note: previous assistant context preserved]";
 
 function matchesModel(currentModel: string, patterns: string[]) {
   return patterns.some((pattern) => {
@@ -43,9 +43,47 @@ function matchesModel(currentModel: string, patterns: string[]) {
   });
 }
 
+/**
+ * Extract the version [major, minor] from a Claude model ID.
+ * Handles patterns like "claude-opus-4.6", "opus-4.6", "claude-4.6-sonnet",
+ * "sonnet-4-6", "claude-sonnet-4p6", etc.
+ * Date-suffixed IDs like "claude-sonnet-4-20250514" are not matched as
+ * version components — the 8-digit date is not a minor version.
+ */
+function claudeVersion(modelID: string): [number, number] | undefined {
+  const id = modelID.toLowerCase();
+  if (
+    !id.includes("claude") &&
+    !id.includes("opus") &&
+    !id.includes("sonnet") &&
+    !id.includes("haiku")
+  )
+    return undefined;
+  const match =
+    /(?:opus|sonnet|haiku|claude)-(\d+)[-.p](\d{1,2})|(\d+)[-.p](\d{1,2})-(?:opus|sonnet|haiku|claude)/i.exec(
+      id,
+    );
+  if (!match) return undefined;
+  const major = Number(match[1] ?? match[3]);
+  const minor = Number(match[2] ?? match[4]);
+  return [major, minor];
+}
+
+/**
+ * Determines if a model supports assistant message prefill.
+ * Claude models >= 4.6 do not support prefill across all providers.
+ */
+function supportsAssistantPrefill(modelID: string): boolean {
+  const ver = claudeVersion(modelID);
+  if (!ver) return true;
+  const [major, minor] = ver;
+  if (major > 4 || (major === 4 && minor >= 6)) return false;
+  return true;
+}
+
 function modelOf(messages: MessageWithParts[]): string | undefined {
-  for (const msg of messages) {
-    const info = msg.info;
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const info = messages[i].info;
     if (info.role === "user" && info.model) {
       return `${info.model.providerID}/${info.model.modelID}`;
     }
@@ -125,6 +163,11 @@ const OpencodePca: Plugin = async (_ctx, options) => {
       const messages = [...output.messages];
       if (messages.length === 0) return;
 
+      const model = modelOf(output.messages);
+      const modelID = model?.slice(model.indexOf("/") + 1);
+      const needsTrailingSynthetic =
+        modelID === undefined || !supportsAssistantPrefill(modelID);
+
       if (strategy === "merge") {
         const merged: MessageWithParts[] = [];
         for (const msg of messages) {
@@ -138,7 +181,7 @@ const OpencodePca: Plugin = async (_ctx, options) => {
         output.messages.splice(0, output.messages.length, ...merged);
 
         const last = output.messages[output.messages.length - 1];
-        if (last && last.info.role === "assistant" && syntheticText) {
+        if (last && last.info.role === "assistant" && syntheticText && needsTrailingSynthetic) {
           output.messages.push(syntheticUserMessage(last, syntheticText));
         }
       } else if (strategy === "inject") {
@@ -152,7 +195,7 @@ const OpencodePca: Plugin = async (_ctx, options) => {
           }
         }
         const last = sanitized[sanitized.length - 1];
-        if (last && last.info.role === "assistant" && syntheticText) {
+        if (last && last.info.role === "assistant" && syntheticText && needsTrailingSynthetic) {
           sanitized.push(syntheticUserMessage(last, syntheticText));
         }
         output.messages.splice(0, output.messages.length, ...sanitized);
