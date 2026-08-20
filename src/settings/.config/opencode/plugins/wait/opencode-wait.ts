@@ -1,7 +1,7 @@
 import type { Plugin, PluginModule } from "@opencode-ai/plugin"
 
 interface WaitRequest {
-  resolve: (value: void) => void
+  settle: (reason: "event" | "timeout") => void
   filter: (event: WaitEvent) => boolean
   timeout?: ReturnType<typeof setTimeout>
 }
@@ -44,27 +44,38 @@ function createFilter(until: string): (event: WaitEvent) => boolean {
   }
 }
 
+// Short retention window for the recent-events buffer. This is only meant to
+// cover the narrow race where an event is processed in the same tick as (or
+// just before) a `wait` call registers, not to replay older history — a
+// larger window risks settling a `wait` instantly against a stale, unrelated
+// past event.
+const EVENT_BUFFER_WINDOW_MS = 100
+const EVENT_BUFFER_MAX_LENGTH = 50
+
 const OpencodeWait: Plugin = async ({ client, $ }) => {
   const promiseRegistry = new Map<string, WaitRequest>()
+  const recentEvents: Array<{ event: { type: string; properties?: unknown }; timestamp: number; seq: number }> = []
+  let eventSeq = 0
+
+  function pruneRecentEvents() {
+    const cutoff = Date.now() - EVENT_BUFFER_WINDOW_MS
+    while (recentEvents.length && recentEvents[0].timestamp < cutoff) recentEvents.shift()
+    while (recentEvents.length > EVENT_BUFFER_MAX_LENGTH) recentEvents.shift()
+  }
 
   function processEvent(event: { type: string; properties?: unknown }) {
-    const toDelete: string[] = []
-
-    for (const [id, request] of promiseRegistry) {
+    for (const request of promiseRegistry.values()) {
       if (matchesFilter(event, request.filter)) {
-        if (request.timeout) clearTimeout(request.timeout)
-        request.resolve()
-        toDelete.push(id)
+        request.settle("event")
       }
-    }
-
-    for (const id of toDelete) {
-      promiseRegistry.delete(id)
     }
   }
 
   return {
     event: async ({ event }) => {
+      const seq = ++eventSeq
+      recentEvents.push({ event, timestamp: Date.now(), seq })
+      pruneRecentEvents()
       processEvent(event)
     },
 
@@ -95,34 +106,57 @@ const OpencodeWait: Plugin = async ({ client, $ }) => {
           const until = args.until ?? "any"
           const seconds = args.seconds ?? 0
 
-          if (seconds < 0) {
-            return "Error: seconds must be non-negative"
+          if (!Number.isFinite(seconds) || seconds < 0) {
+            return "Error: seconds must be a non-negative finite number"
+          }
+
+          // Node's setTimeout takes a 32-bit signed integer delay in milliseconds.
+          // Maximum valid delay is 2147483647 ms = 2147483.647 seconds.
+          const MAX_SECONDS = 2147483.647
+          if (seconds > MAX_SECONDS) {
+            return `Error: seconds must not exceed ${MAX_SECONDS} (maximum setTimeout delay)`
           }
           const filter = createFilter(until)
 
           const id = crypto.randomUUID()
+          // Capture the wait registration sequence before any async operations.
+          // Only buffered events with a strictly greater sequence number will be
+          // eligible for replay, preventing stale events from settling this wait.
+          const registeredSeq = eventSeq
 
-          return new Promise<string>((resolve, reject) => {
+          return new Promise<string>((resolve) => {
+            let settled = false
             let timeout: ReturnType<typeof setTimeout> | undefined
 
-            const cleanup = () => {
+            const settle = (reason: "event" | "timeout") => {
+              if (settled) return
+              settled = true
               if (timeout) clearTimeout(timeout)
               promiseRegistry.delete(id)
+              resolve(
+                reason === "timeout"
+                  ? `Wait completed: timed out after ${seconds} seconds`
+                  : `Wait completed: received ${until} event`,
+              )
             }
 
-            const waitRequest: WaitRequest = {
-              resolve: () => {
-                cleanup()
-                resolve(`Wait completed: received ${until} event`)
-              },
-              filter,
+            const waitRequest: WaitRequest = { settle, filter }
+
+            // Close the race where a matching event was processed just
+            // before this wait registered: replay the recent-events buffer
+            // and settle immediately if there's a matching event that arrived
+            // after this wait call started (not stale events from before).
+            pruneRecentEvents()
+            const bufferedMatch = recentEvents.find(
+              (entry) => entry.seq > registeredSeq && matchesFilter(entry.event, filter),
+            )
+            if (bufferedMatch) {
+              settle("event")
+              return
             }
 
             if (seconds > 0) {
-              timeout = setTimeout(() => {
-                promiseRegistry.delete(id)
-                resolve(`Wait completed: timed out after ${seconds} seconds`)
-              }, seconds * 1000)
+              timeout = setTimeout(() => settle("timeout"), seconds * 1000)
               waitRequest.timeout = timeout
             }
 
