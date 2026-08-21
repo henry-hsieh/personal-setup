@@ -11,11 +11,11 @@
     "prune": false
   },
   "plugin": [
-    "@cortexkit/opencode-magic-context@0.38.0",
+    "@cortexkit/opencode-magic-context@0.38.1",
     "@cortexkit/aft-opencode@0.51.3",
     "@hueyexe/opencode-ensemble@0.16.1",
     "@bybrawe/opencode-goal@1.3.24",
-    "@bybrawe/opencode-loop@0.5.32",
+    "@bybrawe/opencode-loop@0.5.33",
     [
       "./plugins/pca/opencode-pca.ts",
       {
