@@ -52,12 +52,8 @@ for plugin in $PLUGIN_LIST; do
   fi
   if [[ "${plugin}" == @bybrawe/opencode-loop@* ]]; then
     rm -rf /tmp/opencode-loop
-    env OPENCODE_CONFIG_DIR=/tmp/opencode-loop npx -y "${plugin}"
-    # Remove experimental loop goal commands because we have goal plugin
-    rm -rf /tmp/opencode-loop/commands/loop-goal*
+    env OPENCODE_CONFIG_DIR=/tmp/opencode-loop npx -y "${plugin}" --loop-only --without-loop-goals
     cp -rf /tmp/opencode-loop/commands/ "$OPENCODE_CONFIG_DIR/"
-    # Patch local agent to hidden subagent
-    sed -i 's/mode: primary/mode: subagent\nhidden: true/' /tmp/opencode-loop/agents/opencode-loop-local.md
     cp -rf /tmp/opencode-loop/agents/ "$OPENCODE_CONFIG_DIR/"
   fi
 done
