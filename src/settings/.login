@@ -60,7 +60,15 @@ if ( -f "${XDG_CONFIG_HOME}/opencode/custom.json" ) then
 endif
 
 # AFT: keep storage off slow/NFS home dirs (cortexkit/aft#263)
-if ( ! $?AFT_STORAGE_DIR || "$AFT_STORAGE_DIR" == "" ) then
+if ( ! $?AFT_STORAGE_DIR ) then
+  if ( -f "$HOME/.local/share/scripts/aft-storage-init.sh" ) then
+    set _aft_root = "`bash $HOME:q/.local/share/scripts/aft-storage-init.sh`"
+    if ( "$_aft_root" != "" ) then
+      setenv AFT_STORAGE_DIR "$_aft_root"
+    endif
+    unset _aft_root
+  endif
+else if ( "$AFT_STORAGE_DIR" == "" ) then
   if ( -f "$HOME/.local/share/scripts/aft-storage-init.sh" ) then
     set _aft_root = "`bash $HOME:q/.local/share/scripts/aft-storage-init.sh`"
     if ( "$_aft_root" != "" ) then
