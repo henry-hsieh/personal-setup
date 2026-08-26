@@ -48,6 +48,12 @@ if [ -f "${XDG_CONFIG_HOME}/opencode/custom.json" ]; then
   export OPENCODE_CONFIG="${XDG_CONFIG_HOME}/opencode/custom.json"
 fi
 
+# AFT: keep storage off slow/NFS home dirs (cortexkit/aft#263)
+if [ -z "${AFT_STORAGE_DIR:-}" ] && [ -f "$HOME/.local/share/scripts/aft-storage-init.sh" ]; then
+  _aft_root="$(bash "$HOME/.local/share/scripts/aft-storage-init.sh")" && export AFT_STORAGE_DIR="$_aft_root"
+  unset _aft_root
+fi
+
 # Delta
 export DELTA_FEATURES="+side-by-side"
 
