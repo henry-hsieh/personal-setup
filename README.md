@@ -91,7 +91,7 @@ return {
 
 ### OpenCode Customization
 
-To configure OpenCode, create `${XDG_CONFIG_HOME}/opencode/custom.json`. The `OPENCODE_CONFIG` environment variable is automatically set to this path if the file exists.
+To configure OpenCode, create `${XDG_CONFIG_HOME}/opencode/custom.jsonc` (or `custom.json`). The `OPENCODE_CONFIG` environment variable is automatically set to this path if the file exists.
 
 ## Development Guide
 

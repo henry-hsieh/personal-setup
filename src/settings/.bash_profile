@@ -43,8 +43,10 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Mason (Neovim package manager)
 export PATH="${XDG_DATA_HOME}/nvim/mason/bin:$PATH"
 
-# OpenCode
-if [ -f "${XDG_CONFIG_HOME}/opencode/custom.json" ]; then
+# OpenCode custom config (prefer JSONC, fall back to JSON)
+if [ -f "${XDG_CONFIG_HOME}/opencode/custom.jsonc" ]; then
+  export OPENCODE_CONFIG="${XDG_CONFIG_HOME}/opencode/custom.jsonc"
+elif [ -f "${XDG_CONFIG_HOME}/opencode/custom.json" ]; then
   export OPENCODE_CONFIG="${XDG_CONFIG_HOME}/opencode/custom.json"
 fi
 

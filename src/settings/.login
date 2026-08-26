@@ -54,8 +54,10 @@ setenv PATH "$BUN_INSTALL/bin:$PATH"
 # Mason (Neovim package manager)
 setenv PATH "${XDG_DATA_HOME}/nvim/mason/bin:$PATH"
 
-# OpenCode
-if ( -f "${XDG_CONFIG_HOME}/opencode/custom.json" ) then
+# OpenCode custom config (prefer JSONC, fall back to JSON)
+if ( -f "${XDG_CONFIG_HOME}/opencode/custom.jsonc" ) then
+  setenv OPENCODE_CONFIG "${XDG_CONFIG_HOME}/opencode/custom.jsonc"
+else if ( -f "${XDG_CONFIG_HOME}/opencode/custom.json" ) then
   setenv OPENCODE_CONFIG "${XDG_CONFIG_HOME}/opencode/custom.json"
 endif
 

@@ -60,10 +60,15 @@ MC_TARGET="$INSTALL_DIR/.config/cortexkit/magic-context.jsonc"
 if [[ -f "$MC_SOURCE" ]]; then
     echo "[Post-Install] Configuring Magic Context..."
 
-    # Mirror the shell profile's OPENCODE_CONFIG override when present
-    CUSTOM_CONFIG="$INSTALL_DIR/.config/opencode/custom.json"
+    # Mirror the shell profile's OPENCODE_CONFIG override when present (prefer JSONC, fall back to JSON)
+    CUSTOM_CONFIG="$INSTALL_DIR/.config/opencode/custom.jsonc"
     if [[ -f "$CUSTOM_CONFIG" ]]; then
         export OPENCODE_CONFIG="$CUSTOM_CONFIG"
+    else
+        CUSTOM_CONFIG="$INSTALL_DIR/.config/opencode/custom.json"
+        if [[ -f "$CUSTOM_CONFIG" ]]; then
+            export OPENCODE_CONFIG="$CUSTOM_CONFIG"
+        fi
     fi
 
     # Pick the first available model, preferring the target's custom config
