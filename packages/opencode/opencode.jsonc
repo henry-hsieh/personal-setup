@@ -11,8 +11,8 @@
     "prune": false
   },
   "plugin": [
-    "@cortexkit/opencode-magic-context@0.40.0",
-    "@cortexkit/aft-opencode@0.52.1",
+    "@cortexkit/opencode-magic-context@0.40.1",
+    "@cortexkit/aft-opencode@0.52.2",
     "@hueyexe/opencode-ensemble@0.17.0",
     "@bybrawe/opencode-goal@1.3.29",
     "@bybrawe/opencode-loop@0.5.35",
