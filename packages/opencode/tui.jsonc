@@ -1,6 +1,6 @@
 {
   "plugin": [
     "@cortexkit/opencode-magic-context@0.40.1",
-    "@cortexkit/aft-opencode@0.52.2"
+    "@cortexkit/aft-opencode@0.53.0"
   ]
 }
