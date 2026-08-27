@@ -26,7 +26,22 @@ if sys.version_info < (3, 12):
     sys.exit("Python 3.12 or higher is required.")
 
 class PackageBuilder:
+    """Build system for personal setup packages with caching and parallel execution.
+
+    Manages downloading, extracting, building, and installing packages from various
+    sources (git repositories, archives, single files) with support for artifact
+    caching and parallel builds.
+    """
+
     def __init__(self, out_dir: str, parallel: int, retry: int, fast_fail: bool):
+        """Initialize the package builder.
+
+        Args:
+            out_dir: Output directory for installed packages.
+            parallel: Number of parallel build workers.
+            retry: Number of download retry attempts.
+            fast_fail: Whether to abort all builds on first failure.
+        """
         self.out_dir = Path(out_dir).resolve()
         self.parallel = parallel
         self.retry = retry
@@ -75,6 +90,7 @@ class PackageBuilder:
             p.mkdir(parents=True, exist_ok=True)
 
     def _setup_logging(self):
+        """Configure logging to output to both stdout and build.log file."""
         handlers = [
             logging.StreamHandler(sys.stdout),
             logging.FileHandler(self.log_file_path)
@@ -113,6 +129,7 @@ class PackageBuilder:
         self._save_registry()
 
     def _check_abort(self):
+        """Check if the abort event is set and raise RuntimeError if so."""
         if self.abort_event.is_set():
             raise RuntimeError("Process aborted due to fast-fail.")
 
@@ -187,6 +204,14 @@ class PackageBuilder:
     # ==========================
 
     def compute_sha256(self, filepath: Path) -> str:
+        """Compute SHA256 hash of a file.
+
+        Args:
+            filepath: Path to the file to hash.
+
+        Returns:
+            Hexadecimal string representation of the SHA256 hash.
+        """
         hash_sha256 = hashlib.sha256()
         with open(filepath, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
@@ -194,6 +219,14 @@ class PackageBuilder:
         return hash_sha256.hexdigest()
 
     def compute_dir_sha256(self, dir_path: Path) -> str:
+        """Compute SHA256 hash of all files in a directory tree.
+
+        Args:
+            dir_path: Path to the directory to hash.
+
+        Returns:
+            Hexadecimal string representation of the combined SHA256 hash.
+        """
         hash_sha = hashlib.sha256()
         for root, dirs, files in os.walk(dir_path):
             dirs.sort()
@@ -205,6 +238,14 @@ class PackageBuilder:
         return hash_sha.hexdigest()
 
     def get_file_ext(self, url: str) -> str:
+        """Extract file extension from a URL.
+
+        Args:
+            url: URL to parse for file extension.
+
+        Returns:
+            File extension string (e.g., 'tar.gz', 'zip') or empty string if unknown.
+        """
         if (url_path := url.split('?')[0]).endswith(('.tar.gz', '.tgz')):
             return 'tar.gz'
         if url_path.endswith('.tar.xz'):
@@ -436,6 +477,15 @@ class PackageBuilder:
     # ==========================
 
     def resolve_tag(self, url: str, version: str) -> str:
+        """Resolve a version string to an actual git tag name.
+
+        Args:
+            url: Git repository URL.
+            version: Version string to resolve.
+
+        Returns:
+            Resolved tag name or the original version if not found.
+        """
         key = f"{Path(url).stem.replace('.git', '')}-{version}"
 
         # Check cache first (thread-safe read)
@@ -467,6 +517,17 @@ class PackageBuilder:
         return version
 
     def download_git(self, url: str, version: str, name: str, checksum_source: str) -> Path:
+        """Download and checkout a git repository at a specific version.
+
+        Args:
+            url: Git repository URL.
+            version: Version/tag/commit to checkout.
+            name: Package name for workspace directory.
+            checksum_source: Source for checksum validation (should be 'git-refs' or 'none').
+
+        Returns:
+            Path to the checked-out workspace directory.
+        """
         # Validate source type
         if checksum_source != 'git-refs' and checksum_source != 'none':
              logging.warning(f"Unsupported checksum_source '{checksum_source}' for git package {name}. Expected 'git-refs'.")
@@ -512,6 +573,17 @@ class PackageBuilder:
     # ==========================
 
     def download_file(self, url: str, version: str, name: str, checksum_source: str) -> Path:
+        """Download a file from a URL with checksum verification.
+
+        Args:
+            url: URL to download from (may include {version} placeholder).
+            version: Version string to substitute in URL.
+            name: Package name for cache file naming.
+            checksum_source: Source for checksum validation (URL, 'github-release', hash, or 'none').
+
+        Returns:
+            Path to the downloaded file in the cache directory.
+        """
         actual_url = url.replace("{version}", version)
         original_filename = Path(actual_url.split('?')[0]).name
 
@@ -625,6 +697,12 @@ class PackageBuilder:
     # ==========================
 
     def extract_archive(self, archive_path: Path, target_path: Path) -> None:
+        """Extract an archive file to a target directory.
+
+        Args:
+            archive_path: Path to the archive file (tar.gz, zip, etc.).
+            target_path: Target directory for extraction.
+        """
         if target_path.exists():
             shutil.rmtree(target_path)
 
@@ -662,6 +740,14 @@ class PackageBuilder:
             raise e
 
     def cache_artifacts(self, pkg: Dict, extracted_dir: Path, name: str, version: str):
+        """Cache build artifacts for faster subsequent builds.
+
+        Args:
+            pkg: Package configuration dictionary.
+            extracted_dir: Path to the extracted package directory.
+            name: Package name.
+            version: Package version.
+        """
         if 'cache' not in pkg:
             return
 
@@ -692,6 +778,17 @@ class PackageBuilder:
         self._update_registry_key(f"{name}-{version}", 'artifacts_sha256', sha)
 
     def restore_cache(self, pkg: Dict, extracted_dir: Path, name: str, version: str) -> bool:
+        """Restore cached build artifacts if available and valid.
+
+        Args:
+            pkg: Package configuration dictionary.
+            extracted_dir: Path to the extracted package directory.
+            name: Package name.
+            version: Package version.
+
+        Returns:
+            True if cache was successfully restored, False otherwise.
+        """
         if 'cache' not in pkg:
             return False
 
@@ -730,6 +827,14 @@ class PackageBuilder:
         return True
 
     def copy_files(self, extracted_dir: Path, files: List[Dict], out_dir: Path, version: str):
+        """Copy files from extracted directory to output directory.
+
+        Args:
+            extracted_dir: Source directory containing the files.
+            files: List of file copy specifications with 'src', 'dst', and optional 'chmod'.
+            out_dir: Target output directory.
+            version: Package version for substitution in file paths.
+        """
         for file_info in files:
             src = file_info['src']
             dst = out_dir / file_info['dst']
@@ -782,6 +887,14 @@ class PackageBuilder:
                 os.chmod(dst, val)
 
     def run_build_cmds(self, cmds: List[str], cwd: Path, version: str, pkg_dir: str):
+        """Run build commands in the specified working directory.
+
+        Args:
+            cmds: List of shell commands to execute.
+            cwd: Working directory for command execution.
+            version: Package version for substitution in commands.
+            pkg_dir: Package directory path for substitution in commands.
+        """
         # If cwd is a file (e.g. single file package), run in its parent directory
         actual_cwd = cwd.parent if cwd.is_file() else cwd
 
@@ -796,6 +909,17 @@ class PackageBuilder:
     # ==========================
 
     def _process_git_package(self, pkg: Dict, url: str, checksum_source: str, processed_files: List[Dict]):
+        """Process a git-based package.
+
+        Args:
+            pkg: Package configuration dictionary.
+            url: Git repository URL.
+            checksum_source: Source for checksum validation.
+            processed_files: List of files to copy after building.
+
+        Returns:
+            Path to the workspace directory.
+        """
         name = pkg['name']
         version = pkg['version']
         build_cmds = pkg.get('build_cmds', [])
@@ -813,6 +937,17 @@ class PackageBuilder:
         return workspace_dir
 
     def _process_archive_package(self, pkg: Dict, url: str, checksum_source: str, processed_files: List[Dict]):
+        """Process an archive-based package (tar.gz, zip, etc.).
+
+        Args:
+            pkg: Package configuration dictionary.
+            url: URL to the archive file.
+            checksum_source: Source for checksum validation.
+            processed_files: List of files to copy after building.
+
+        Returns:
+            Path to the workspace directory.
+        """
         name = pkg['name']
         version = pkg['version']
         build_cmds = pkg.get('build_cmds', [])
@@ -870,6 +1005,17 @@ class PackageBuilder:
         return workspace_dir
 
     def _process_single_file_package(self, pkg: Dict, url: str, checksum_source: str, processed_files: List[Dict]):
+        """Process a single-file package (e.g., AppImage, binary).
+
+        Args:
+            pkg: Package configuration dictionary.
+            url: URL to the file.
+            checksum_source: Source for checksum validation.
+            processed_files: List of files to copy after building.
+
+        Returns:
+            Path to the downloaded file.
+        """
         name = pkg['name']
         version = pkg['version']
         build_cmds = pkg.get('build_cmds', [])
@@ -895,6 +1041,15 @@ class PackageBuilder:
         return workspace_dir
 
     def _process_downloadless_package(self, pkg: Dict, processed_files: List[Dict]):
+        """Process a package without upstream downloads (local files or web resources only).
+
+        Args:
+            pkg: Package configuration dictionary.
+            processed_files: List of files to copy.
+
+        Returns:
+            Path to the workspace directory (output directory).
+        """
         name = pkg['name']
         version = pkg['version']
         build_cmds = pkg.get('build_cmds', [])
@@ -968,6 +1123,14 @@ class PackageBuilder:
                         logging.warning(f"Failed to delete {f}: {e}")
 
     def process_package(self, pkg: Dict) -> bool:
+        """Process a single package: download, build, and install.
+
+        Args:
+            pkg: Package configuration dictionary.
+
+        Returns:
+            True if package processing succeeded, False otherwise.
+        """
         if self.abort_event.is_set():
             return False
 
@@ -1059,6 +1222,11 @@ class PackageBuilder:
             logging.info(f"Init completed for {pkg['name']}")
 
     def run_init(self, packages: List[Dict]):
+        """Run initialization commands for all packages in parallel.
+
+        Args:
+            packages: List of package configuration dictionaries.
+        """
         env = os.environ.copy()
         env['HOME'] = str(self.out_dir.resolve())
 
@@ -1071,6 +1239,7 @@ class PackageBuilder:
                 future.result()
 
 def main():
+    """Build personal setup environment from package definitions."""
     parser = argparse.ArgumentParser(description="Build personal setup environment")
     parser.add_argument("--out-dir", required=True, help="Output directory")
     parser.add_argument("--parallel", type=int, default=4)

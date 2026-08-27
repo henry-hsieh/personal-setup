@@ -43,6 +43,14 @@ STYLE_START = "<style>\n"
 
 
 def dashboard_paths(plugin_dir: Path) -> tuple[Path, Path, Path, Path, Path]:
+  """Get paths to all dashboard-related files.
+
+  Args:
+      plugin_dir: Root directory of the Ensemble plugin.
+
+  Returns:
+      Tuple of (dashboard_html, config_path, input_path, output_path, bundle_path).
+  """
   source_dir = plugin_dir / "src"
   return (
     source_dir / "dashboard-html.ts",
@@ -54,6 +62,14 @@ def dashboard_paths(plugin_dir: Path) -> tuple[Path, Path, Path, Path, Path]:
 
 
 def prepare(plugin_dir: Path) -> None:
+  """Prepare Tailwind configuration and input files for compilation.
+
+  Args:
+      plugin_dir: Root directory of the Ensemble plugin.
+
+  Raises:
+      RuntimeError: If the dashboard source is in an unsupported format.
+  """
   dashboard_html, config_path, input_path, _, _ = dashboard_paths(plugin_dir)
   source = dashboard_html.read_text(encoding="utf-8")
   if "DASHBOARD_TAILWIND_CSS" not in source and (
@@ -66,6 +82,14 @@ def prepare(plugin_dir: Path) -> None:
 
 
 def apply(plugin_dir: Path) -> None:
+  """Apply compiled Tailwind CSS to dashboard source and bundle files.
+
+  Args:
+      plugin_dir: Root directory of the Ensemble plugin.
+
+  Raises:
+      RuntimeError: If Tailwind compilation failed or dashboard source is unsupported.
+  """
   dashboard_html, _, _, output_path, bundle_path = dashboard_paths(plugin_dir)
 
   if not output_path.is_file() or output_path.stat().st_size == 0:
@@ -112,6 +136,11 @@ def apply(plugin_dir: Path) -> None:
 
 
 def main() -> None:
+  """Entry point for the Ensemble dashboard Tailwind CSS patcher.
+
+  Raises:
+      SystemExit: If arguments are invalid or patching fails.
+  """
   if len(sys.argv) != 3 or sys.argv[1] not in {"prepare", "apply"}:
     raise SystemExit(f"usage: {Path(sys.argv[0]).name} <prepare|apply> <plugin-dir>")
 
