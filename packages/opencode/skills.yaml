@@ -1,0 +1,31 @@
+# Pre-installed OpenCode agent skills.
+#
+# This is the single source of truth for which agent skills ship in the
+# environment and at what version. Renovate bumps each entry's `version`
+# automatically (see renovate.json5 "OpenCode Skills" managers), so a single
+# PR can update every skill at once.
+#
+# Field order matters: each entry must list `datasource` FIRST and `name` LAST
+# (with `branch` right after `datasource` for git-refs). The Renovate custom
+# managers anchor on the unique `datasource:` line and read the remaining
+# fields afterward, so this layout is what lets the regex match unambiguously.
+#
+# ref = git tag (datasource: github-tags) or commit SHA (datasource: git-refs).
+# src = path to the skill directory inside the repo (must contain SKILL.md).
+# dst = destination under $HOME (opencode discovers skills in
+#       ~/.config/opencode/skills/<name>/).
+skills:
+  - datasource: git-refs
+    branch: main
+    version: eaf9e84a6e872e6af9ad8bb5a8fd274ce926a878
+    package: hueyexe/opencode-ensemble
+    src: skills/opencode-ensemble
+    dst: .config/opencode/skills/opencode-ensemble
+    name: opencode-ensemble
+  - datasource: git-refs
+    branch: main
+    version: 38e19c20d2b154510b0e624a2e3e186b19b5c527
+    package: wshobson/agents
+    src: plugins/python-development/skills/uv-package-manager
+    dst: .config/opencode/skills/uv-package-manager
+    name: uv-package-manager

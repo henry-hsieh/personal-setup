@@ -73,7 +73,37 @@
             versioningTemplate: 'semver',
         },
         {
-            description: 'Opencode Plugin: NPM (Scoped or Unscoped)',
+            description: 'OpenCode Skills Lock (github-tags)',
+            customType: 'regex',
+            managerFilePatterns: [
+                '/packages/opencode/skills\\.yaml$/',
+            ],
+            matchStrings: [
+                'datasource:\\s*(?<datasource>github-tags)\\n\\s*version:\\s*(?<currentValue>.*?)\\n\\s*package:\\s*(?<packageName>.*?)\\n\\s*src:.*?\\n\\s*dst:.*?\\n\\s*name:\\s*(?<depName>.*?)\\n',
+            ],
+            datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
+            versioningTemplate: '{{#if (containsString datasource "git-refs")}}git{{else}}semver{{/if}}',
+            extractVersionTemplate: '^{{#if versionPrefix}}{{{versionPrefix}}}{{else}}v?{{/if}}(?<version>.*?)$',
+            packageNameTemplate: "{{#if (containsString datasource 'git-refs')}}https://github.com/{{{packageName}}}{{else}}{{{packageName}}}{{/if}}",
+            currentValueTemplate: "{{#if (containsString datasource 'git-refs')}}{{{branchName}}}{{else}}{{{currentValue}}}{{/if}}",
+        },
+        {
+            description: 'OpenCode Skills Lock (git-refs)',
+            customType: 'regex',
+            managerFilePatterns: [
+                '/packages/opencode/skills\\.yaml$/',
+            ],
+            matchStrings: [
+                'datasource:\\s*(?<datasource>git-refs?)\\n\\s*branch:\\s*(?<branchName>.*?)\\n\\s*version:\\s*(?<currentDigest>.*?)\\n\\s*package:\\s*(?<packageName>.*?)\\n\\s*src:.*?\\n\\s*dst:.*?\\n\\s*name:\\s*(?<depName>.*?)\\n',
+            ],
+            datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
+            versioningTemplate: '{{#if (containsString datasource "git-refs")}}git{{else}}semver{{/if}}',
+            extractVersionTemplate: '^{{#if versionPrefix}}{{{versionPrefix}}}{{else}}v?{{/if}}(?<version>.*?)$',
+            packageNameTemplate: "{{#if (containsString datasource 'git-refs')}}https://github.com/{{{packageName}}}{{else}}{{{packageName}}}{{/if}}",
+            currentValueTemplate: "{{#if (containsString datasource 'git-refs')}}{{{branchName}}}{{else}}{{{currentValue}}}{{/if}}",
+        },
+        {
+            description: 'OpenCode Plugin: NPM (Scoped or Unscoped)',
             customType: 'regex',
             managerFilePatterns: [
                 '/^packages/opencode/opencode\\.jsonc$/',
@@ -85,7 +115,7 @@
             datasourceTemplate: 'npm',
         },
         {
-            description: 'Opencode Plugin: GitHub (github:owner/repo#version)',
+            description: 'OpenCode Plugin: GitHub (github:owner/repo#version)',
             customType: 'regex',
             managerFilePatterns: [
                 '/^packages/opencode/opencode\\.json$/',
@@ -113,11 +143,16 @@
     "packageRules": [
         {
             "matchManagers": ["custom.regex"],
+            "matchFileNames": ["/packages/opencode/skills\\.yaml$/"],
+            "groupName": "OpenCode Skills",
+        },
+        {
+            "matchManagers": ["custom.regex"],
             "matchFileNames": [
                 '/^packages/opencode/opencode\\.jsonc$/',
                 '/^packages/opencode/tui\\.jsonc$/',
             ],
-            "groupName": "Opencode Plugins",
+            "groupName": "OpenCode Plugins",
         },
         {
             "matchPackageNames": ["/^oven-sh/bun$/"],

@@ -20,3 +20,5 @@ select = ["E4", "E7", "E9", "F", "S"]
 # build.py deliberately spawns toolchain subprocesses (git, bun, ...) and
 # extracts package archives from pinned release URLs into controlled temp dirs.
 "src/build.py" = ["S202", "S603", "S607"]
+# install-skills.py downloads repo-pinned GitHub zipballs and extracts them.
+"packages/opencode/scripts/install-skills.py" = ["S301", "S310"]
