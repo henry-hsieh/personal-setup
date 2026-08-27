@@ -28,7 +28,7 @@
       }
     ],
     [
-      "./plugins/kata/kata-attention.ts",
+      "./plugins/kata/kata.ts",
       {}
     ]
   ],
