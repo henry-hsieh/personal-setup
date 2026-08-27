@@ -1,5 +1,5 @@
 name: kata
-version: 0.15.1
+version: 0.16.0
 datasource: github-releases
 package: kenn-io/kata
 url: https://github.com/kenn-io/kata/releases/download/v{version}/kata_{version}_linux_amd64.tar.gz
