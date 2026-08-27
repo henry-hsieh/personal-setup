@@ -99,7 +99,7 @@ if [[ -f "$MC_SOURCE" ]]; then
         for agent in historian dreamer sidekick; do
             CURRENT=$("$INSTALL_DIR/.local/bin/yq" -r "${MC_MODEL_PATH[$agent]} // \"\"" "$MC_SOURCE")
             if [[ -z "$CURRENT" ]]; then
-                "$INSTALL_DIR/.local/bin/yq" -o=json -i "${MC_MODEL_PATH[$agent]} = \"${FIRST_MODEL}\"" "$MC_SOURCE"
+                FIRST_MODEL="$FIRST_MODEL" "$INSTALL_DIR/.local/bin/yq" -o=json -i "${MC_MODEL_PATH[$agent]} = strenv(FIRST_MODEL)" "$MC_SOURCE"
             fi
         done
     fi
