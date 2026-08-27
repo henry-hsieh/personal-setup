@@ -10,4 +10,4 @@ files:
     dst: .local/bin/kata
 test:
   type: cmd
-  cmd: kata version
+  cmd: kata version && bun test $ROOT_DIR/tests/opencode/kata.test.ts
