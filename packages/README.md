@@ -283,6 +283,42 @@ subpackages:
 </example>
 </examples>
 
+## Pre-installed agent skills (`skills.yaml`)
+
+OpenCode agent skills are shipped as pre-installed files (not via Renovate's npm
+plugin flow) so they update through Renovate version bumps and stay airgap-safe.
+All skills are declared in a single lock file:
+
+- `packages/opencode/skills.yaml` — one YAML list entry per skill. **Field order is
+  significant:** each entry must list `datasource` **first** and `name` **last**
+  (`branch` right after `datasource` for `git-refs`). The Renovate custom
+  managers anchor on the unique `datasource:` line and read the rest of the
+  fields afterward, so this layout is what lets the regex match each skill
+  unambiguously:
+  - `datasource`: `github-tags` (tagged release) or `git-refs` (branch/commit, requires `branch:`). Must be the first field.
+  - `version`: git tag (`github-tags`) **or** commit SHA (`git-refs`). For `git-refs`, place it after `branch:`.
+  - `branch`: required only for `git-refs` (the branch Renovate tracks for new commits); put it right after `datasource:`.
+  - `package`: `owner/repo` on GitHub.
+  - `src`: path to the skill directory inside the repo (must contain `SKILL.md`).
+  - `dst`: destination relative to `$HOME` (e.g. `.config/opencode/skills/<name>`).
+  - `name`: skill name (also the destination folder under `~/.config/opencode/skills/`). Must be the last field.
+
+The installer `packages/opencode/scripts/install-skills.py` (invoked from
+`packages/opencode/scripts/init.sh`) downloads each skill as a GitHub codeload
+zipball, strips the single repository top-level directory, and copies `src` to
+`dst` at build time. Renovate bumps every `version` automatically (see the
+"OpenCode Skills" managers in `.github/renovate.json5`); all skill bumps are
+grouped into a single PR.
+
+### Adding a new skill
+
+1. Append an entry to `packages/opencode/skills.yaml`, ordering the fields as
+   `datasource` first and `name` last (with `branch` right after `datasource` for
+   `git-refs`): `datasource`, `branch` (git-refs only), `version`, `package`,
+   `src`, `dst`, `name`. Supply `package`, `version` (ref), `src` subpath, and `dst`.
+2. No `build.py` change or new package directory is required; the next build
+   installs it.
+
 <reference>
 
 ## Examples

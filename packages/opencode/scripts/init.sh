@@ -58,5 +58,5 @@ for plugin in $PLUGIN_LIST; do
   fi
 done
 
-# 3. Pin Ensemble skills
-bash "${SCRIPT_DIR}/pin-ensemble-skills.sh"
+# 3. Install pre-pinned OpenCode agent skills (see skills.yaml)
+python3 "${SCRIPT_DIR}/install-skills.py"

@@ -15,7 +15,8 @@ files:
   - src: "{pkg_dir}/tui.jsonc"
     dst: .config/opencode/tui.jsonc
 test:
-  type: version-check
+  type: cmd
+  cmd: "opencode --version && test -d \"$HOME/.config/opencode/skills/opencode-ensemble\" && test -d \"$HOME/.config/opencode/skills/uv-package-manager\""
 init_cmds:
   - opencode completion > $HOME/.local/share/bash-completion/completions/opencode.bash
   - |

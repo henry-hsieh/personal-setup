@@ -37,17 +37,34 @@ HF = "https://huggingface.co"
 
 
 def fetch(url):
+    """Fetch content from a URL.
+
+    Args:
+        url: URL to fetch (must be a trusted HTTPS path).
+
+    Returns:
+        Raw bytes of the response content.
+    """
     # Fixed HTTPS paths only (HF_REPO/REPO, release tarballs) — no untrusted input.
     req = urllib.request.Request(url, headers={"User-Agent": "personal-setup-build"})  # noqa: S310
     return urllib.request.urlopen(req, timeout=300).read()  # noqa: S310
 
 
 def git_blob_sha(data):
+    """Compute git blob SHA-1 hash of data.
+
+    Args:
+        data: Raw bytes to hash.
+
+    Returns:
+        Hexadecimal string of the git blob SHA-1 hash.
+    """
     # HF hub blob IDs are git-blob SHA-1 by design (not used for security).
     return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()  # noqa: S324
 
 
 def main():
+    """Pre-download AFT embedding model and ONNX Runtime for offline use."""
     storage = os.path.expanduser("~/.local/share/cortexkit/aft")
 
     api = json.loads(fetch("%s/api/models/%s" % (HF, REPO)).decode())
