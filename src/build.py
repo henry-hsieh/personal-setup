@@ -833,7 +833,8 @@ class PackageBuilder:
             extracted_dir: Source directory containing the files.
             files: List of file copy specifications with 'src', 'dst', and optional 'chmod'.
             out_dir: Target output directory.
-            version: Package version for substitution in file paths.
+            version: Package version associated with the package. `{version}`
+                substitutions are performed by `process_package` before this method.
         """
         for file_info in files:
             src = file_info['src']
