@@ -24,7 +24,7 @@ skills:
     name: opencode-ensemble
   - datasource: git-refs
     branch: main
-    version: 554237f7515b7012ce22e753c5c2e5b65369e3a4
+    version: 7b7d96804e9c34ce2cd0aa011cf65244019520b0
     package: wshobson/agents
     src: plugins/python-development/skills/uv-package-manager
     dst: .config/opencode/skills/uv-package-manager
