@@ -15,7 +15,7 @@ RUN_UTILS=true
 RUN_NVIM=true
 
 echo "=== Running Build Integrity Tests ==="
-if ! python "$ROOT_DIR/tests/integrity/test_build.py"; then
+if ! python3 "$ROOT_DIR/tests/integrity/test_build.py"; then
   EXIT_CODE=1
 fi
 

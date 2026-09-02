@@ -53,7 +53,8 @@ The following fields MAY be included in a `package.yaml` file:
   - `git-refs`: Use git commit hashes (for git repositories)
   - A URL template for checksum files
   - Embedded 64 hex chars for sha256
-  - `none`: Skip checksum verification
+  - `none`: No package-level checksum source. Valid only when `url` is absent;
+    HTTP(S) file mappings still require `sha256`.
 - `build_cmds` (list of strings): Commands to execute during the build process. Run in the package's workspace directory.
 - `init_cmds` (list of strings): Commands to execute after installation. Run in the user's environment.
 - `cache` (list of strings): Directory patterns to cache between builds.
@@ -72,7 +73,7 @@ The following fields MAY be included in a `package.yaml` file:
 Each item in the `files` list MUST be a dictionary with the following fields:
 
 - `src` (string): Source path. REQUIRED. Valid values include:
-- A path within the extracted archive
+  - A path within the extracted archive
   - A URL to download
   - A local path (MUST start with `{pkg_dir}` for downloadless packages)
 - `dst` (string): Destination path relative to the user's home directory (typically starts with `.local/`). REQUIRED.

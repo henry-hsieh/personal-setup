@@ -629,18 +629,7 @@ class PackageBuilder:
         filename = original_filename
         if name:
             ext = self.get_file_ext(actual_url)
-            # If no extension in URL, try HEAD request
-            if not ext:
-                try:
-                    head_resp = requests.head(actual_url, allow_redirects=False, timeout=10)
-                    if 'content-type' in head_resp.headers:
-                        ct = head_resp.headers['content-type'].lower()
-                        if 'gzip' in ct or 'x-tar' in ct:
-                            ext = 'tar.gz'
-                        elif 'zip' in ct:
-                            ext = 'zip'
-                except requests.RequestException:
-                    pass
+            # Keep the cache path stable when a server's metadata changes.
             filename = f"{name}-{version}.{ext}" if ext else f"{name}-{version}"
 
         # Download directly to global cache

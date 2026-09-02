@@ -8,9 +8,8 @@ checksum_source: github-release
 files:
   - src: opencode
     dst: .local/bin/opencode
-  - src: https://opencode.ai/config.json
+  - src: "{pkg_dir}/config.json"
     dst: .config/opencode/schema.json
-    sha256: c5de4f6feddbbdfece59821bbe33933eb454e839d58cd906d9fb6f69a586f7bb
   - src: "{pkg_dir}/opencode.jsonc"
     dst: .config/opencode/opencode.jsonc
   - src: "{pkg_dir}/tui.jsonc"
