@@ -14,6 +14,11 @@ EXIT_CODE=0
 RUN_UTILS=true
 RUN_NVIM=true
 
+echo "=== Running Build Integrity Tests ==="
+if ! python "$ROOT_DIR/tests/integrity/test_build.py"; then
+  EXIT_CODE=1
+fi
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     --utils) RUN_NVIM=false; shift ;;

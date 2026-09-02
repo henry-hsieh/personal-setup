@@ -37,7 +37,7 @@ The following fields are REQUIRED:
 
 The following fields are REQUIRED when certain condition is matched:
 
-- `branch` (string): The tracking Git branch name. REQUIRED when the `datasource` field is `git-refs`.
+- `git_commit` (string): The full Git commit ID. REQUIRED for Git packages using `checksum_source: git-refs`; exactly 40 hexadecimal characters.
 
 ### Optional Fields
 
@@ -72,10 +72,11 @@ The following fields MAY be included in a `package.yaml` file:
 Each item in the `files` list MUST be a dictionary with the following fields:
 
 - `src` (string): Source path. REQUIRED. Valid values include:
-  - A path within the extracted archive
+- A path within the extracted archive
   - A URL to download
   - A local path (MUST start with `{pkg_dir}` for downloadless packages)
 - `dst` (string): Destination path relative to the user's home directory (typically starts with `.local/`). REQUIRED.
+- `sha256` (string): Required for every HTTP(S) `src`; exactly 64 hexadecimal characters. The downloaded bytes are staged, retried, verified, and only then installed.
 - `chmod` (string): Sets the file mode of the destination file using a 3-digit octal string (e.g., "755"), similar to the `chmod` command's octal mode. OPTIONAL.
 </format>
 </schema>

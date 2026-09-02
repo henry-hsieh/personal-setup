@@ -13,6 +13,7 @@ import tarfile
 import threading
 import zipfile
 import glob
+import re
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Set
 
@@ -367,6 +368,22 @@ class PackageBuilder:
     # Checksum Resolutions
     # ==========================
 
+    @staticmethod
+    def _canonical_sha256(value: Optional[str]) -> Optional[str]:
+        """Return a normalized SHA256 value, rejecting ambiguous metadata."""
+        if not isinstance(value, str):
+            return None
+        value = value.strip().lower()
+        return value if re.fullmatch(r"[0-9a-f]{64}", value) else None
+
+    @staticmethod
+    def _canonical_git_commit(value: Optional[str]) -> Optional[str]:
+        """Return a normalized full Git commit ID, rejecting abbreviated refs."""
+        if not isinstance(value, str):
+            return None
+        value = value.strip().lower()
+        return value if re.fullmatch(r"[0-9a-f]{40}", value) else None
+
     def _resolve_github_release_sha(self, url: str, filename: str) -> Optional[str]:
         """Fetch SHA256 from GitHub Release assets (checksum files)."""
         # Expected URL format: https://github.com/{owner}/{repo}/releases/download/{tag}/{filename}
@@ -407,7 +424,7 @@ class PackageBuilder:
                     digest = asset.get('digest')
                     if digest and isinstance(digest, str) and digest.startswith('sha256:'):
                         logging.info(f"Found GitHub asset digest for {filename}")
-                        return digest[7:] # strip sha256: prefix
+                        return self._canonical_sha256(digest[7:])
 
             # 2. Look for checksum files in assets
             checksum_candidates = ['checksums.txt', 'sha256sums.txt', 'sha256sums', 'sha256', f'{filename}.sha256']
@@ -430,8 +447,9 @@ class PackageBuilder:
                         # Match filename (exact or relative)
                         if f_name == filename or f_name.endswith(f"/{filename}"):
                             # Verify hash format (64 hex chars for sha256)
-                            if len(hash_val) == 64:
-                                return hash_val
+                            canonical = self._canonical_sha256(hash_val)
+                            if canonical:
+                                return canonical
 
             return None
 
@@ -449,7 +467,7 @@ class PackageBuilder:
 
             # Case 1: File contains ONLY the hash
             if len(content) == 64 and all(c in '0123456789abcdefABCDEF' for c in content):
-                return content
+                return self._canonical_sha256(content)
 
             # Case 2: Standard checksum file format
             for line in content.splitlines():
@@ -459,14 +477,17 @@ class PackageBuilder:
                     f_name = parts[1].lstrip('*')
 
                     if f_name == filename or f_name.endswith(f"/{filename}"):
-                        if len(hash_val) == 64:
-                            return hash_val
+                        canonical = self._canonical_sha256(hash_val)
+                        if canonical:
+                            return canonical
 
-            # Case 3: Heuristic (First token is hash)
-            if content:
-                first_token = content.split()[0]
-                if len(first_token) == 64:
-                    return first_token
+            # Case 3: A single-entry sidecar may use a filename different from
+            # the download URL (for example, a provider's redirect endpoint).
+            lines = [line for line in content.splitlines() if line.strip()]
+            if len(lines) == 1:
+                canonical = self._canonical_sha256(lines[0].split()[0])
+                if canonical:
+                    return canonical
 
         except Exception as e:
             logging.warning(f"Failed to fetch HTTP checksum: {e}")
@@ -516,7 +537,15 @@ class PackageBuilder:
         self._update_registry_key(key, 'tag', version)
         return version
 
-    def download_git(self, url: str, version: str, name: str, checksum_source: str) -> Path:
+    def download_git(
+        self,
+        url: str,
+        version: str,
+        name: str,
+        checksum_source: str,
+        cache_key: Optional[str] = None,
+        git_commit: Optional[str] = None,
+    ) -> Path:
         """Download and checkout a git repository at a specific version.
 
         Args:
@@ -528,22 +557,23 @@ class PackageBuilder:
         Returns:
             Path to the checked-out workspace directory.
         """
-        # Validate source type
-        if checksum_source != 'git-refs' and checksum_source != 'none':
-             logging.warning(f"Unsupported checksum_source '{checksum_source}' for git package {name}. Expected 'git-refs'.")
+        expected_commit = self._canonical_git_commit(git_commit)
+        if checksum_source != 'git-refs' or not expected_commit:
+            raise ValueError(f"Git package {name} requires a full git_commit with checksum_source: git-refs")
 
         repo_name = Path(url).stem.replace('.git', '')
+        repo_identity = hashlib.sha256(url.encode()).hexdigest()
 
         # Workspace directory where files are checked out
-        clone_dir = self.build_dir / f"{name}-{version}"
+        clone_dir = self.build_dir / (cache_key or f"{name}-{version}")
         if clone_dir.exists():
             shutil.rmtree(clone_dir)
 
         # Bare Repo directory
-        cache_repo_dir = self.repo_cache_dir / repo_name
+        cache_repo_dir = self.repo_cache_dir / f"{repo_name}-{repo_identity}"
 
-        # Resolve tag before locking repo if possible, though resolve_tag is network bound
-        resolved_tag = self.resolve_tag(url, version)
+        # A full commit avoids mutable tags and does not require tag resolution.
+        resolved_tag = expected_commit
 
         # Critical Section: Lock this specific repo to prevent concurrent fetch/prune
         with self._get_repo_lock(repo_name):
@@ -566,6 +596,13 @@ class PackageBuilder:
             logging.info(f"Checking out {repo_name} @ {resolved_tag}")
             subprocess.run(['git', 'worktree', 'add', '--quiet', '--force', str(clone_dir), resolved_tag], cwd=str(cache_repo_dir), check=True)
 
+            actual_commit = subprocess.check_output(
+                ['git', 'rev-parse', 'HEAD'], cwd=str(clone_dir), text=True
+            ).strip().lower()
+            if actual_commit != expected_commit:
+                shutil.rmtree(clone_dir, ignore_errors=True)
+                raise ValueError(f"Git commit mismatch for {name}: expected {expected_commit}, got {actual_commit}")
+
         return clone_dir
 
     # ==========================
@@ -585,6 +622,7 @@ class PackageBuilder:
             Path to the downloaded file in the cache directory.
         """
         actual_url = url.replace("{version}", version)
+        url_identity = hashlib.sha256(actual_url.encode()).hexdigest()
         original_filename = Path(actual_url.split('?')[0]).name
 
         # Determine extension/filename
@@ -606,7 +644,9 @@ class PackageBuilder:
             filename = f"{name}-{version}.{ext}" if ext else f"{name}-{version}"
 
         # Download directly to global cache
-        cache_filepath = self.download_cache_dir / filename
+        cache_filepath = self.download_cache_dir / url_identity / filename
+        cache_filepath.parent.mkdir(parents=True, exist_ok=True)
+        registry_key = f"{name}-{version}-{url_identity}"
 
         # 1. Resolve Expected Checksum
         expected_sha = None
@@ -618,7 +658,7 @@ class PackageBuilder:
             expected_sha = self._resolve_http_sha(checksum_url, original_filename)
         elif len(checksum_source) == 64:
             # Source is a literal SHA256 hash
-            expected_sha = checksum_source
+            expected_sha = self._canonical_sha256(checksum_source)
 
         if expected_sha:
             logging.info(f"Resolved expected SHA256 for {name}: {expected_sha}")
@@ -626,38 +666,40 @@ class PackageBuilder:
             if checksum_source != 'none':
                 logging.warning(f"Could not resolve checksum for {name} using source '{checksum_source}'")
 
-        # 2. Check Cache Integrity
+        # 2. Check Cache Integrity. A registry digest is trusted only after
+        # re-hashing the bytes; it allows an outage in the checksum service
+        # without ever accepting an unverified download.
         with self.registry_lock:
-            cached_sha = self.registry.get(f"{name}-{version}", {}).get('download_sha256')
+            cache_record = self.registry.get(registry_key, {})
+            cached_sha = cache_record.get('download_sha256')
+            cached_url = cache_record.get('download_url')
 
+        cached_sha = self._canonical_sha256(cached_sha)
         if cache_filepath.exists():
             # If we have a cached file, verify it
             # If we have a registry SHA, it should match expected (if expected is known)
             valid_cache = False
 
             if cached_sha:
-                if expected_sha:
-                    if cached_sha == expected_sha:
-                        # Registry matches expectation. Now verify file on disk matches registry.
-                        # This ensures the file hasn't been corrupted or modified since download.
-                        logging.info(f"Verifying cached file integrity for {name}...")
-                        actual_file_sha = self.compute_sha256(cache_filepath)
-                        if actual_file_sha == cached_sha:
-                            valid_cache = True
-                        else:
-                            logging.warning(f"File integrity check failed for {filename}. Expected {cached_sha}, got {actual_file_sha}. Re-downloading.")
-                    else:
-                        logging.warning(f"Cached SHA {cached_sha} does not match expected {expected_sha}. Re-downloading.")
-                else:
-                    # If expected_sha does not exist, log warning and always download
-                    logging.warning(f"No expected SHA provided for {name}. Re-downloading to ensure integrity.")
-                    valid_cache = False
-
+                actual_file_sha = self.compute_sha256(cache_filepath)
+                cache_url_matches = expected_sha or cached_url == actual_url
+                if actual_file_sha == cached_sha and cache_url_matches and (not expected_sha or cached_sha == expected_sha):
+                    valid_cache = True
+                elif expected_sha:
+                    logging.warning(f"Cached SHA {cached_sha} does not match expected {expected_sha}.")
             if valid_cache:
-                 return cache_filepath
+                if not expected_sha:
+                    logging.warning(f"Checksum service unavailable; using verified cache for {name}.")
+                return cache_filepath
+
+        # A configured checksum source is an integrity requirement. Never
+        # download bytes when its metadata could not be resolved.
+        if checksum_source != 'none' and not expected_sha:
+            raise ValueError(f"Could not resolve required checksum for {name}")
 
         # 3. Download
-        part_filepath = self.download_cache_dir / (filename + ".part")
+        part_filepath = cache_filepath.with_name(cache_filepath.name + ".part")
+        part_filepath.unlink(missing_ok=True)
 
         retryer = tenacity.Retrying(
             stop=tenacity.stop_after_attempt(self.retry),
@@ -667,28 +709,31 @@ class PackageBuilder:
 
         def _do_download():
             logging.info(f"Downloading {actual_url}")
-            r = requests.get(actual_url, stream=True, timeout=30)
-            r.raise_for_status()
-            with open(part_filepath, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
+            part_filepath.unlink(missing_ok=True)
+            with requests.get(actual_url, stream=True, timeout=30) as r:
+                r.raise_for_status()
+                with open(part_filepath, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
-        retryer(_do_download)
+        try:
+            retryer(_do_download)
 
-        # 4. Verify & Commit
-        computed_sha = self.compute_sha256(part_filepath)
+            # 4. Verify & Commit
+            computed_sha = self.compute_sha256(part_filepath)
 
-        if expected_sha and computed_sha != expected_sha:
-            part_filepath.unlink()
-            raise ValueError(f"SHA mismatch for {filename}: expected {expected_sha}, got {computed_sha}")
+            if expected_sha and computed_sha != expected_sha:
+                raise ValueError(f"SHA mismatch for {filename}: expected {expected_sha}, got {computed_sha}")
 
-        # Update Cache
-        self._update_registry_key(f"{name}-{version}", 'download_sha256', computed_sha)
+            # Update Cache
+            self._update_registry_key(registry_key, 'download_sha256', computed_sha)
+            self._update_registry_key(registry_key, 'download_url', actual_url)
 
-        # Rename .part to final filename
-        if cache_filepath.exists():
-            cache_filepath.unlink()
-        part_filepath.rename(cache_filepath)
+            # Rename .part to final filename
+            os.replace(part_filepath, cache_filepath)
+        except Exception:
+            part_filepath.unlink(missing_ok=True)
+            raise
 
         return cache_filepath
 
@@ -739,7 +784,9 @@ class PackageBuilder:
                 shutil.rmtree(temp_extract_dir)
             raise e
 
-    def cache_artifacts(self, pkg: Dict, extracted_dir: Path, name: str, version: str):
+    def cache_artifacts(
+        self, pkg: Dict, extracted_dir: Path, name: str, version: str, cache_key: Optional[str] = None
+    ):
         """Cache build artifacts for faster subsequent builds.
 
         Args:
@@ -754,7 +801,8 @@ class PackageBuilder:
         # Fallback to parent dir if extracted_dir is a file (single-file package)
         base_dir = extracted_dir.parent if extracted_dir.is_file() else extracted_dir
 
-        cache_base = self.artifacts_cache_dir / f"{name}-{version}"
+        artifact_key = cache_key or f"{name}-{version}"
+        cache_base = self.artifacts_cache_dir / artifact_key
 
         for pattern in pkg['cache']:
             # Globbing
@@ -775,9 +823,11 @@ class PackageBuilder:
                         self._force_copy(match_path, dest)
 
         sha = self.compute_dir_sha256(cache_base)
-        self._update_registry_key(f"{name}-{version}", 'artifacts_sha256', sha)
+        self._update_registry_key(artifact_key, 'artifacts_sha256', sha)
 
-    def restore_cache(self, pkg: Dict, extracted_dir: Path, name: str, version: str) -> bool:
+    def restore_cache(
+        self, pkg: Dict, extracted_dir: Path, name: str, version: str, cache_key: Optional[str] = None
+    ) -> bool:
         """Restore cached build artifacts if available and valid.
 
         Args:
@@ -792,7 +842,8 @@ class PackageBuilder:
         if 'cache' not in pkg:
             return False
 
-        cache_base = self.artifacts_cache_dir / f"{name}-{version}"
+        artifact_key = cache_key or f"{name}-{version}"
+        cache_base = self.artifacts_cache_dir / artifact_key
         if not cache_base.exists():
             return False
 
@@ -800,12 +851,15 @@ class PackageBuilder:
         base_dir = extracted_dir.parent if extracted_dir.is_file() else extracted_dir
 
         with self.registry_lock:
-            expected_sha = self.registry.get(f"{name}-{version}", {}).get('artifacts_sha256')
+            expected_sha = self.registry.get(artifact_key, {}).get('artifacts_sha256')
 
-        if expected_sha:
-            if self.compute_dir_sha256(cache_base) != expected_sha:
-                logging.warning(f"Artifact cache corrupted for {name}")
-                return False
+        expected_sha = self._canonical_sha256(expected_sha)
+        if not expected_sha:
+            logging.warning(f"Artifact cache for {name} has no valid registry checksum")
+            return False
+        if self.compute_dir_sha256(cache_base) != expected_sha:
+            logging.warning(f"Artifact cache corrupted for {name}")
+            return False
 
         for pattern in pkg['cache']:
             full_pattern = str(cache_base / pattern)
@@ -845,12 +899,14 @@ class PackageBuilder:
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 logging.info(f"Downloading resource {src}")
                 try:
-                    r = requests.get(src, timeout=30)
-                    r.raise_for_status()
-                    with open(dst, 'wb') as f:
-                        f.write(r.content)
-                except requests.RequestException as e:
-                     raise RuntimeError(f"Failed to download resource {src}: {e}")
+                    expected_sha = self._canonical_sha256(file_info.get('sha256'))
+                    if not expected_sha:
+                        raise ValueError(f"HTTP resource {src} is missing valid sha256 metadata")
+                    resource_name = f"resource-{hashlib.sha256(src.encode()).hexdigest()}"
+                    staged = self.download_file(src, version, resource_name, expected_sha)
+                    self._force_copy(staged, dst)
+                except (requests.RequestException, ValueError) as e:
+                    raise RuntimeError(f"Failed to download resource {src}: {e}") from e
             else:
                 src_path = None
 
@@ -909,7 +965,15 @@ class PackageBuilder:
     # Package Type Processors
     # ==========================
 
-    def _process_git_package(self, pkg: Dict, url: str, checksum_source: str, processed_files: List[Dict]):
+    def _process_git_package(
+        self,
+        pkg: Dict,
+        url: str,
+        checksum_source: str,
+        processed_files: List[Dict],
+        cache_key: Optional[str] = None,
+        git_commit: Optional[str] = None,
+    ):
         """Process a git-based package.
 
         Args:
@@ -927,17 +991,24 @@ class PackageBuilder:
         pkg_dir = pkg.get('pkg_dir', '')
 
         # Git Flow: Repo Cache -> Workspace
-        workspace_dir = self.download_git(url, version, name, checksum_source)
+        workspace_dir = self.download_git(url, version, name, checksum_source, cache_key, git_commit)
 
         # Restore -> Build -> Cache -> Copy
-        self.restore_cache(pkg, workspace_dir, name, version)
+        self.restore_cache(pkg, workspace_dir, name, version, cache_key)
         self.run_build_cmds(build_cmds, workspace_dir, version, pkg_dir)
-        self.cache_artifacts(pkg, workspace_dir, name, version)
+        self.cache_artifacts(pkg, workspace_dir, name, version, cache_key)
         self.copy_files(workspace_dir, processed_files, self.out_dir, version)
 
         return workspace_dir
 
-    def _process_archive_package(self, pkg: Dict, url: str, checksum_source: str, processed_files: List[Dict]):
+    def _process_archive_package(
+        self,
+        pkg: Dict,
+        url: str,
+        checksum_source: str,
+        processed_files: List[Dict],
+        cache_key: Optional[str] = None,
+    ):
         """Process an archive-based package (tar.gz, zip, etc.).
 
         Args:
@@ -958,12 +1029,13 @@ class PackageBuilder:
         archive_path = self.download_file(url, version, name, checksum_source)
 
         # 1. Ensure Pristine Cache Exists & Verify Integrity
-        pristine_extract_dir = self.extracted_cache_dir / f"{name}-{version}"
+        archive_key = cache_key or f"{name}-{version}"
+        pristine_extract_dir = self.extracted_cache_dir / archive_key
         needs_extract = True
 
         if pristine_extract_dir.exists():
             with self.registry_lock:
-                expected_sha = self.registry.get(f"{name}-{version}", {}).get('extracted_sha256')
+                expected_sha = self.registry.get(archive_key, {}).get('extracted_sha256')
 
             if expected_sha:
                 logging.info(f"Verifying cached extraction for {name}...")
@@ -983,10 +1055,10 @@ class PackageBuilder:
             self.extract_archive(archive_path, pristine_extract_dir)
             # Compute and Save SHA to seal the cache
             extracted_sha = self.compute_dir_sha256(pristine_extract_dir)
-            self._update_registry_key(f"{name}-{version}", 'extracted_sha256', extracted_sha)
+            self._update_registry_key(archive_key, 'extracted_sha256', extracted_sha)
 
         # 2. Create Workspace from Pristine Cache
-        workspace_dir = self.build_dir / f"{name}-{version}"
+        workspace_dir = self.build_dir / archive_key
         if workspace_dir.exists():
             shutil.rmtree(workspace_dir)
 
@@ -995,9 +1067,9 @@ class PackageBuilder:
 
         # Restore -> Build -> Cache -> Copy
         # If we have build artifacts cached (e.g. binaries), restore them and skip the build commands.
-        if not self.restore_cache(pkg, workspace_dir, name, version):
+        if not self.restore_cache(pkg, workspace_dir, name, version, cache_key):
             self.run_build_cmds(build_cmds, workspace_dir, version, pkg_dir)
-            self.cache_artifacts(pkg, workspace_dir, name, version)
+            self.cache_artifacts(pkg, workspace_dir, name, version, cache_key)
         else:
             logging.info(f"Using cached artifacts for {name}, skipping build cmds.")
 
@@ -1005,7 +1077,14 @@ class PackageBuilder:
 
         return workspace_dir
 
-    def _process_single_file_package(self, pkg: Dict, url: str, checksum_source: str, processed_files: List[Dict]):
+    def _process_single_file_package(
+        self,
+        pkg: Dict,
+        url: str,
+        checksum_source: str,
+        processed_files: List[Dict],
+        cache_key: Optional[str] = None,
+    ):
         """Process a single-file package (e.g., AppImage, binary).
 
         Args:
@@ -1031,9 +1110,9 @@ class PackageBuilder:
 
         # Restore -> Build -> Cache -> Copy
         # Even for single files, users might want to restore sidecar files or run commands.
-        if not self.restore_cache(pkg, workspace_dir, name, version):
+        if not self.restore_cache(pkg, workspace_dir, name, version, cache_key):
             self.run_build_cmds(build_cmds, workspace_dir, version, pkg_dir)
-            self.cache_artifacts(pkg, workspace_dir, name, version)
+            self.cache_artifacts(pkg, workspace_dir, name, version, cache_key)
         else:
             logging.info(f"Using cached artifacts for {name}, skipping build cmds.")
 
@@ -1086,7 +1165,8 @@ class PackageBuilder:
                 if any(key.startswith(f"{p}-") for p in sub_packages):
                     continue
                 # Exclude the key for the currently processed version.
-                if key.removeprefix(f"{name}-") == current_version:
+                key_version = key.removeprefix(f"{name}-")
+                if key_version == current_version or key_version.startswith(f"{current_version}-"):
                     continue
                 keys_to_remove.append(key)
 
@@ -1113,15 +1193,30 @@ class PackageBuilder:
                         logging.warning(f"Failed to remove old {cache_type} cache {dir_to_remove}: {e}")
 
             # Downloads
-            for f in self.download_cache_dir.glob(f"{glob.escape(key)}*"):
+            url_identity = key.rsplit("-", 1)[-1]
+            if self._canonical_sha256(url_identity):
+                download_dir = self.download_cache_dir / url_identity
+                download_prefix = key[: -(len(url_identity) + 1)]
+                candidates = download_dir.glob(f"{download_prefix}*")
+            else:
+                download_dir = None
+                download_prefix = key
+                candidates = self.download_cache_dir.glob(f"{glob.escape(key)}*")
+
+            for f in candidates:
                 # Ensure we match '{key}' exactly or '{key}.ext' to avoid accidentally
                 # deleting a file where the version is a prefix (e.g. 'pkg-1.2' vs 'pkg-1.2-beta').
-                if f.is_file() and (f.name == key or f.name.startswith(f"{key}.")):
+                if f.is_file() and (f.name == download_prefix or f.name.startswith(f"{download_prefix}.")):
                     logging.info(f"Removing old download cache: {f}")
                     try:
                         f.unlink()
                     except OSError as e:
                         logging.warning(f"Failed to delete {f}: {e}")
+            if download_dir is not None and download_dir.exists():
+                try:
+                    download_dir.rmdir()
+                except OSError:
+                    pass
 
     def process_package(self, pkg: Dict) -> bool:
         """Process a single package: download, build, and install.
@@ -1140,12 +1235,16 @@ class PackageBuilder:
         url = pkg.get('url')
         files = pkg.get('files', [])
         checksum_source = pkg.get('checksum_source', 'none')
+        git_commit = pkg.get('git_commit')
         pkg_dir = pkg.get('pkg_dir', '')
 
         try:
             # Prepare substitutions
             if url:
                 url = url.replace("{version}", version)
+                cache_key = f"{name}-{version}-{hashlib.sha256(url.encode()).hexdigest()}"
+            else:
+                cache_key = None
 
             if checksum_source != 'none':
                 checksum_source = checksum_source.replace("{version}", version)
@@ -1157,17 +1256,29 @@ class PackageBuilder:
                 new_f['dst'] = f['dst'].replace('{version}', version).replace('{pkg_dir}', pkg_dir)
                 processed_files.append(new_f)
 
+            # Every network file is independently verified before installation.
+            for f in processed_files:
+                if f['src'].startswith(('http://', 'https://')) and not self._canonical_sha256(f.get('sha256')):
+                    raise ValueError(f"HTTP resource {f['src']} is missing valid sha256 metadata")
+
+            if url and not url.endswith('.git') and checksum_source == 'none':
+                raise ValueError(f"Network package {name} is missing required checksum_source")
+
             # Dispatch based on package type
             workspace_dir = None
             if url:
                 if url.endswith('.git'):
-                    workspace_dir = self._process_git_package(pkg, url, checksum_source, processed_files)
+                    if checksum_source != 'git-refs' or not self._canonical_git_commit(git_commit):
+                        raise ValueError(f"Git package {name} requires a full git_commit with checksum_source: git-refs")
+                    workspace_dir = self._process_git_package(
+                        pkg, url, checksum_source, processed_files, cache_key, git_commit
+                    )
                 elif pkg.get('extract', False):
                     # Explicit extract=True implies Archive Package
-                    workspace_dir = self._process_archive_package(pkg, url, checksum_source, processed_files)
+                    workspace_dir = self._process_archive_package(pkg, url, checksum_source, processed_files, cache_key)
                 else:
                     # Default / extract=False implies Single File Package
-                    workspace_dir = self._process_single_file_package(pkg, url, checksum_source, processed_files)
+                    workspace_dir = self._process_single_file_package(pkg, url, checksum_source, processed_files, cache_key)
             else:
                 workspace_dir = self._process_downloadless_package(pkg, processed_files)
 
