@@ -16,7 +16,7 @@ files:
     dst: .config/opencode/tui.jsonc
 test:
   type: cmd
-  cmd: "opencode --version && test -d \"$HOME/.config/opencode/skills/opencode-ensemble\" && test -d \"$HOME/.config/opencode/skills/uv-package-manager\" && bun test $ROOT_DIR/tests/opencode/wait.test.ts"
+  cmd: "opencode --version && test -d \"$HOME/.config/opencode/skills/opencode-ensemble\" && test -d \"$HOME/.config/opencode/skills/uv-package-manager\" && bun test \"$ROOT_DIR/tests/opencode/wait.test.ts\" && bun test \"$ROOT_DIR/tests/opencode/precache-magic-context.test.ts\""
 init_cmds:
   - opencode completion > $HOME/.local/share/bash-completion/completions/opencode.bash
   - |
