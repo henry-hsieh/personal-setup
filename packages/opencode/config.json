@@ -2,6 +2,10 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$ref": "#/$defs/Config",
   "$defs": {
+    "Model": {
+      "type": "string",
+      "description": "Model identifier in provider/model format"
+    },
     "LogLevel": {
       "type": "string",
       "enum": [
@@ -171,7 +175,7 @@
       "properties": {
         "model": {
           "type": "string",
-          "$ref": "https://models.dev/model-schema.json#/$defs/Model"
+          "$ref": "#/$defs/Model"
         },
         "variant": {
           "type": "string",
@@ -809,7 +813,7 @@
               },
               "model": {
                 "type": "string",
-                "$ref": "https://models.dev/model-schema.json#/$defs/Model"
+                "$ref": "#/$defs/Model"
               },
               "variant": {
                 "type": "string"
@@ -963,12 +967,12 @@
         "model": {
           "type": "string",
           "description": "Model to use in the format of provider/model, eg anthropic/claude-2",
-          "$ref": "https://models.dev/model-schema.json#/$defs/Model"
+          "$ref": "#/$defs/Model"
         },
         "small_model": {
           "type": "string",
           "description": "Small model to use for tasks like title generation in the format of provider/model",
-          "$ref": "https://models.dev/model-schema.json#/$defs/Model"
+          "$ref": "#/$defs/Model"
         },
         "default_agent": {
           "type": "string",
