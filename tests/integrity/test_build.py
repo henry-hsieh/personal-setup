@@ -262,4 +262,10 @@ class IntegrityTests(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    suite = unittest.defaultTestLoader.loadTestsFromTestCase(IntegrityTests)
+    result = unittest.TextTestRunner(verbosity=1).run(suite)
+    failed = len(result.failures)
+    errors = len(result.errors)
+    passed = result.testsRun - failed - errors
+    print(f"Integrity summary: {passed} passed, {failed} failed, {errors} errors.")
+    raise SystemExit(not result.wasSuccessful())

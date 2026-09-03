@@ -154,11 +154,13 @@ jobs:
           if [[ "${{ matrix.manager }}" == "apt" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
             echo "RUN apt update" >> Dockerfile
-            echo "RUN apt install -y tcsh curl tar xz-utils make git ca-certificates fuse libatomic1" >> Dockerfile
+            echo "RUN apt install -y tcsh curl tar xz-utils make git ca-certificates fuse libatomic1 python3 python3-pip python3-venv" >> Dockerfile
           elif [[ "${{ matrix.manager }}" == "yum" ]]; then
             echo "FROM ${{ matrix.image }}" > Dockerfile
-            echo "RUN yum install -y tcsh curl tar xz make git ca-certificates fuse-libs libatomic" >> Dockerfile
+            echo "RUN yum install -y tcsh curl tar xz make git ca-certificates fuse-libs libatomic python3 python3-pip" >> Dockerfile
           fi
+          echo "RUN python3 -m venv /opt/test-venv && /opt/test-venv/bin/python -m pip install --no-cache-dir pyyaml requests tenacity" >> Dockerfile
+          echo 'ENV PATH="/opt/test-venv/bin:$PATH"' >> Dockerfile
           echo "RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin/" >> Dockerfile
 
       - name: Cache docker images
