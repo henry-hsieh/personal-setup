@@ -10,8 +10,10 @@ files:
     dst: .local/bin/tinty
   - src: https://raw.githubusercontent.com/tinted-theming/tinty/v{version}/contrib/completion/tinty.bash
     dst: .local/share/bash-completion/completions/tinty.bash
+    sha256: bebbf0bb7464af50953ea9f533da027a19ac5dea237173c179b82f385404e681
   - src: https://raw.githubusercontent.com/tinted-theming/tinty/v{version}/contrib/completion/tinty.fish
     dst: .config/fish/completions/tinty.fish
+    sha256: 715e061a8dc9233d574a4abee7903e37d2fcb640e621803bcca019ec41bc83f2
 init_cmds:
   - tinty sync
 test:

@@ -5,6 +5,7 @@ package: tmux-plugins/tpm
 url: https://github.com/tmux-plugins/tpm.git
 extract: false
 checksum_source: git-refs
+git_commit: 7bdb7ca33c9cc6440a600202b50142f401b6fe21
 files:
   - src: .
     dst: .cache/personal-setup/init/tpm
