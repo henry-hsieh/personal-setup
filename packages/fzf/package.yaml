@@ -10,9 +10,12 @@ files:
     dst: .local/bin/fzf
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/man/man1/fzf.1
     dst: .local/share/man/man1/fzf.1
+    sha256: 8d35453a6a2e146107fd7afdb88df970a9cff7388a09be36c9627f81608f2677
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/completion.bash
     dst: .local/share/scripts/fzf-completion.bash
+    sha256: 263f7c4e602c002747175c69efa507bd3fb663633bb2419efda2e7641ffb6912
   - src: https://raw.githubusercontent.com/junegunn/fzf/v{version}/shell/key-bindings.bash
     dst: .local/share/scripts/fzf-key-bindings.bash
+    sha256: 89103adb2e29816b0ed8f36814ce4c95945a5f1c7dcd3b0620d2973ea2dbd6ea
 test:
   type: version-check

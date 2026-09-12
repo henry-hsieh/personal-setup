@@ -4,6 +4,7 @@ datasource: github-releases
 package: dandavison/delta
 url: https://github.com/dandavison/delta/releases/download/{version}/delta-{version}-x86_64-unknown-linux-musl.tar.gz
 extract: true
+checksum_source: github-release
 files:
   - src: delta
     dst: .local/bin/delta

@@ -11,11 +11,15 @@ files:
     chmod: "755"
   - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv.1
     dst: .local/share/man/man1/direnv.1
+    sha256: 0d1561d7d8d3c8e69a74f1878241d86efc24ecaa81c994e591be7a2324d8bea9
   - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv-stdlib.1
     dst: .local/share/man/man1/direnv-stdlib.1
+    sha256: 8f7f57c35165486900cd2d591714c3da67cd9f4a9f7b521198ba48c1ac3861b3
   - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv-fetchurl.1
     dst: .local/share/man/man1/direnv-fetchurl.1
+    sha256: 0e13d1fec17461d52a7e4e1d8861ef7e2cf29f8700750e3629c17ca8cff7de80
   - src: https://raw.githubusercontent.com/direnv/direnv/v{version}/man/direnv.toml.1
     dst: .local/share/man/man1/direnv.toml.1
+    sha256: 981d7f30b14b3cb436b89bff5faada7c6bff432e9a6d497d5ff667dc6416f7a3
 test:
   type: version-check

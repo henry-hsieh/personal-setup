@@ -12,8 +12,10 @@ files:
     chmod: "755"
   - src: https://raw.githubusercontent.com/oven-sh/bun/refs/tags/bun-v{version}/completions/bun.bash
     dst: .local/share/bash-completion/completions/bun.bash
+    sha256: 15e26e705cc82212e9fc50359b82d87b92154fb0015005f3be0f538f873ac3f1
   - src: https://raw.githubusercontent.com/oven-sh/bun/refs/tags/bun-v{version}/completions/bun.fish
     dst: .config/fish/completions/bun.fish
+    sha256: 08dc1a496b9d5f82e71d65f50a14470e5c5da870719956ffcefa2d2491fa6962
 init_cmds:
   - bash {pkg_dir}/install-bun-packages.sh
 subpackages:
