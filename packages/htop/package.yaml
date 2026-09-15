@@ -11,5 +11,6 @@ files:
     chmod: "755"
   - src: https://github.com/henry-hsieh/htop.appimage/releases/download/v{version}/htop.1
     dst: .local/share/man/man1/htop.1
+    sha256: 34e092f11a0396ddf4c413785dd01e4e8cce16e62f3bb053446fb4b39ccad84c
 test:
   type: version-check
