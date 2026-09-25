@@ -33,3 +33,10 @@ merge_queue:
   max_parallel_checks: 1
 merge_protections_settings:
   auto_merge_conditions: true
+merge_protections:
+  - name: Enforce conventional commit
+    description: Make sure that we follow https://www.conventionalcommits.org/en/v1.0.0/
+    if:
+      - base = main
+    success_conditions:
+      - "title ~= ^(fix|feat|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\\(.+\\))?:"
