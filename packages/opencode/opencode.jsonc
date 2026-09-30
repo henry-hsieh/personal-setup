@@ -14,8 +14,8 @@
     "@cortexkit/opencode-magic-context@0.44.1",
     "@cortexkit/aft-opencode@0.58.0",
     "@hueyexe/opencode-ensemble@0.18.0",
-    "@bybrawe/opencode-goal@1.3.38",
-    "@bybrawe/opencode-loop@0.5.38",
+    "@bybrawe/opencode-goal@1.3.39",
+    "@bybrawe/opencode-loop@0.6.0",
     [
       "./plugins/wait/opencode-wait.ts",
       {}

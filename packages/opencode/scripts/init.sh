@@ -47,12 +47,12 @@ for plugin in $PLUGIN_LIST; do
 
   if [[ "${plugin}" == @bybrawe/opencode-goal@* ]]; then
     rm -rf /tmp/opencode-goal
-    env OPENCODE_CONFIG_DIR=/tmp/opencode-goal npx -y "${plugin}"
+    env OPENCODE_CONFIG_DIR=/tmp/opencode-goal npx -y "${plugin}" --legacy-v1
     cp -r /tmp/opencode-goal/commands/ "$OPENCODE_CONFIG_DIR/"
   fi
   if [[ "${plugin}" == @bybrawe/opencode-loop@* ]]; then
     rm -rf /tmp/opencode-loop
-    env OPENCODE_CONFIG_DIR=/tmp/opencode-loop npx -y "${plugin}" --loop-only --without-loop-goals
+    env OPENCODE_CONFIG_DIR=/tmp/opencode-loop npx -y "${plugin}" --legacy-v1 --loop-only --without-loop-goals
     cp -rf /tmp/opencode-loop/commands/ "$OPENCODE_CONFIG_DIR/"
     cp -rf /tmp/opencode-loop/agents/ "$OPENCODE_CONFIG_DIR/"
   fi
