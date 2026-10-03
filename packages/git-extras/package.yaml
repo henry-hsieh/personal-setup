@@ -5,11 +5,14 @@ package: tj/git-extras
 url: https://github.com/tj/git-extras.git
 extract: false
 checksum_source: git-refs
+git_commit: 2bdeb59a73b2c0cd6651086b9f37d98a50047b4f
 files:
-  - src: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+  - src: https://raw.githubusercontent.com/git/git/1630431f326e15fcde608827b5ff38422528eb59/contrib/completion/git-completion.bash
     dst: .local/share/bash-completion/completions/git
-  - src: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+    sha256: 3b1018983d1ca279967403e65d1dac8b4afd30baafdf104f057a652c199015a6
+  - src: https://raw.githubusercontent.com/git/git/1630431f326e15fcde608827b5ff38422528eb59/contrib/completion/git-prompt.sh
     dst:  .local/share/scripts/git-prompt.sh
+    sha256: 7ff718f4a06fd0a0be7edfef926abb41b1353c48c1515ad312d226965b74943a
 build_cmds:
   - make install DESTDIR={out_dir}/ PREFIX=.local/ SYSCONFDIR=.local/share/
 test:

@@ -13,6 +13,7 @@ files:
     chmod: "755"
   - src: https://github.com/henry-hsieh/tmux.appimage/releases/download/v{version}/tmux.1
     dst: .local/share/man/man1/tmux.1
+    sha256: cbedf24cf75128a6794a24a4c380307f73515047945b6736933d313af4623ae7
 test:
   type: version-check
   args: ["-V"]

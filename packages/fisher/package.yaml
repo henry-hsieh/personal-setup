@@ -5,8 +5,10 @@ package: jorgebucaran/fisher
 files:
   - src: https://raw.githubusercontent.com/jorgebucaran/fisher/refs/tags/{version}/functions/fisher.fish
     dst: .config/fish/functions/fisher.fish
+    sha256: 0fb6c81ae3003e95b5671766fa6c25c3597066e29965b7772f6c1b007387356d
   - src: https://raw.githubusercontent.com/jorgebucaran/fisher/refs/tags/{version}/completions/fisher.fish
     dst: .config/fish/completions/fisher.fish
+    sha256: 6d1696c0a801e74e0c224fb0915649037496fef99a66c32a43b79988effaa042
 init_cmds:
   - fish -c "fisher update"
   - fish -c "tide configure --auto --style=Rainbow --prompt_colors='16 colors' --show_time='24-hour format' --rainbow_prompt_separators=Angled --powerline_prompt_heads=Sharp --powerline_prompt_tails=Flat --powerline_prompt_style='Two lines, character and frame' --prompt_connection=Disconnected --powerline_right_prompt_frame=Yes --prompt_spacing=Sparse --icons='Many icons'"
