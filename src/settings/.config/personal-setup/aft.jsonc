@@ -1,6 +1,4 @@
 {
-  "search_index": true,
-  "semantic_search": true,
   "auto_update": false,
   "lsp": {
     "auto_install": false
