@@ -89,14 +89,12 @@ if [[ -f "$MC_SOURCE" ]]; then
     fi
 
     if [[ -n "$FIRST_MODEL" ]]; then
-        # New magic-context syntax nests model settings under per-harness blocks
-        # (historian.opencode / dreamer.opencode); sidekick.model stays flat.
+        # Magic-context model settings live under per-harness blocks.
         declare -A MC_MODEL_PATH=(
             [historian]=".historian.opencode.model"
             [dreamer]=".dreamer.opencode.model"
-            [sidekick]=".sidekick.model"
         )
-        for agent in historian dreamer sidekick; do
+        for agent in historian dreamer; do
             CURRENT=$("$INSTALL_DIR/.local/bin/yq" -r "${MC_MODEL_PATH[$agent]} // \"\"" "$MC_SOURCE")
             if [[ -z "$CURRENT" ]]; then
                 FIRST_MODEL="$FIRST_MODEL" "$INSTALL_DIR/.local/bin/yq" -o=json -i "${MC_MODEL_PATH[$agent]} = strenv(FIRST_MODEL)" "$MC_SOURCE"
