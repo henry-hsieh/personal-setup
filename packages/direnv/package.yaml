@@ -1,5 +1,5 @@
 name: direnv
-version: 2.38.1
+version: 2.38.2
 datasource: github-releases
 package: direnv/direnv
 url: https://github.com/direnv/direnv/releases/download/v{version}/direnv.linux-amd64
