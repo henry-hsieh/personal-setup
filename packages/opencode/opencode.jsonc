@@ -1,42 +1,56 @@
 {
   "$schema": "schema.json",
-  "autoupdate": false,
-  "agent": {
+  "update": "disable",
+  "agents": {
     "general": {
-      "disable": true
+      "disabled": true
     }
   },
   "compaction": {
-    "auto": false,
-    "prune": false
+    "auto": false
   },
-  "plugin": [
+  "plugins": [
     "@cortexkit/opencode-magic-context@0.49.25",
     "@cortexkit/aft-opencode@0.62.0",
     "@hueyexe/opencode-ensemble@0.20.0",
     "@bybrawe/opencode-goal@1.3.49",
     "@bybrawe/opencode-loop@0.6.9",
-    [
-      "./plugins/wait/opencode-wait.ts",
-      {}
-    ],
-    [
-      "./plugins/pca/opencode-pca.ts",
-      {
+    {
+      "package": "./plugins/wait"
+    },
+    {
+      "package": "./plugins/pca",
+      "options": {
         "strategy": "merge",
         "enabled": true
       }
-    ],
-    [
-      "./plugins/kata/kata.ts",
-      {}
-    ]
-  ],
-  "permission": {
-    "external_directory": {
-      "~/.local/share/opencode/worktree/**": "allow"
+    },
+    {
+      "package": "./plugins/kata"
     }
-  },
+  ],
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "~/.local/share/opencode/worktree/*",
+      "effect": "allow"
+    },
+    {
+      "action": "external_directory",
+      "resource": "{env:AFT_STORAGE_DIR}/opencode/bash-tasks/*",
+      "effect": "allow"
+    },
+    {
+      "action": "external_directory",
+      "resource": "{env:XDG_DATA_HOME}/cortexkit/aft/opencode/bash-tasks/*",
+      "effect": "allow"
+    },
+    {
+      "action": "external_directory",
+      "resource": "~/.local/share/cortexkit/aft/opencode/bash-tasks/*",
+      "effect": "allow"
+    }
+  ],
   "lsp": {
     "slang-server": {
       "command": ["slang-server"],

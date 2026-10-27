@@ -8,29 +8,32 @@ VERSION="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # 1. Shell completions
-opencode completion > "$HOME/.local/share/bash-completion/completions/opencode.bash"
+opencode --completions bash > "$HOME/.local/share/bash-completion/completions/opencode.bash"
 
-# 2. Install @opencode-ai/plugin and its plugins
+# 2. Install the v2 SDK for local plugins and their tests
 OPENCODE_CONFIG_DIR="$HOME/.config/opencode/"
 rm -rf "$OPENCODE_CONFIG_DIR"/node_modules/
 rm -rf "$OPENCODE_CONFIG_DIR"/package.json
 rm -rf "$OPENCODE_CONFIG_DIR"/package-lock.json
 rm -rf "$OPENCODE_CONFIG_DIR"/bun.lock
 cd "${OPENCODE_CONFIG_DIR}"
-bun add --exact "@opencode-ai/plugin@${VERSION}"
+bun add --exact "@opencode/plugin@${VERSION}" "@opencode/ai@${VERSION}" solid-js
 npm install --package-lock-only
 
-# Install OpenCode plugins
-OPENCODE_PLUGIN_DIR="$HOME/.cache/opencode/packages/"
+# OpenCode v2 selects the highest numeric generation under each npm spec.
+OPENCODE_PLUGIN_DIR="$HOME/.cache/opencode/npm/"
 rm -rf "$HOME/.cache/opencode/"
 mkdir -p "$OPENCODE_PLUGIN_DIR"
-PLUGIN_LIST=$(cpp -P "$HOME/.config/opencode/opencode.jsonc" | yq -r '.plugin[] | select(type == "!!str")')
+PLUGIN_LIST=$(cpp -P "$HOME/.config/opencode/opencode.jsonc" | yq -r '
+  .plugins[] | (select(tag == "!!str") // .package)
+  | select(. != null) | select(test("^(\\.|/|file:)") | not)
+')
 if [[ -z "$PLUGIN_LIST" ]]; then
   echo "[opencode] WARNING: no plugins found in opencode.jsonc"
   exit 1
 fi
-for plugin in $PLUGIN_LIST; do
-  PLUGIN_PATH="${OPENCODE_PLUGIN_DIR}/${plugin}"
+while IFS= read -r plugin; do
+  PLUGIN_PATH="${OPENCODE_PLUGIN_DIR}/${plugin}/1"
   mkdir -p "${PLUGIN_PATH}"
   cd "${PLUGIN_PATH}"
   bun add --exact "${plugin}"
@@ -45,18 +48,7 @@ for plugin in $PLUGIN_LIST; do
   # Compile Ensemble's browser-loaded Tailwind CSS
   bash "${SCRIPT_DIR}/build-ensemble-tailwind.sh" "${plugin}" "${PLUGIN_PATH}" "${SCRIPT_DIR}"
 
-  if [[ "${plugin}" == @bybrawe/opencode-goal@* ]]; then
-    rm -rf /tmp/opencode-goal
-    env OPENCODE_CONFIG_DIR=/tmp/opencode-goal npx -y "${plugin}" --legacy-v1
-    cp -r /tmp/opencode-goal/commands/ "$OPENCODE_CONFIG_DIR/"
-  fi
-  if [[ "${plugin}" == @bybrawe/opencode-loop@* ]]; then
-    rm -rf /tmp/opencode-loop
-    env OPENCODE_CONFIG_DIR=/tmp/opencode-loop npx -y "${plugin}" --legacy-v1 --loop-only --without-loop-goals
-    cp -rf /tmp/opencode-loop/commands/ "$OPENCODE_CONFIG_DIR/"
-    cp -rf /tmp/opencode-loop/agents/ "$OPENCODE_CONFIG_DIR/"
-  fi
-done
+done <<< "$PLUGIN_LIST"
 
 # 3. Install pre-pinned OpenCode agent skills (see skills.yaml)
 python3 "${SCRIPT_DIR}/install-skills.py"

@@ -1,5 +1,5 @@
 name: opencode
-version: 1.19.4
+version: 2.2.0
 datasource: github-releases
 package: anomalyco/opencode
 url: https://github.com/anomalyco/opencode/releases/download/v{version}/opencode-linux-x64.tar.gz
@@ -12,12 +12,9 @@ files:
     dst: .config/opencode/schema.json
   - src: "{pkg_dir}/opencode.jsonc"
     dst: .config/opencode/opencode.jsonc
-  - src: "{pkg_dir}/tui.jsonc"
-    dst: .config/opencode/tui.jsonc
 test:
   type: cmd
-  cmd: "opencode --version && test -d \"$HOME/.config/opencode/skills/opencode-ensemble\" && test -d \"$HOME/.config/opencode/skills/uv-package-manager\" && bun test \"$ROOT_DIR/tests/opencode/wait.test.ts\" && bun test \"$ROOT_DIR/tests/opencode/precache-magic-context.test.ts\""
+  cmd: "opencode --version && test -d \"$HOME/.config/opencode/skills/opencode-ensemble\" && test -d \"$HOME/.config/opencode/skills/uv-package-manager\" && bun test \"$ROOT_DIR/tests/opencode/wait.test.ts\" \"$ROOT_DIR/tests/opencode/wait-plugin.test.ts\" \"$ROOT_DIR/tests/opencode/wait-tui.test.ts\" \"$ROOT_DIR/tests/opencode/kata.test.ts\" \"$ROOT_DIR/tests/opencode/pca.test.ts\" \"$ROOT_DIR/tests/opencode/legacy-cleanup.test.ts\" \"$ROOT_DIR/tests/opencode/precache-magic-context.test.ts\""
 init_cmds:
-  - opencode completion > $HOME/.local/share/bash-completion/completions/opencode.bash
   - |
     bash {pkg_dir}/scripts/init.sh {version}
