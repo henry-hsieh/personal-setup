@@ -1,194 +1,152 @@
-import { test, expect, afterEach } from "bun:test"
-import { mkdtempSync, writeFileSync, unlinkSync } from "node:fs"
+import { afterEach, expect, test } from "bun:test"
+import { mkdtempSync, rmSync, utimesSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
 
-// Attention path requires KATA_REF at module load time.
-process.env.KATA_REF = "abc4"
-const { KataPlugin } = await import(
-  "../../src/settings/.config/opencode/plugins/kata/kata.ts"
-)
+const pluginDir = process.env.OPENCODE_TEST_PLUGIN_DIR ?? path.join(process.env.HOME!, ".config/opencode/plugins")
+const { KataRuntime } = await import(path.join(pluginDir, "kata/index.ts"))
+const { default: KataTui } = await import(path.join(pluginDir, "kata/tui.ts"))
 
-// Several tests mutate process-wide env (OPENCODE_PROJECT_DIR). Restore it
-// after each test so a test never observes another test's workspace even if
-// bun is later run with --concurrent.
-const ORIGINAL_ENV = {
-  KATA_REF: process.env.KATA_REF,
-  OPENCODE_PROJECT_DIR: process.env.OPENCODE_PROJECT_DIR,
-}
+const originalRef = process.env.KATA_REF
+const temporaryDirectories: string[] = []
+
 afterEach(() => {
-  for (const key of ["KATA_REF", "OPENCODE_PROJECT_DIR"] as const) {
-    const value = ORIGINAL_ENV[key]
-    if (value === undefined) delete process.env[key]
-    else process.env[key] = value
-  }
+  if (originalRef === undefined) delete process.env.KATA_REF
+  else process.env.KATA_REF = originalRef
+  for (const directory of temporaryDirectories.splice(0)) rmSync(directory, { recursive: true, force: true })
 })
 
-function fakeShell(onCmd?: (cmd: string) => string) {
-  const calls: string[] = []
-  const tagged = (strings: TemplateStringsArray, ...values: unknown[]) => {
-    const cmd = strings
-      .reduce((a, s, i) => a + s + (i < values.length ? String(values[i]) : ""), "")
-      .trim()
-    calls.push(cmd)
-    const stdout = onCmd ? onCmd(cmd) : ""
-    const chainable: any = {
-      quiet() {
-        return chainable
-      },
-      nothrow() {
-        return chainable
-      },
-      then(resolve: (v: any) => void) {
-        resolve({ stdout, stderr: "", exitCode: 0 })
-      },
-    }
-    return chainable
-  }
-  return { tagged: tagged as any, calls }
+function workspace(): string {
+  const directory = mkdtempSync(path.join(tmpdir(), "kata-v2-"))
+  temporaryDirectories.push(directory)
+  writeFileSync(path.join(directory, ".kata.toml"), "")
+  return directory
 }
 
-const client: any = {
-  app: { log: async () => ({}) },
-  session: { list: async () => ({ data: [] }) },
-}
-
-test("attention: start on first session, end on last, dedupes multiples", async () => {
-  const { tagged, calls } = fakeShell()
-  const hooks = await KataPlugin({ client, $: tagged })
-
-  await hooks.event!({ event: { type: "session.created", properties: { info: { id: "s1" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook start"))).toHaveLength(1)
-
-  await hooks.event!({ event: { type: "session.created", properties: { info: { id: "s2" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook start"))).toHaveLength(1)
-
-  await hooks.event!({ event: { type: "session.deleted", properties: { info: { id: "s1" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook end"))).toHaveLength(0)
-
-  await hooks.event!({ event: { type: "session.deleted", properties: { info: { id: "s2" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook end"))).toHaveLength(1)
-})
-
-test("contract: injected when .kata.toml present, cached across calls, absent otherwise", async () => {
-  const withToml = mkdtempSync(path.join(tmpdir(), "kata-"))
-  writeFileSync(path.join(withToml, ".kata.toml"), "")
-  const withoutToml = mkdtempSync(path.join(tmpdir(), "kata-no-"))
-
-  const quickstartCalls: string[] = []
-  const { tagged } = fakeShell((cmd) => {
-    if (cmd.includes("quickstart")) quickstartCalls.push(cmd)
-    return "CONTRACT-BODY"
-  })
-  const hooks = await KataPlugin({ client, $: tagged })
-
-  process.env.OPENCODE_PROJECT_DIR = withToml
-  const out1 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "x", model: {} as any }, out1)
-  expect(out1.system).toEqual(["CONTRACT-BODY"])
-  expect(quickstartCalls).toHaveLength(1)
-
-  const out2 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "y", model: {} as any }, out2)
-  expect(out2.system).toEqual(["CONTRACT-BODY"])
-  expect(quickstartCalls).toHaveLength(1)
-
-  process.env.OPENCODE_PROJECT_DIR = withoutToml
-  const out3 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "z", model: {} as any }, out3)
-  expect(out3.system).toEqual([])
-  expect(quickstartCalls).toHaveLength(1)
-})
-
-test("contract refresh when .kata.toml changes", async () => {
-  const dir = mkdtempSync(path.join(tmpdir(), "kata-refresh-"))
-  writeFileSync(path.join(dir, ".kata.toml"), "")
-  process.env.OPENCODE_PROJECT_DIR = dir
-
-  const quickstartCalls: string[] = []
-  const { tagged } = fakeShell((cmd) => {
-    if (cmd.includes("quickstart")) quickstartCalls.push(cmd)
-    return "CONTRACT-BODY"
-  })
-  const hooks = await KataPlugin({ client, $: tagged })
-
-  const out1 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "x", model: {} as any }, out1)
-  expect(quickstartCalls).toHaveLength(1)
-
-  // touch .kata.toml into the future so mtime changes
-  const future = new Date(Date.now() + 60_000)
-  require("node:fs").utimesSync(path.join(dir, ".kata.toml"), future, future)
-  const out2 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "y", model: {} as any }, out2)
-  expect(quickstartCalls).toHaveLength(2)
-})
-
-test("attention: missing properties does not throw and starts nothing", async () => {
-  const { tagged, calls } = fakeShell()
-  const hooks = await KataPlugin({ client, $: tagged })
-  const startsBefore = calls.filter((c) => c.includes("attention-hook start")).length
-  await expect(
-    hooks.event!({ event: { type: "session.created", properties: undefined } }),
-  ).resolves.toBeUndefined()
-  // no extra start beyond the init-time one
-  expect(calls.filter((c) => c.includes("attention-hook start"))).toHaveLength(startsBefore)
-})
-
-test("contract: empty quickstart result is retried, not cached", async () => {
-  const withToml = mkdtempSync(path.join(tmpdir(), "kata-empty-"))
-  writeFileSync(path.join(withToml, ".kata.toml"), "")
-  process.env.OPENCODE_PROJECT_DIR = withToml
-
-  const quickstartCalls: string[] = []
-  const { tagged } = fakeShell((cmd) => {
-    if (cmd.includes("quickstart")) quickstartCalls.push(cmd)
+test("attention starts on each reference's first session and ends on its last", async () => {
+  const calls: Array<{ args: string[]; reference: string }> = []
+  const runtime = new KataRuntime("kata-test", async (_binary, args, options) => {
+    calls.push({ args, reference: options.reference })
     return ""
   })
-  const hooks = await KataPlugin({ client, $: tagged })
 
-  const out1 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "x", model: {} as any }, out1)
-  const out2 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "y", model: {} as any }, out2)
-  expect(out1.system).toEqual([])
-  expect(out2.system).toEqual([])
-  expect(quickstartCalls).toHaveLength(2)
+  await runtime.setSessionContext("s1", { reference: "task-a" })
+  await runtime.setSessionContext("s2", { reference: "task-a" })
+  await runtime.setSessionContext("s3", { reference: "task-b" })
+  expect(calls.filter(({ args }) => args.join(" ") === "attention-hook start")).toHaveLength(2)
+
+  await runtime.removeSession("s1")
+  expect(calls.filter(({ args }) => args.join(" ") === "attention-hook end")).toHaveLength(0)
+  await runtime.removeSession("s2")
+  expect(calls.filter(({ args }) => args.join(" ") === "attention-hook end")).toEqual([
+    { args: ["attention-hook", "end"], reference: "task-a" },
+  ])
+  await runtime.removeSession("s3")
+  expect(calls.filter(({ args }) => args.join(" ") === "attention-hook end")).toHaveLength(2)
 })
 
-test("attention: failed session.list does not cause false end on untracked delete", async () => {
-  const { tagged, calls } = fakeShell()
-  const failingClient: any = {
-    app: { log: async () => ({}) },
-    session: { list: async () => { throw new Error("boom") } },
+test("context uses the session reference and caches by workspace config", async () => {
+  const directory = workspace()
+  const quickstarts: string[] = []
+  const runtime = new KataRuntime("kata-test", async (_binary, args, options) => {
+    if (args[0] === "quickstart") {
+      quickstarts.push(options.reference)
+      return `CONTRACT-${options.reference}`
+    }
+    return ""
+  })
+  await runtime.setSessionContext("s1", { reference: "task-a" })
+  await runtime.setSessionContext("s2", { reference: "task-b" })
+
+  const output = (sessionID: string) => {
+    const system: string[] = []
+    return runtime.injectContract(sessionID, directory, (text) => system.push(text)).then(() => system)
   }
-  const hooks = await KataPlugin({ client: failingClient, $: tagged })
-  const startsBefore = calls.filter((c) => c.includes("attention-hook start")).length
-  // a real session arriving still starts attention
-  await hooks.event!({ event: { type: "session.created", properties: { info: { id: "s1" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook start"))).toHaveLength(startsBefore + 1)
-  // deleting an untracked (unseeded) session must NOT end attention
-  await hooks.event!({ event: { type: "session.deleted", properties: { info: { id: "ghost" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook end"))).toHaveLength(0)
-  // deleting the real one does end it
-  await hooks.event!({ event: { type: "session.deleted", properties: { info: { id: "s1" } } } })
-  expect(calls.filter((c) => c.includes("attention-hook end"))).toHaveLength(1)
+
+  expect(await output("s1")).toEqual(["CONTRACT-task-a"])
+  expect(await output("s1")).toEqual(["CONTRACT-task-a"])
+  expect(await output("s2")).toEqual(["CONTRACT-task-b"])
+  expect(quickstarts).toEqual(["task-a", "task-b"])
+
+  const future = new Date(Date.now() + 60_000)
+  utimesSync(path.join(directory, ".kata.toml"), future, future)
+  expect(await output("s1")).toEqual(["CONTRACT-task-a"])
+  expect(quickstarts).toHaveLength(3)
+
+  rmSync(path.join(directory, ".kata.toml"))
+  expect(await output("s1")).toEqual([])
 })
 
-test("contract: stops injecting after .kata.toml is removed", async () => {
-  const dir = mkdtempSync(path.join(tmpdir(), "kata-rm-"))
-  const toml = path.join(dir, ".kata.toml")
-  writeFileSync(toml, "")
-  process.env.OPENCODE_PROJECT_DIR = dir
-  const { tagged } = fakeShell((cmd) => (cmd.includes("quickstart") ? "CONTRACT" : ""))
-  const hooks = await KataPlugin({ client, $: tagged })
+test("empty contract output is retried and sessions without a reference are untouched", async () => {
+  const directory = workspace()
+  let attempts = 0
+  const runtime = new KataRuntime("kata-test", async (_binary, args) => {
+    if (args[0] !== "quickstart") return ""
+    attempts += 1
+    return attempts === 1 ? "" : "CONTRACT"
+  })
+  await runtime.setSessionContext("s1", { reference: "task-a" })
 
-  const out1 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "x", model: {} as any }, out1)
-  expect(out1.system).toEqual(["CONTRACT"])
+  const collect = async (sessionID: string) => {
+    const system: string[] = []
+    await runtime.injectContract(sessionID, directory, (text) => system.push(text))
+    return system
+  }
+  expect(await collect("unknown")).toEqual([])
+  expect(await collect("s1")).toEqual([])
+  expect(await collect("s1")).toEqual(["CONTRACT"])
+  expect(attempts).toBe(2)
+})
 
-  unlinkSync(toml)
-  const out2 = { system: [] as string[] }
-  await hooks["experimental.chat.system.transform"]!({ sessionID: "y", model: {} as any }, out2)
-  expect(out2.system).toEqual([])
+test("TUI associates the current session family and new same-location sessions", async () => {
+  const previousRef = process.env.KATA_REF
+  process.env.KATA_REF = "task-current"
+  const calls: Array<{ sessionID: string; reference: string }> = []
+  let createdHandler: ((event: unknown) => void) | undefined
+  let stopped = false
+  const context = {
+    client: {
+      rpc: () => ({
+        setSessionContext: async (input: { sessionID: string; reference: string }) => {
+          calls.push(input)
+        },
+      }),
+    },
+    location: { directory: "/workspace" },
+    data: {
+      on: (type: string, handler: (event: unknown) => void) => {
+        expect(type).toBe("session.created")
+        createdHandler = handler
+        return () => { stopped = true }
+      },
+      session: { family: () => ["root", "child"] },
+    },
+    ui: { router: { current: () => ({ type: "session", sessionID: "root" }) } },
+  }
+
+  try {
+    const cleanup = await KataTui.setup(context as never)
+    expect(calls).toEqual([
+      { sessionID: "root", reference: "task-current" },
+      { sessionID: "child", reference: "task-current" },
+    ])
+
+    createdHandler!({
+      location: { directory: "/workspace" },
+      data: { sessionID: "new-session" },
+    })
+    createdHandler!({
+      location: { directory: "/other" },
+      data: { sessionID: "other-session" },
+    })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(calls.at(-1)).toEqual({ sessionID: "new-session", reference: "task-current" })
+    expect(calls).toHaveLength(3)
+
+    cleanup?.()
+    expect(stopped).toBe(true)
+  } finally {
+    if (previousRef === undefined) delete process.env.KATA_REF
+    else process.env.KATA_REF = previousRef
+  }
 })

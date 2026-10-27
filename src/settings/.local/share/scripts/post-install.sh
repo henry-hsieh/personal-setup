@@ -61,6 +61,7 @@ if [[ -f "$MC_SOURCE" ]]; then
     echo "[Post-Install] Configuring Magic Context..."
 
     # Mirror the shell profile's OPENCODE_CONFIG override when present (prefer JSONC, fall back to JSON)
+    unset OPENCODE_CONFIG
     CUSTOM_CONFIG="$INSTALL_DIR/.config/opencode/custom.jsonc"
     if [[ -f "$CUSTOM_CONFIG" ]]; then
         export OPENCODE_CONFIG="$CUSTOM_CONFIG"
@@ -75,17 +76,17 @@ if [[ -f "$MC_SOURCE" ]]; then
     FIRST_MODEL=""
     if [[ -n "${OPENCODE_CONFIG:-}" ]]; then
         FIRST_MODEL=$("$INSTALL_DIR/.local/bin/yq" -r '
-            .provider | to_entries
+            (.providers // .provider // {}) | to_entries
             | map(select((.value | has("models")) and ((.value.models | keys | length) > 0)))
             | map(.key + "/" + (.value.models | keys | .[0]))
             | .[0] // ""
         ' "$OPENCODE_CONFIG" 2>/dev/null)
     fi
     if [[ -z "$FIRST_MODEL" ]]; then
-        FIRST_MODEL=$(HOME="$INSTALL_DIR" XDG_CONFIG_HOME="$INSTALL_DIR/.config" XDG_DATA_HOME="$INSTALL_DIR/.data" XDG_CACHE_HOME="$INSTALL_DIR/.cache" OPENCODE_CONFIG_DIR="$INSTALL_DIR/.config/opencode" "$INSTALL_DIR/.local/bin/opencode" models --pure 2>/dev/null | grep -v '^opencode/' | head -n1)
+        FIRST_MODEL=$(HOME="$INSTALL_DIR" XDG_CONFIG_HOME="$INSTALL_DIR/.config" XDG_DATA_HOME="$INSTALL_DIR/.data" XDG_CACHE_HOME="$INSTALL_DIR/.cache" OPENCODE_CONFIG_DIR="$INSTALL_DIR/.config/opencode" "$INSTALL_DIR/.local/bin/opencode" models 2>/dev/null | grep -v '^opencode/' | head -n1)
     fi
     if [[ -z "$FIRST_MODEL" ]]; then
-        FIRST_MODEL=$(HOME="$INSTALL_DIR" XDG_CONFIG_HOME="$INSTALL_DIR/.config" XDG_DATA_HOME="$INSTALL_DIR/.data" XDG_CACHE_HOME="$INSTALL_DIR/.cache" OPENCODE_CONFIG_DIR="$INSTALL_DIR/.config/opencode" "$INSTALL_DIR/.local/bin/opencode" models --pure 2>/dev/null | head -n1)
+        FIRST_MODEL=$(HOME="$INSTALL_DIR" XDG_CONFIG_HOME="$INSTALL_DIR/.config" XDG_DATA_HOME="$INSTALL_DIR/.data" XDG_CACHE_HOME="$INSTALL_DIR/.cache" OPENCODE_CONFIG_DIR="$INSTALL_DIR/.config/opencode" "$INSTALL_DIR/.local/bin/opencode" models 2>/dev/null | head -n1)
     fi
 
     if [[ -n "$FIRST_MODEL" ]]; then
