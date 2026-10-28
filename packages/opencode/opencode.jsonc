@@ -32,6 +32,11 @@
   "permissions": [
     {
       "action": "external_directory",
+      "resource": "{env:CARGO_HOME}/registry/**",
+      "effect": "allow"
+    },
+    {
+      "action": "external_directory",
       "resource": "~/.local/share/opencode/worktree/*",
       "effect": "allow"
     },
