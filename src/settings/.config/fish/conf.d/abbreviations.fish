@@ -4,6 +4,7 @@ abbr -a l  ls -CF
 abbr -a v  vim
 abbr -a n  nvim
 abbr -a nn nvim -u NONE
+abbr -a oc opencode
 abbr -a rp realpath
 abbr -a bunx bun x
 abbr -a mv mv -i

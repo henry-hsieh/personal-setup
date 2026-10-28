@@ -42,6 +42,7 @@ alias vi  'vim'
 alias n   'nvim'
 alias nn  'nvim -u NONE'
 alias bat "bat --theme='base16-256'"
+alias oc 'opencode'
 setenv EDITOR 'nvim'
 
 # Bun alias
