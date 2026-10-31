@@ -14,7 +14,7 @@
     "@cortexkit/aft-opencode@0.63.4",
     "@hueyexe/opencode-ensemble@0.20.0",
     "@bybrawe/opencode-goal@1.3.49",
-    "@bybrawe/opencode-loop@0.6.9",
+    "@bybrawe/opencode-loop@0.6.10",
     {
       "package": "./plugins/wait"
     },
