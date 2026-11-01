@@ -10,7 +10,7 @@
     "auto": false
   },
   "plugins": [
-    "@cortexkit/opencode-magic-context@0.49.34",
+    "@cortexkit/opencode-magic-context@0.49.35",
     "@cortexkit/aft-opencode@0.63.4",
     "@hueyexe/opencode-ensemble@0.20.0",
     "@bybrawe/opencode-goal@1.3.50",
