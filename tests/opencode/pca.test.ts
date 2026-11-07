@@ -29,7 +29,6 @@ test("merges consecutive assistant messages without dropping non-text content", 
   const draft = request([message("user", "hello"), first, second, message("user", "next")])
   transformMessages(draft, {})
   expect(draft.messages.map((entry) => entry.role)).toEqual(["user", "assistant", "user"])
-  expect(draft.messages[1].constructor.name).toBe("Message")
   expect(draft.messages[1].content).toEqual([
     { type: "text", text: "First " },
     { type: "reasoning", text: "reason" },

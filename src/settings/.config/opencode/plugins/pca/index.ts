@@ -35,7 +35,7 @@ function supportsAssistantPrefill(modelID: string): boolean {
 }
 
 function syntheticUserMessage(text: string): Message {
-  return new Message({
+  return Message.make({
     id: crypto.randomUUID(),
     role: "user",
     content: [{ type: "text", text }],
@@ -49,7 +49,7 @@ function mergeAssistantMessages(previous: Message, next: Message): Message {
     const last = content[lastTextIndex]
     if (last.type === "text") content[lastTextIndex] = { ...last, text: `${last.text} ` }
   }
-  return new Message({ ...previous, content: [...content, ...next.content] })
+  return Message.make({ ...previous, content: [...content, ...next.content] })
 }
 
 /** Preserve provider-owned message metadata instead of discarding it during a merge. */
