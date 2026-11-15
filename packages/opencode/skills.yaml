@@ -17,7 +17,7 @@
 skills:
   - datasource: git-refs
     branch: main
-    version: e984b5f1c90ccfc62d09ed12b30adb71854e2b75
+    version: 5be38458b4541f3d24f1fae18bf8295401b00153
     package: hueyexe/opencode-ensemble
     src: skills/opencode-ensemble
     dst: .config/opencode/skills/opencode-ensemble
