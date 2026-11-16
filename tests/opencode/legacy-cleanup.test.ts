@@ -42,3 +42,58 @@ $ARGUMENTS
     rmSync(root, { recursive: true, force: true })
   }
 })
+
+test("release exclusion preserves installed TUI preferences", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "opencode-preferences-"))
+  const source = path.join(root, "source")
+  const target = path.join(root, "target")
+  const fresh = path.join(root, "fresh")
+  const relative = ".config/opencode/tui-preferences.jsonc"
+  const repo = path.resolve(import.meta.dir, "../..")
+  mkdirSync(path.join(source, ".config/opencode"), { recursive: true })
+  mkdirSync(path.join(target, ".config/opencode"), { recursive: true })
+  mkdirSync(fresh)
+  writeFileSync(path.join(source, relative), "shipped preferences\n")
+  writeFileSync(path.join(target, relative), "user preferences\n")
+  writeFileSync(path.join(source, ".config/opencode/other.json"), "included\n")
+
+  try {
+    const evaluated = spawnSync("just", ["--evaluate", "static_exclude_flags"], { cwd: repo, encoding: "utf8" })
+    expect(evaluated.status).toBe(0)
+    const exclusions = evaluated.stdout.trim().split(/\s+/)
+    const archive = path.join(root, "release.tar")
+    expect(spawnSync("tar", [...exclusions, "-cf", archive, "-C", source, "."]).status).toBe(0)
+    expect(spawnSync("tar", ["-xf", archive, "-C", fresh]).status).toBe(0)
+    expect(existsSync(path.join(fresh, relative))).toBe(false)
+    expect(spawnSync("tar", ["-xf", archive, "-C", target]).status).toBe(0)
+    expect(readFileSync(path.join(target, relative), "utf8")).toBe("user preferences\n")
+    expect(readFileSync(path.join(target, ".config/opencode/other.json"), "utf8")).toBe("included\n")
+
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test.skipIf(!Bun.which("rsync"))("fast-test exclusion preserves installed TUI preferences", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "opencode-preferences-rsync-"))
+  const source = path.join(root, "source")
+  const target = path.join(root, "target")
+  const relative = ".config/opencode/tui-preferences.jsonc"
+  const repo = path.resolve(import.meta.dir, "../..")
+  mkdirSync(path.join(source, ".config/opencode"), { recursive: true })
+  mkdirSync(path.join(target, ".config/opencode"), { recursive: true })
+  writeFileSync(path.join(source, relative), "shipped preferences\n")
+  writeFileSync(path.join(target, relative), "user preferences\n")
+  writeFileSync(path.join(source, ".config/opencode/other.json"), "included\n")
+
+  try {
+    const evaluated = spawnSync("just", ["--evaluate", "static_exclude_flags"], { cwd: repo, encoding: "utf8" })
+    expect(evaluated.status).toBe(0)
+    const exclusions = evaluated.stdout.trim().split(/\s+/)
+    expect(spawnSync("rsync", ["-a", ...exclusions, `${source}/`, `${target}/`]).status).toBe(0)
+    expect(readFileSync(path.join(target, relative), "utf8")).toBe("user preferences\n")
+    expect(readFileSync(path.join(target, ".config/opencode/other.json"), "utf8")).toBe("included\n")
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
