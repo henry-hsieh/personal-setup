@@ -32,6 +32,9 @@ jobs:
       - name: Sync project dependencies
         run: uv sync
 
+      - name: Test AFT precache
+        run: uv run python tests/opencode/test_precache_aft.py
+
       - name: Ty check
         uses: JacobCoffee/ty-action@v0.0.1
         with:
