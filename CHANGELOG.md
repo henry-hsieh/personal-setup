@@ -1,5 +1,38 @@
 # Changelog
 
+## [2.7.0](https://github.com/henry-hsieh/personal-setup/compare/v2.6.0...v2.7.0) (2026-11-21)
+
+
+### Features
+
+* **@cortexkit/aft-opencode:** bump OpenCode Plugins ([#1588](https://github.com/henry-hsieh/personal-setup/issues/1588)) ([7c5c123](https://github.com/henry-hsieh/personal-setup/commit/7c5c1232d8f8611c62178cfe7a13692cee389a96))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.57 ([#1583](https://github.com/henry-hsieh/personal-setup/issues/1583)) ([3597fa1](https://github.com/henry-hsieh/personal-setup/commit/3597fa18fb08a8b6d304e7b3061dbdc34613dcc1))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.61 ([#1589](https://github.com/henry-hsieh/personal-setup/issues/1589)) ([afe759c](https://github.com/henry-hsieh/personal-setup/commit/afe759c91dac5683c472324991e3bc1c82d5d116))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.62 ([#1594](https://github.com/henry-hsieh/personal-setup/issues/1594)) ([15c17a5](https://github.com/henry-hsieh/personal-setup/commit/15c17a58874c89705e70ce4a3dc469617ae9721f))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.63 ([#1601](https://github.com/henry-hsieh/personal-setup/issues/1601)) ([929424c](https://github.com/henry-hsieh/personal-setup/commit/929424cb67fd2998a6f91110f3d16617f8121dc0))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.65 ([#1603](https://github.com/henry-hsieh/personal-setup/issues/1603)) ([285967f](https://github.com/henry-hsieh/personal-setup/commit/285967f99a7a744a73c71ea063ca2531f6011fb4))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.66 ([#1607](https://github.com/henry-hsieh/personal-setup/issues/1607)) ([d6753e9](https://github.com/henry-hsieh/personal-setup/commit/d6753e9fa123fbb98c1abbaef0e265d34a65d440))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.67 ([#1608](https://github.com/henry-hsieh/personal-setup/issues/1608)) ([8b0e0f2](https://github.com/henry-hsieh/personal-setup/commit/8b0e0f2547bdede3774ccd201fe45ffeb95c2a0c))
+* **@cortexkit/opencode-magic-context:** bump version to v0.49.68 ([#1610](https://github.com/henry-hsieh/personal-setup/issues/1610)) ([fdc4586](https://github.com/henry-hsieh/personal-setup/commit/fdc4586ebec6bb39f41635b26864d1749b4bcd84))
+* **@fission-ai/openspec:** bump version to v2.1.0 ([#1585](https://github.com/henry-hsieh/personal-setup/issues/1585)) ([4fac8ea](https://github.com/henry-hsieh/personal-setup/commit/4fac8ea462b14a7bca2ab74f8c87caf0685096b4))
+* **@fission-ai/openspec:** bump version to v2.1.1 ([#1604](https://github.com/henry-hsieh/personal-setup/issues/1604)) ([633765e](https://github.com/henry-hsieh/personal-setup/commit/633765ed03243094d13f21279d22400451cd0517))
+* **aft:** add NuGet as the second source of ONNX runtime ([#1595](https://github.com/henry-hsieh/personal-setup/issues/1595)) ([ce9d434](https://github.com/henry-hsieh/personal-setup/commit/ce9d434cbbdfa9cef1e0f67c46ca357582ce7012))
+* **astral-sh/setup-uv:** bump astral-sh/setup-uv action to v10.4.0 ([#1609](https://github.com/henry-hsieh/personal-setup/issues/1609)) ([4b87f59](https://github.com/henry-hsieh/personal-setup/commit/4b87f596016bb3c997fd9444280ebf38fa898eb9))
+* **delta:** bump version to v0.21.1 ([#1600](https://github.com/henry-hsieh/personal-setup/issues/1600)) ([3b60f8e](https://github.com/henry-hsieh/personal-setup/commit/3b60f8e341dea675fdc258beb7760722549b27fe))
+* **delta:** bump version to v0.21.2 ([#1605](https://github.com/henry-hsieh/personal-setup/issues/1605)) ([099b830](https://github.com/henry-hsieh/personal-setup/commit/099b8306deae9288962adde953e0a396632ee694))
+* **gh:** bump version to v2.105.0 ([#1593](https://github.com/henry-hsieh/personal-setup/issues/1593)) ([698fddc](https://github.com/henry-hsieh/personal-setup/commit/698fddc538ff4d04dd1ac3be0fadedfe56bc6361))
+* **harper-ls:** bump version to v3.3.0 ([#1599](https://github.com/henry-hsieh/personal-setup/issues/1599)) ([8ed566c](https://github.com/henry-hsieh/personal-setup/commit/8ed566cf5fc561694ad80e2b5bec492668adea94))
+* **jdk:** bump version to v25.0.5.1+2 ([#1598](https://github.com/henry-hsieh/personal-setup/issues/1598)) ([820c450](https://github.com/henry-hsieh/personal-setup/commit/820c4508f4514af37383fcbe45e8f7488555f021))
+* **opencode:** bump version to v2.3.2 ([#1592](https://github.com/henry-hsieh/personal-setup/issues/1592)) ([caf63c6](https://github.com/henry-hsieh/personal-setup/commit/caf63c6a54b99baf887ee1f984422f2859532310))
+* **ruff:** bump version to v0.17.6 ([#1606](https://github.com/henry-hsieh/personal-setup/issues/1606)) ([097b454](https://github.com/henry-hsieh/personal-setup/commit/097b454f9ad6a71ebcd63520768abc7c7fa0d5f6))
+* **tmux:** bump version to v3.8 ([#1590](https://github.com/henry-hsieh/personal-setup/issues/1590)) ([80b5d38](https://github.com/henry-hsieh/personal-setup/commit/80b5d382b7cc129dae292d94752a0528c26ae68b))
+* **ty:** bump version to v0.0.105 ([#1586](https://github.com/henry-hsieh/personal-setup/issues/1586)) ([edec129](https://github.com/henry-hsieh/personal-setup/commit/edec129eac8e98d02603627a32c0ecd8806aba41))
+* **ty:** bump version to v0.0.106 ([#1597](https://github.com/henry-hsieh/personal-setup/issues/1597)) ([be7fb3f](https://github.com/henry-hsieh/personal-setup/commit/be7fb3f1b2e20626c68ae5331500662a52dce3a2))
+* **ty:** bump version to v0.0.107 ([#1602](https://github.com/henry-hsieh/personal-setup/issues/1602)) ([4e983e8](https://github.com/henry-hsieh/personal-setup/commit/4e983e8e86547157404c1b35f4a17241f52f05ad))
+* **uv-package-manager:** bump uv-package-manager digest to 4220308 ([#1596](https://github.com/henry-hsieh/personal-setup/issues/1596)) ([38599ea](https://github.com/henry-hsieh/personal-setup/commit/38599ea407c4142fdc358ebb3cbb9496f0fb9040))
+* **uv-package-manager:** bump uv-package-manager digest to 91ff753 ([#1611](https://github.com/henry-hsieh/personal-setup/issues/1611)) ([6feb9ed](https://github.com/henry-hsieh/personal-setup/commit/6feb9edac5cee9755ce81a58928da6d5ae88404c))
+* **uv:** bump version to v0.13.9 ([#1587](https://github.com/henry-hsieh/personal-setup/issues/1587)) ([d0e0def](https://github.com/henry-hsieh/personal-setup/commit/d0e0defb598e4d3f808530f8df8685597aaf0686))
+
 ## [2.6.0](https://github.com/henry-hsieh/personal-setup/compare/v2.5.0...v2.6.0) (2026-11-16)
 
 
