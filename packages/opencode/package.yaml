@@ -1,5 +1,5 @@
 name: opencode
-version: 2.4.1
+version: 2.4.2
 datasource: github-releases
 package: anomalyco/opencode
 url: https://github.com/anomalyco/opencode/releases/download/v{version}/opencode-linux-x64.tar.gz
